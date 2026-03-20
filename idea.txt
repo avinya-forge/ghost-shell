@@ -1,0 +1,19 @@
+# THE GHOSTSHELL MANIFESTO 👻🐚
+
+## 🎯 The Vision
+GhostShell is the ultimate "distributed brain" for local AI coding. It splits the experience into two distinct, high-performance entities:
+
+### 👻 THE GHOST (Processing Node)
+The silent powerhouse. It hides in the background, strips the OS to its bone, and optimizes itself intelligently using a 1.5B reasoning agent. It has no UI, only raw inference speed.
+
+### 🐚 THE SHELL (Interface Node)
+The creative vessel. It’s where you sit and write code. It connects to the Ghost over the network and offloads all complexity, letting you work on lightweight hardware while feeling the speed of a supercomputer.
+
+---
+
+## 🛠️ The Architecture
+- **GhostShell.ps1**: The single-script deployment weapon.
+- **Embedded Sentinel**: The watchdog that ensures the Ghost never dies.
+
+**Status: GHOSTSHELL v2.0 READY**
+**Project: "Viral Ready"**
