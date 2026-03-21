@@ -44,6 +44,7 @@ function Start-GhostNode {
 
     Write-Log "Configuring Ghost Network & Firewall..." "Yellow"
     $env:OLLAMA_HOST = "0.0.0.0"
+    $env:OLLAMA_ORIGINS = "*" # ALLOW EXTERNAL WEB APPS (Like GitHub Pages) TO CONNECT
     New-NetFirewallRule -DisplayName "GhostShell Ollama" -Direction Inbound -LocalPort 11434 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue | Out-Null
     New-NetFirewallRule -DisplayName "GhostShell WebUI" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue | Out-Null
 
@@ -95,32 +96,36 @@ function Start-GhostNode {
         }
     }
     
-    # UI Deployment 
-    $installUI = Read-Host "`nDeploy Open WebUI for Mobile/Web access? (Requires Docker) (y/n)"
+    $installUI = Read-Host "`nDeploy Local Open WebUI? (y/n)"
     if ($installUI -match "^[yY]$") {
         Write-Log "Deploying Open WebUI container on port 3000..." "Yellow"
         docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main | Out-Null
-        if ($?) {
-            Write-Log "SUCCESS: Web UI is live at http://$(hostname):3000 and accessible from mobile." "Green"
-            
-            # Global Access Tunnel
-            $tunnel = Read-Host "`nEnable Cloudflare Tunnel for Free GLOBAL Access (Share anywhere)? (y/n)"
-            if ($tunnel -match "^[yY]$") {
-                Write-Log "Deploying Cloudflare Tunnel container..." "Yellow"
-                docker rm -f ghost-tunnel -v > $null 2>&1
-                docker run -d --name ghost-tunnel --restart always cloudflare/cloudflared:latest tunnel --url http://host.docker.internal:3000 | Out-Null
-                
-                Write-Log "Waiting for Cloudflare entry node generation..." "Gray"
-                Start-Sleep -Seconds 8
-                $url = docker logs ghost-tunnel 2>&1 | Select-String "https://.*trycloudflare\.com" | Select-Object -Last 1
-                if ($url) {
-                    Write-Log "`n[ 🌐 GLOBAL ACCESS URL SECURED ]" "Green"
-                    Write-Log "$($url.Line.Trim())" "Green"
-                    Write-Log "Save this link! You can chat with your local AI anywhere in the world." "Green"
-                }
+        if ($?) { Write-Log "SUCCESS: Local Web UI is live at http://$(hostname):3000" "Green" }
+        else { Write-Log "ERROR: Web UI deployment failed. Ensure Docker Desktop is running." "Red" }
+    }
+
+    # Global Access Tunnel
+    $tunnel = Read-Host "`nEnable Cloudflare Tunnel for Free GLOBAL Access? (y/n)"
+    if ($tunnel -match "^[yY]$") {
+        $targetPort = Read-Host "Tunnel to WebUI (port 3000) or pure Ollama API (port 11434)? (3000/11434)"
+        if ($targetPort -ne "3000" -and $targetPort -ne "11434") { $targetPort = "11434" }
+
+        Write-Log "Deploying Cloudflare Tunnel for port $targetPort..." "Yellow"
+        docker rm -f ghost-tunnel -v > $null 2>&1
+        docker run -d --name ghost-tunnel --restart always cloudflare/cloudflared:latest tunnel --url http://host.docker.internal:$targetPort | Out-Null
+        
+        Write-Log "Waiting for Cloudflare entry node generation..." "Gray"
+        Start-Sleep -Seconds 8
+        $urlObj = docker logs ghost-tunnel 2>&1 | Select-String "https://.*trycloudflare\.com" | Select-Object -Last 1
+        if ($urlObj) {
+            $url = $urlObj.Line.Trim() -replace '.*(https://[a-zA-Z0-9-]+\.trycloudflare\.com).*', '$1'
+            Write-Log "`n[ 🌐 GLOBAL ACCESS URL SECURED ]" "Green"
+            Write-Log "URL: $url" "Cyan"
+            if ($targetPort -eq "11434") {
+                Write-Log "This is your RAW API Endpoint. Plug this into any web-hosted AI UI (like LobeChat) as the custom Ollama Endpoint!" "Green"
+            } else {
+                Write-Log "This links directly to your local WebUI. Open it anywhere to chat." "Green"
             }
-        } else {
-            Write-Log "ERROR: Web UI deployment failed. Ensure Docker Desktop is installed/running." "Red"
         }
     }
 

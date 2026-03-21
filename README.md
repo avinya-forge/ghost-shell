@@ -46,9 +46,15 @@ If you installed the optional Web UI during the Ghost deployment:
 1. Ensure your mobile device is on the same WiFi network.
 2. Navigate to `http://<Ghost-Node-IP>:3000` in your mobile browser.
 
-### 🌍 Global "Share Anywhere" Access
-When prompted, enabling the **Cloudflare Tunnel** instantly proxies your local Web UI to the internet securely. 
-* The script will output an `https://<random>.trycloudflare.com` URL.
-* Access this URL from **any network in the world** (cellular, cafes) to talk to your local laptop AI. No data leaves your machine unless requested.
+### 🌍 Global Access & GitHub-Hosted UIs
+When prompted, enabling the **Cloudflare Tunnel** gives you two options:
+1. **Tunnel Port 3000 (WebUI)**: Proxies your local Open WebUI to a `trycloudflare.com` URL so you can use it anywhere.
+2. **Tunnel Port 11434 (API)**: This exposes your raw Ollama server securely. You can plug this URL into **ANY GitHub-Hosted Static UI** (Like [LobeChat](https://github.com/lobehub/lobe-chat) or [Chatbot UI](https://github.com/mckaywrigley/chatbot-ui)). 
+   * *Why?* This gives you a world-class UI hosted on GitHub/Vercel (which you can browse from anywhere) that processes inference 100% locally on your laptop!
+
+### ⚙️ Skills & Plugins
+To integrate robust "Skills" (web scraping, API hooks, Github scanning, Google Photos logic):
+* **Using Open WebUI**: Navigate to your Workspace -> Tools -> Import.
+* **Using LobeChat (Recommended)**: Use the Cloudflare API Tunnel (11434). LobeChat has a native "Plugin Market" with hundreds of one-click skills built-in.
 
 **Privacy. Performance. Persistence.**
