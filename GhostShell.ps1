@@ -54,14 +54,23 @@ if ($Role -eq "Ghost") {
         Read-Host "Press Enter to exit..."
         return 
     }
+    Log "Configuring Ghost Network & Firewall..." "Yellow"
+    $env:OLLAMA_HOST = "0.0.0.0"
+    New-NetFirewallRule -DisplayName "GhostShell Ollama" -Direction Inbound -LocalPort 11434 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue | Out-Null
+    New-NetFirewallRule -DisplayName "GhostShell WebUI" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue | Out-Null
+
     Log "Starting Ghost Engine..."
     $env:OLLAMA_HOST = "0.0.0.0" # Enable remote access
     Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 5
 
-    # 2. AI-DRIVEN OPTIMIZATION
-    Log "Bootstrapping 1.5B Reasoning Model for System Audit..."
-    & $ollama pull qwen2.5-coder:1.5b | Out-Null
+    # 2. AI-DRIVEN OPTIMIZATION & MODEL SYNC
+    Log "Synchronizing Mental Models (7B, 1.5B, 8B, DeepSeek)..." "Yellow"
+    $models = @("qwen2.5-coder:7b", "qwen2.5-coder:1.5b", "llama3.1:8b", "nomic-embed-text", "deepseek-r1:7b", "deepseek-coder:6.7b")
+    foreach ($m in $models) {
+        Log "Pulling $m..." "Gray"
+        & $ollama pull $m | Out-Null
+    }
     
     Log "Asking the Ghost to analyze system bloat..." "Yellow"
     $procs = Get-Process | Select-Object -ExpandProperty Name -Unique | Sort-Object | Out-String
@@ -70,15 +79,18 @@ if ($Role -eq "Ghost") {
     try {
         $body = @{ model = "qwen2.5-coder:1.5b"; prompt = $prompt; stream = $false } | ConvertTo-Json
         $response = Invoke-RestMethod -Method Post -Uri "http://localhost:11434/api/generate" -Body $body -ContentType "application/json"
+        
+        Log "[+] AI Test Passed! Inference Engine is fully operational." "Cyan"
+        
         $killList = $response.response.Trim().Split(",")
         
         Log "Ghost identified $($killList.Count) targets for termination." "Green"
         foreach ($target in $killList) {
             $t = $target.Trim().ToLower()
-            $skip = "powershell|ollama|explorer|conhost|svchost|system|idle|init|taskhost"
+            $skip = "powershell|ollama|explorer|conhost|svchost|system|idle|init|taskhost|winlogon|csrss|lsass|smss|services|dwm|wlanext|fontdrvhost|searchui|sihost|memory compression|registry|ctfmon|dllhost|com-surrogate|spoolsv|runtimebroker|wmiprvse|searchindexer|securityhealthservice|smartscreen|docker.*|wsl.*"
             if ($t -and ($t -notmatch $skip)) {
                 Log "Terminating: $t" "Gray"
-                Get-Process -Name $t -ErrorAction SilentlyContinue | Stop-Process -Force
+                Get-Process -Name $t -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
             }
         }
     } catch {
@@ -91,11 +103,25 @@ if ($Role -eq "Ghost") {
     Start-Job -Name "GhostSentinel" -ScriptBlock {
         while ($true) {
             $os = Get-CimInstance Win32_OperatingSystem
-            if ((100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100)) -gt 95) { Stop-Process -Name 'ollama*' -Force }
+            if ((100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100)) -gt 96) { 
+                [System.GC]::Collect() # Reclaim memory gracefully instead of hanging OS by crashing Ollama mid-inference
+            }
             Start-Sleep -Seconds 60
         }
     }
     
+    # 4. OPTIONAL WEB UI
+    $installUI = Read-Host "`nDeploy Open WebUI for Mobile/Web access? (Requires Docker) (y/n)"
+    if ($installUI -match "^[yY]$") {
+        Log "Deploying Open WebUI container on port 3000..." "Yellow"
+        docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+        if ($?) {
+            Log "SUCCESS: Web UI is live at http://$(hostname):3000 and accessible from mobile." "Green"
+        } else {
+            Log "ERROR: Web UI deployment failed. Ensure Docker Desktop is installed and running." "Red"
+        }
+    }
+
     Log "`nREADY: Ghost is serving AI at http://$(hostname):11434" "Yellow"
     Log "Press Enter to close this window (Sentinel stays active)..." "Gray"
     Read-Host

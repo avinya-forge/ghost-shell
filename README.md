@@ -1,18 +1,20 @@
-# 👻🐚 GhostShell: The Distributed Local AI Node
+# 👻🐚 GhostShell: The Elite Distributed AI Node
 
-**GhostShell** is a minimalist, high-performance architecture for local AI coding. It decouples the "Processing" (The Ghost) from the "Workspace" (The Shell).
+**GhostShell** transforms your hardware into a dedicated, **Self-Optimizing** AI Coding Server. It decouples the "Processing" (The Ghost) from the "Workspace" (The Shell).
 
 ---
 
-## ⚡ Setup Sequence
+## ⚡ One-Click Initialization
 
-> [!IMPORTANT]  
-> Always **Run as Administrator** to allow the Ghost to strip Windows services and optimize RAM.
+> [!CAUTION]  
+> **YOU MUST RUN AS ADMINISTRATOR.**  
+> Right-click your Terminal (PowerShell) and select **Run as Administrator** before pasting these commands.
 
-### 1. Invoke THE GHOST (The Server Node)
-On your most powerful machine:
-- **CLI**: `powershell -ExecutionPolicy Bypass -File .\GhostShell.ps1 -Role Ghost`
-- **Manual**: Right-Click -> Run with PowerShell -> Select **1 (Ghost)**.
+### 💨 To Start THE GHOST (Node 1 - Server)
+Copy and paste this into an **Admin PowerShell**:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\GhostShell.ps1 -Role Ghost
+```
 
 ### 2. Enter THE SHELL (The Client Node)
 On your primary coding workstation:
@@ -25,16 +27,23 @@ All the heavy lifting is handled by the Ghost (C3PO in your network).
 
 ---
 
+## 🛠️ Deployment Flow
+1. **Network Ready**: Opens firewall rules and configures the host to allow mobile/remote connections.
+2. **Bootstrap**: The Ghost pulls its own 1.5B reasoning model.
+3. **Audit**: The AI identifies and kills system bloatware (Teams, OneDrive, etc.).
+4. **Strip**: Windows services are deep-stripped for maximum RAM throughput.
+5. **Sentinel**: A background watchdog ensures the Ghost stays alive 24/7.
+6. **Web UI (Optional)**: Can deploy Open WebUI via Docker for chat and mobile access.
+
 ## 🔍 Verification
-Run this on the Shell to verify connectivity:
+Run this on the Shell to verify connectivity to your Ghost Node:
 ```powershell
 Invoke-RestMethod http://c3po:11434/api/tags
 ```
 
-## 🛡️ Ghost-Sentinel
-Hidden background job that:
-- Monitors RAM usage ($usage > 95%).
-- Kills runaway background processes every 60s.
-- Resets the engine if critical memory levels are reached to prevent OS hangs.
+### 📱 Mobile Access
+If you installed the optional Web UI during the Ghost deployment:
+1. Ensure your mobile device is on the same WiFi network.
+2. Navigate to `http://<Ghost-Node-IP>:3000` in your mobile browser.
 
 **Privacy. Performance. Persistence.**
