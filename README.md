@@ -16,18 +16,19 @@ On your most powerful machine:
 
 ### 2. Enter THE SHELL (The Client Node)
 On your primary coding workstation:
-- **CLI**: `powershell -ExecutionPolicy Bypass -File .\GhostShell.ps1 -Role Shell`
-- **Manual**: Run -> Select **2 (Shell)** -> Enter Ghost IP.
+- **CLI**: `powershell -ExecutionPolicy Bypass -File .\GhostShell.ps1 -Role Shell -GhostAddress <GHOST_IP>`
+- **Manual**: Run -> Select **2 (Shell)** -> It will default to **c3po** or ask for IP.
 
 ### 3. Connect & Code
-Open VS Code on the Shell and begin prompt-based coding. All the heavy lifting is handled by the Ghost.
+Open VS Code on the Shell. The script automatically configures your `~/.continue/config.json` to point to the Ghost Node.
+All the heavy lifting is handled by the Ghost (C3PO in your network).
 
 ---
 
 ## 🔍 Verification
-Run this on the Ghost Node to verify it's active:
+Run this on the Shell to verify connectivity:
 ```powershell
-Invoke-RestMethod http://localhost:11434/api/tags
+Invoke-RestMethod http://c3po:11434/api/tags
 ```
 
 ## 🛡️ Ghost-Sentinel
