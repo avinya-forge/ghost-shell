@@ -32,8 +32,8 @@ All the heavy lifting is handled by the Ghost (C3PO in your network).
 2. **Bootstrap**: The Ghost pulls its own 1.5B reasoning model.
 3. **Audit**: The AI identifies and kills system bloatware (Teams, OneDrive, etc.).
 4. **Strip**: Windows services are deep-stripped for maximum RAM throughput.
-5. **Sentinel**: A background watchdog ensures the Ghost stays alive 24/7.
-6. **Web UI (Optional)**: Can deploy Open WebUI via Docker for chat and mobile access.
+5. **Sentinel**: A background watchdog gracefully handles high memory to prevent hangs.
+6. **Web UI & Global Access (Optional)**: Automatically deploy Open WebUI for a ChatGPT-like interface and spawn a secure Cloudflare Tunnel to access your local models from anywhere in the world completely free.
 
 ## 🔍 Verification
 Run this on the Shell to verify connectivity to your Ghost Node:
@@ -45,5 +45,10 @@ Invoke-RestMethod http://c3po:11434/api/tags
 If you installed the optional Web UI during the Ghost deployment:
 1. Ensure your mobile device is on the same WiFi network.
 2. Navigate to `http://<Ghost-Node-IP>:3000` in your mobile browser.
+
+### 🌍 Global "Share Anywhere" Access
+When prompted, enabling the **Cloudflare Tunnel** instantly proxies your local Web UI to the internet securely. 
+* The script will output an `https://<random>.trycloudflare.com` URL.
+* Access this URL from **any network in the world** (cellular, cafes) to talk to your local laptop AI. No data leaves your machine unless requested.
 
 **Privacy. Performance. Persistence.**
