@@ -47,9 +47,9 @@ If you installed the optional Web UI during the Ghost deployment:
 2. Navigate to `http://<Ghost-Node-IP>:3000` in your mobile browser.
 
 ### 🌍 Global Access & GitHub-Hosted UIs
-When prompted, enabling the **Cloudflare Tunnel** gives you two options:
-1. **Tunnel Port 3000 (WebUI)**: Proxies your local Open WebUI to a `trycloudflare.com` URL so you can use it anywhere.
-2. **Tunnel Port 11434 (API)**: This exposes your raw Ollama server securely. You can plug this URL into **ANY GitHub-Hosted Static UI** (Like [LobeChat](https://github.com/lobehub/lobe-chat) or [Chatbot UI](https://github.com/mckaywrigley/chatbot-ui)). 
+When prompted, enabling the **Cloudflare Tunnel** instantly exposes your raw Ollama API securely to the internet. 
+You can use a free generic Quick Tunnel, or provide your own Cloudflare Token. 
+When it generates your URL, just plug that URL into **ANY hosted UI** (Like [LobeChat Cloud](https://chat-preview.lobehub.com)) as your custom API endpoint.
    * *Why?* This gives you a world-class UI hosted on GitHub/Vercel (which you can browse from anywhere) that processes inference 100% locally on your laptop!
 
 ### ⚙️ Skills & Plugins
