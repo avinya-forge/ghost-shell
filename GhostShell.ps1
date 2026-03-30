@@ -345,6 +345,7 @@ function Start-GhostNode {
                 Start-Process powershell -ArgumentList "-NoExit", "-Command", "openclaw onboard"
             }
         }
+        }
     }
 
     Write-Log "`nREADY: C3PO is serving AI." "Yellow"
