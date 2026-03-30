@@ -33,34 +33,33 @@ function Show-GhostDashboard ($globalUrl) {
     $models = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] } | Select-Object -First 10
     $modelStr = if ($models) { $models -join ", " } else { "None Active" }
 
-    Write-Host "`n  ╔══════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "  ║                [ G H O S T - S H E L L   D A S H B O A R D ] 👻      ║" -ForegroundColor Cyan
-    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
-    Write-Host "  ║  STATUS:        ONLINE (Operational)                           [HF]  ║" -ForegroundColor Green
-    Write-Host "  ║  NODE NAME:     $machine                                              ║" -ForegroundColor Gray
-    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
-    Write-Host "  ║  [ 🏠 HOME ACCESS ]  (CONSTANT URL)                                  ║" -ForegroundColor Yellow
-    Write-Host "  ║  Web UI:        http://$($machine.ToLower()):3000                            ║" -ForegroundColor White
-    Write-Host "  ║  IP Access:     http://$($localIp):3000                                 ║" -ForegroundColor Gray
-    Write-Host "  ║  Ollama API:    http://$($machine.ToLower()):11434                           ║" -ForegroundColor White
-    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
-    Write-Host "  ║  [ 🌐 AWAY ACCESS ]  (RANDOM URL)                                    ║" -ForegroundColor Yellow
+    Write-Host "`n  [ G H O S T - S H E L L   D A S H B O A R D ]" -ForegroundColor Cyan
+    Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "  STATUS:        ONLINE (Operational)           [HF]" -ForegroundColor Green
+    Write-Host "  NODE NAME:     $machine" -ForegroundColor Gray
+    Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "  [ HOME ACCESS ]  (CONSTANT URL)" -ForegroundColor Yellow
+    Write-Host "  Web UI:        http://$($machine.ToLower()):3000" -ForegroundColor White
+    Write-Host "  IP Access:     http://$($localIp):3000" -ForegroundColor Gray
+    Write-Host "  Ollama API:    http://$($machine.ToLower()):11434" -ForegroundColor White
+    Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "  [ AWAY ACCESS ]  (RANDOM URL)" -ForegroundColor Yellow
     if ($globalUrl) {
-        Write-Host "  ║  Cloudflare:    $globalUrl                          ║" -ForegroundColor Cyan
+        Write-Host "  Cloudflare:    $globalUrl" -ForegroundColor Cyan
     } else {
-        Write-Host "  ║  Cloudflare:    Not Enabled (Restricted to Home)                     ║" -ForegroundColor Red
+        Write-Host "  Cloudflare:    Not Enabled (Restricted to Home)" -ForegroundColor Red
     }
-    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
-    Write-Host "  ║  [ 🧠 MENTAL MODELS ]                                                ║" -ForegroundColor Yellow
-    Write-Host "  ║  Models:        $modelStr" -ForegroundColor Gray
-    Write-Host "  ╚══════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "  [ MENTAL MODELS ]" -ForegroundColor Yellow
+    Write-Host "  Models:        $modelStr" -ForegroundColor Gray
+    Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
     Write-Host "`n  [!] Press CTRL+C to Shutdown all services. " -ForegroundColor Gray
     Write-Host "  [!] Keep this window open for background resource shielding. `n" -ForegroundColor Gray
 }
 
 # --- HUGGING FACE SYNC ---
 function Sync-HFModel {
-    Write-Host "`n  [ HUGGING FACE SYNC ] 🤗" -ForegroundColor Yellow
+    Write-Host "`n  [ HUGGING FACE SYNC ]" -ForegroundColor Yellow
     Write-Host "  Example: bartowski/Llama-3.2-1B-Instruct-GGUF" -ForegroundColor Gray
     $repo = Read-Host "`n  Enter Hugging Face Repo Path"
     if (-not [string]::IsNullOrWhiteSpace($repo)) {
@@ -218,7 +217,7 @@ function Start-GhostNode {
                     }
                 }
                 if ($url) {
-                    Write-Log "`n[ 🌐 GLOBAL WEB UI SECURED ]" "Green"
+                    Write-Log "`n[ GLOBAL WEB UI SECURED ]" "Green"
                     Write-Log "URL: $url" "Cyan"
                     Write-Log "Login to Open WebUI via this URL to access your AI from anywhere safely!" "Green"
                 } else {
@@ -373,7 +372,7 @@ function Start-ShellNode {
 Assert-Admin
 
 if (-not $Role) {
-    Write-Host "`n  [ G H O S T - S H E L L ] 👻🐚" -ForegroundColor Cyan
+    Write-Host "`n  [ G H O S T - S H E L L ]" -ForegroundColor Cyan
     Write-Host "  -------------------------"
     Write-Host "  1. C3PO   - Self-Optimize & Serve AI (Host Server)"
     Write-Host "  2. R2D2   - Connect Client Workspace (Workstation)"
