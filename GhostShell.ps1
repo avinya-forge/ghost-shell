@@ -30,19 +30,19 @@ function Show-GhostDashboard ($globalUrl) {
     Clear-Host
     $machine = hostname.ToUpper()
     $localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "Loopback|vEthernet" } | Select-Object -First 1).IPAddress
-    $models = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] } | Select-Object -First 5
+    $models = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] } | Select-Object -First 10
     $modelStr = if ($models) { $models -join ", " } else { "None Active" }
 
     Write-Host "`n  ╔══════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
     Write-Host "  ║                [ G H O S T - S H E L L   D A S H B O A R D ] 👻      ║" -ForegroundColor Cyan
     Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
-    Write-Host "  ║  STATUS:        ONLINE (Operational)                                 ║" -ForegroundColor Green
+    Write-Host "  ║  STATUS:        ONLINE (Operational)                           [HF]  ║" -ForegroundColor Green
     Write-Host "  ║  NODE NAME:     $machine                                              ║" -ForegroundColor Gray
     Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
     Write-Host "  ║  [ 🏠 HOME ACCESS ]  (CONSTANT URL)                                  ║" -ForegroundColor Yellow
-    Write-Host "  ║  Web UI:        http://$($machine):3000                                    ║" -ForegroundColor White
+    Write-Host "  ║  Web UI:        http://$($machine.ToLower()):3000                            ║" -ForegroundColor White
     Write-Host "  ║  IP Access:     http://$($localIp):3000                                 ║" -ForegroundColor Gray
-    Write-Host "  ║  Ollama API:    http://$($machine):11434                                   ║" -ForegroundColor White
+    Write-Host "  ║  Ollama API:    http://$($machine.ToLower()):11434                           ║" -ForegroundColor White
     Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
     Write-Host "  ║  [ 🌐 AWAY ACCESS ]  (RANDOM URL)                                    ║" -ForegroundColor Yellow
     if ($globalUrl) {
@@ -56,6 +56,31 @@ function Show-GhostDashboard ($globalUrl) {
     Write-Host "  ╚══════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
     Write-Host "`n  [!] Press CTRL+C to Shutdown all services. " -ForegroundColor Gray
     Write-Host "  [!] Keep this window open for background resource shielding. `n" -ForegroundColor Gray
+}
+
+# --- HUGGING FACE SYNC ---
+function Sync-HFModel {
+    Write-Host "`n  [ HUGGING FACE SYNC ] 🤗" -ForegroundColor Yellow
+    Write-Host "  Example: bartowski/Llama-3.2-1B-Instruct-GGUF" -ForegroundColor Gray
+    $repo = Read-Host "`n  Enter Hugging Face Repo Path"
+    if (-not [string]::IsNullOrWhiteSpace($repo)) {
+        $quant = Read-Host "  Specify Quantization (default: Q4_K_M)"
+        if ([string]::IsNullOrWhiteSpace($quant)) { $quant = "Q4_K_M" }
+        
+        $hfPath = "hf.co/$repo"
+        if ($quant) { $hfPath += ":$quant" }
+        
+        Write-Host "  Pulling from Hugging Face: $hfPath..." -ForegroundColor Gray
+        & ollama pull $hfPath
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  SUCCESS: Model $repo is ready!" -ForegroundColor Green
+            return $true
+        } else {
+            Write-Host "  ERROR: Failed to pull model. Ensure repo exists and contains GGUF files." -ForegroundColor Red
+            return $false
+        }
+    }
+    return $false
 }
 
 # --- THE GHOST (SERVER) ---
@@ -90,6 +115,12 @@ function Start-GhostNode {
     foreach ($m in $models) {
         Write-Log "Syncing: $m..." "Gray"
         & $ollama pull $m | Out-Null
+    }
+
+    # HUGGING FACE SYNC OPTION
+    $hfSync = Read-Host "`n  Pull a Hugging Face Model (hf.co)? (y/n)"
+    if ($hfSync -match "^[yY]$") {
+        Sync-HFModel | Out-Null
     }
     
     Write-Log "Initializing GhostSentinel (Background Optimization)..." "Gray"
