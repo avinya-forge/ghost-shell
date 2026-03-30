@@ -28,7 +28,7 @@ function Assert-Admin {
 
 function Show-GhostDashboard ($globalUrl) {
     Clear-Host
-    $machine = hostname.ToUpper()
+    $machine = $env:COMPUTERNAME.ToUpper()
     $localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "Loopback|vEthernet" } | Select-Object -First 1).IPAddress
     $models = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] } | Select-Object -First 10
     $modelStr = if ($models) { $models -join ", " } else { "None Active" }
