@@ -26,6 +26,38 @@ function Assert-Admin {
     }
 }
 
+function Show-GhostDashboard ($globalUrl) {
+    Clear-Host
+    $machine = hostname.ToUpper()
+    $localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "Loopback|vEthernet" } | Select-Object -First 1).IPAddress
+    $models = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] } | Select-Object -First 5
+    $modelStr = if ($models) { $models -join ", " } else { "None Active" }
+
+    Write-Host "`n  ╔══════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "  ║                [ G H O S T - S H E L L   D A S H B O A R D ] 👻      ║" -ForegroundColor Cyan
+    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    Write-Host "  ║  STATUS:        ONLINE (Operational)                                 ║" -ForegroundColor Green
+    Write-Host "  ║  NODE NAME:     $machine                                              ║" -ForegroundColor Gray
+    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    Write-Host "  ║  [ 🏠 HOME ACCESS ]  (CONSTANT URL)                                  ║" -ForegroundColor Yellow
+    Write-Host "  ║  Web UI:        http://$($machine):3000                                    ║" -ForegroundColor White
+    Write-Host "  ║  IP Access:     http://$($localIp):3000                                 ║" -ForegroundColor Gray
+    Write-Host "  ║  Ollama API:    http://$($machine):11434                                   ║" -ForegroundColor White
+    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    Write-Host "  ║  [ 🌐 AWAY ACCESS ]  (RANDOM URL)                                    ║" -ForegroundColor Yellow
+    if ($globalUrl) {
+        Write-Host "  ║  Cloudflare:    $globalUrl                          ║" -ForegroundColor Cyan
+    } else {
+        Write-Host "  ║  Cloudflare:    Not Enabled (Restricted to Home)                     ║" -ForegroundColor Red
+    }
+    Write-Host "  ╠══════════════════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    Write-Host "  ║  [ 🧠 MENTAL MODELS ]                                                ║" -ForegroundColor Yellow
+    Write-Host "  ║  Models:        $modelStr" -ForegroundColor Gray
+    Write-Host "  ╚══════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "`n  [!] Press CTRL+C to Shutdown all services. " -ForegroundColor Gray
+    Write-Host "  [!] Keep this window open for background resource shielding. `n" -ForegroundColor Gray
+}
+
 # --- THE GHOST (SERVER) ---
 function Start-GhostNode {
     $machineName = hostname
@@ -186,9 +218,11 @@ function Start-GhostNode {
         }
     }
 
-    Write-Log "`nREADY: C3PO is serving AI at http://$(hostname):11434" "Yellow"
-    Write-Log "Press Enter to close this window (Sentinel stays active)..." "Gray"
-    Read-Host
+    Write-Log "`nREADY: C3PO is serving AI." "Yellow"
+    Show-GhostDashboard -globalUrl $url
+    
+    # Stay alive to keep dashboard and jobs active
+    while($true) { Start-Sleep -Seconds 60 }
 }
 
 # --- THE SHELL (CLIENT) ---
