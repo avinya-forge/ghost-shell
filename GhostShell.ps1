@@ -26,7 +26,7 @@ function Assert-Admin {
     }
 }
 
-function Show-GhostDashboard ($globalUrl) {
+function Show-GhostDashboard ($globalUrl, $uiStatus="OFFLINE") {
     Clear-Host
     $machine = $env:COMPUTERNAME.ToUpper()
     $localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "Loopback|vEthernet" } | Select-Object -First 1).IPAddress
@@ -39,7 +39,13 @@ function Show-GhostDashboard ($globalUrl) {
     Write-Host "  NODE NAME:     $machine" -ForegroundColor Gray
     Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
     Write-Host "  [ HOME ACCESS ]  (CONSTANT URL)" -ForegroundColor Yellow
-    Write-Host "  Web UI:        http://$($machine.ToLower()):3000" -ForegroundColor White
+    
+    if ($uiStatus -eq "ONLINE") {
+        Write-Host "  Web UI:        http://$($machine.ToLower()):3000" -ForegroundColor White
+    } else {
+        Write-Host "  Web UI:        NOT RUNNING (Docker required)" -ForegroundColor Red
+    }
+    
     Write-Host "  IP Access:     http://$($localIp):3000" -ForegroundColor Gray
     Write-Host "  Ollama API:    http://$($machine.ToLower()):11434" -ForegroundColor White
     Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
@@ -92,6 +98,8 @@ function Start-GhostNode {
     }
 
     Write-Log "### INITIALIZING C3PO NODE (SERVER) ###"
+    $url = ""
+    $uiStatus = "OFFLINE"
     $ollama = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
     if (!(Test-Path $ollama)) { 
         Write-Log "[!] CRITICAL: Ollama not found at $ollama. Install from ollama.com" "Red"
@@ -193,7 +201,10 @@ function Start-GhostNode {
             -e OLLAMA_BASE_URL=http://host.docker.internal:11434 `
             -v open-webui:/app/backend/data `
             --name r2d2 --restart always ghcr.io/open-webui/open-webui:main 2>&1
-        if ($LASTEXITCODE -eq 0 -and $?) { Write-Log "SUCCESS: R2D2 is live at http://localhost:3000" "Green" }
+        if ($LASTEXITCODE -eq 0 -and $?) { 
+            Write-Log "SUCCESS: R2D2 is live at http://localhost:3000" "Green"
+            $uiStatus = "ONLINE"
+        }
         else { Write-Log "WARNING: R2D2 deploy failed. Is Docker running? Output: $dockerRun" "Yellow" }
     
         # Global Access Tunnel
@@ -225,7 +236,8 @@ function Start-GhostNode {
                 }
             } else {
                 docker run -d --name ghost-tunnel --restart always cloudflare/cloudflared:latest tunnel run --token $token 2>&1 | Out-Null
-                Write-Log "`n[ 🌐 GLOBAL WEB UI SECURED VIA CUSTOM DOMAIN ]" "Green"
+                $url = "CUSTOM_DOMAIN"
+                Write-Log "`n[ GLOBAL WEB UI SECURED VIA CUSTOM DOMAIN ]" "Green"
                 Write-Log "Access Open WebUI via your Cloudflare domain!" "Green"
             }
         }
@@ -249,7 +261,7 @@ function Start-GhostNode {
     }
 
     Write-Log "`nREADY: C3PO is serving AI." "Yellow"
-    Show-GhostDashboard -globalUrl $url
+    Show-GhostDashboard -globalUrl $url -uiStatus $uiStatus
     
     # Stay alive to keep dashboard and jobs active
     while($true) { Start-Sleep -Seconds 60 }
