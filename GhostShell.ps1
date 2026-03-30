@@ -71,7 +71,8 @@ function Show-GhostDashboard ($globalUrl, $uiStatus="OFFLINE") {
         $cpu = (Get-Counter '\Processor(_Total)\% Processor Time' -ErrorAction SilentlyContinue).CounterSamples.CookedValue
         $os = Get-CimInstance Win32_OperatingSystem
         $ram = (100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100))
-        $color = if ($cpu -gt 70 -or $ram -gt 70) { "Red" } else { "Cyan" }
+        $color = "Cyan"
+        if ($cpu -gt 70 -or $ram -gt 70) { $color = "Red" }
         Write-Host "  CORE HEALTH:   CPU: $([int]$cpu)% | RAM: $([int]$ram)%" -ForegroundColor $color
     } catch { }
 
@@ -483,14 +484,16 @@ if (-not $Role) {
     
     if ($Host.UI.RawUI.KeyAvailable) {
         $choice = Read-Host "`nSelect your role (1 or 2)"
-        $Role = if ($choice -eq "2") { "Shell" } else { "Ghost" }
+        $Role = "Ghost"
+        if ($choice -eq "2") { $Role = "Shell" }
     } else {
         # Simple wait loop for input with timeout
         for ($i = $timeout; $i -gt 0; $i--) {
             Write-Host "`r  Starting in $i... " -NoNewline
             if ($Host.UI.RawUI.KeyAvailable) {
                 $choice = Read-Host "`nSelect your role (1 or 2)"
-                $Role = if ($choice -eq "2") { "Shell" } else { "Ghost" }
+                $Role = "Ghost"
+                if ($choice -eq "2") { $Role = "Shell" }
                 break
             }
             Start-Sleep -Seconds 1
