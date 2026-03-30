@@ -13,6 +13,12 @@ Param(
     [string]$GhostAddress = "c3po"
 )
 
+# --- AUTO UPDATE (GIT SYNC) ---
+if (Get-Command git -ErrorAction SilentlyContinue) {
+    Write-Host "[*] Checking for updates on main..." -ForegroundColor Gray
+    git pull origin main --rebase | Out-Null
+}
+
 # --- UTILITIES ---
 function Write-Log ($msg, $color="Cyan") { Write-Host "[$(Get-Date -Format 'HH:mm:ss')] $msg" -ForegroundColor $color }
 
@@ -59,6 +65,16 @@ function Show-GhostDashboard ($globalUrl, $uiStatus="OFFLINE") {
     Write-Host "  [ MENTAL MODELS ]" -ForegroundColor Yellow
     Write-Host "  Models:        $modelStr" -ForegroundColor Gray
     Write-Host "  --------------------------------------------------" -ForegroundColor Cyan
+    
+    # LIVE RESOURCE MINI-BAR
+    try {
+        $cpu = (Get-Counter '\Processor(_Total)\% Processor Time' -ErrorAction SilentlyContinue).CounterSamples.CookedValue
+        $os = Get-CimInstance Win32_OperatingSystem
+        $ram = (100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100))
+        $color = if ($cpu -gt 70 -or $ram -gt 70) { "Red" } else { "Cyan" }
+        Write-Host "  CORE HEALTH:   CPU: $([int]$cpu)% | RAM: $([int]$ram)%" -ForegroundColor $color
+    } catch { }
+
     Write-Host "`n  [!] Press CTRL+C to Shutdown all services. " -ForegroundColor Gray
     Write-Host "  [!] Keep this window open for background resource shielding. `n" -ForegroundColor Gray
 }
@@ -139,11 +155,11 @@ function Start-GhostNode {
     New-NetFirewallRule -DisplayName "GhostShell WebUI" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow -ErrorAction SilentlyContinue | Out-Null
 
     Write-Log "Starting Ghost Engine..." "Gray"
-    Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Start-Sleep -Seconds 5
-
-    Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
-    Start-Sleep -Seconds 5
+    $ollamaProc = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
+    if (-not $ollamaProc) {
+        Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
+        Start-Sleep -Seconds 5
+    }
 
     # ITERATIVE MODEL SYNC (1-AT-A-TIME)
     Write-Log "Initializing Agentic Model Synchronization..." "Yellow"
@@ -201,8 +217,9 @@ function Start-GhostNode {
         } catch { Write-Log "Surgical cleanup failed. Standing by." "Gray" }
     }
 
-    # Sentinel Job (Background Monitor)
+    # Sentinel Job (Background Monitor & Self-Healing Heartbeat)
     Start-Job -Name "GhostSentinel" -ScriptBlock {
+        Param($ollamaPath)
         function Get-CpuUsage { (Get-Counter '\Processor(_Total)\% Processor Time' -ErrorAction SilentlyContinue).CounterSamples.CookedValue }
         function Get-RamUsage { 
             $os = Get-CimInstance Win32_OperatingSystem
@@ -213,16 +230,25 @@ function Start-GhostNode {
             $cpu = Get-CpuUsage
             $ram = Get-RamUsage
             
-            if ($cpu -gt 70 -or $ram -gt 70) {
-                # Signal the main script or run locally if possible (Jobs have limited scope)
-                # For simplicity in this script, we'll just log and let the user know if they check logs
-                # In a more advanced version, we'd trigger the cleanup function here.
-                # For now, let's just perform a basic GC and let the main script handle the heavy lifting.
+            # 1. SELF-HEALING (HEARTBEAT)
+            if (-not (Get-Process -Name "ollama" -ErrorAction SilentlyContinue)) {
+                Start-Process $ollamaPath -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
+            }
+
+            # 2. CONTAINER WATCHDOG (R2D2)
+            if (Get-Command docker -ErrorAction SilentlyContinue) {
+                $r2d2 = docker inspect -f '{{.State.Running}}' r2d2 2>$null
+                if ($r2d2 -ne "true") { docker start r2d2 2>$null }
+            }
+
+            # 3. RESOURCE SHIELDING
+            if ($cpu -gt 75 -or $ram -gt 75) {
+                # In jobs, we can't call main functions, but we can do a local surgical clear if needed
                 if ($ram -gt 95) { [System.GC]::Collect() }
             }
-            Start-Sleep -Seconds 30
+            Start-Sleep -Seconds 15 # Faster Heartbeat for 2026 perfection
         }
-    }
+    } -ArgumentList $ollama
     
     # Force refresh environment variables in current session
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
@@ -232,15 +258,27 @@ function Start-GhostNode {
         Write-Log "WARNING: Docker is not installed or not in PATH. Skipping OpenWebUI and Cloudflare Tunnels." "Yellow"
         Write-Log "If you just installed Docker, try restarting this PowerShell window." "Gray"
     } else {
-        # Check if Docker Desktop is actually running
-        docker ps >$null 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Write-Log "[!] CRITICAL: Docker is installed, but the ENGINE is not running." "Red"
-            Write-Log "[!] Please open Docker Desktop and wait for 'Engine running' status." "Red"
-            Read-Host "Press Enter once Docker is running to continue..."
+        # ROBUST DOCKER WATCHDOG (Engine Startup Loop)
+        $dockerReady = $false
+        Write-Log "Checking Docker Engine (Watchdog active for 60s)..." "Gray"
+        for ($i=0; $i -lt 12; $i++) {
+            docker ps >$null 2>&1
+            if ($LASTEXITCODE -eq 0) { $dockerReady = $true; break }
+            Write-Host "." -NoNewline
+            Start-Sleep -Seconds 5
+        }
+
+        if (-not $dockerReady) {
+            Write-Log "`n[!] CRITICAL: Docker Engine is not responding." "Red"
+            Write-Log "[!] Ensure Docker Desktop is running and set to 'Engine running'." "Red"
+            $skip = Read-Host "Skip Docker-based services and continue? (y/n)"
+            if ($skip -ne "y") { return }
+        } else {
+            Write-Log "`nSUCCESS: Docker Engine is active." "Green"
         }
         
-        # UI Deployment 
+        if ($dockerReady) {
+            # UI Deployment 
         Write-Log "Deploying R2D2 (Open WebUI) on port 3000..." "Yellow"
         Write-Log "Cleaning up any old R2D2 instance..." "Gray"
         docker rm -f r2d2 2>&1 | Out-Null
@@ -309,10 +347,12 @@ function Start-GhostNode {
     }
 
     Write-Log "`nREADY: C3PO is serving AI." "Yellow"
-    Show-GhostDashboard -globalUrl $url -uiStatus $uiStatus
     
-    # Stay alive to keep dashboard and jobs active
-    while($true) { Start-Sleep -Seconds 60 }
+    # Live Dashboard Loop (Refreshes every 60s)
+    while($true) { 
+        Show-GhostDashboard -globalUrl $url -uiStatus $uiStatus
+        Start-Sleep -Seconds 60 
+    }
 }
 
 # --- THE SHELL (CLIENT) ---
