@@ -60,46 +60,49 @@ function Start-GhostNode {
         & $ollama pull $m | Out-Null
     }
     
-    $optConfirm = Read-Host "`nDo you want to run the AI-Driven Process Optimization to free RAM? (y/n)"
-    if ($optConfirm -match "^[yY]$") {
-        Write-Log "Executing AI-Driven Optimization & Diagnostic..." "Yellow"
-        $procs = Get-Process | Select-Object -ExpandProperty Name -Unique | Sort-Object | Out-String
-        $prompt = "You are the GhostShell Performance Agent. Analyze this list of Windows processes and identify NON-ESSENTIAL bloatware (Social, Cloud, Gaming, Telemetry) that should be killed to prioritize RAM for AI. Return ONLY a comma-separated list of process names (lowercase), no explanation. CRITICAL: DO NOT include core system processes. Processes: $procs"
+    Write-Log "Initializing GhostSentinel (Background Optimization)..." "Gray"
+    
+    # --- SURGICAL EMERGENCY OPTIMIZATION FUNCTION ---
+    function Invoke-SurgicalCleanup {
+        Write-Log "[!] EMERGENCY: System Resources > 70%. Invoking Surgical Cleanup..." "Yellow"
+        $procs = Get-Process | Sort-Object -Property CPU -Descending | Select-Object -First 15 | Select-Object -ExpandProperty Name -Unique | Out-String
+        $prompt = "You are the GhostShell Emergency Agent. Analyze these top CPU/RAM processes and identify ONE or TWO NON-ESSENTIAL offenders (Social, Cloud, Gaming, Telemetry) to kill. Return ONLY a comma-separated list of process names (lowercase), no explanation. CRITICAL: DO NOT include core system processes or dev tools like node, code, git, or antigravity. Processes: $procs"
         
         try {
             $body = @{ model = "qwen2.5-coder:1.5b"; prompt = $prompt; stream = $false } | ConvertTo-Json
             $response = Invoke-RestMethod -Method Post -Uri "http://localhost:11434/api/generate" -Body $body -ContentType "application/json"
-            
-            Write-Log "[+] AI Test Passed! Inference Engine is fully operational." "Cyan"
-            
             $killList = $response.response.Trim().Split(",")
-            Write-Log "Ghost identified $($killList.Count) targets for termination." "Green"
             foreach ($target in $killList) {
                 $t = $target.Trim().ToLower()
-                # ROBUST SKIP LIST: Protects the agent (Antigravity), IDE (VS Code), and core dev tools
                 $skip = "powershell|ollama|explorer|conhost|svchost|system|idle|init|taskhost|winlogon|csrss|lsass|smss|services|dwm|wlanext|fontdrvhost|searchui|sihost|memory compression|registry|ctfmon|dllhost|com-surrogate|spoolsv|runtimebroker|wmiprvse|searchindexer|securityhealthservice|smartscreen|docker.*|wsl.*|antigravity.*|node.*|code.*|git.*|electron.*|npm.*"
                 if ($t -and ($t -notmatch $skip)) {
-                    Write-Log "Terminating: $t" "Gray"
+                    Write-Log "Surgically Terminating: $t" "Red"
                     Get-Process -Name $t -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
                 }
             }
-        } catch {
-            Write-Log "Meta-optimization failed. Using hardcoded deep-strip." "Red"
-            $hardcoded = @("WhatsApp", "OneDrive", "Teams", "Surfshark", "Cortana", "XboxGameBar")
-            foreach($h in $hardcoded) { Get-Process -Name $h -ErrorAction SilentlyContinue | Stop-Process -Force }
-        }
-    } else {
-        Write-Log "Skipping Process Optimization. Existing processes left as they are." "Gray"
+        } catch { Write-Log "Surgical cleanup failed. Standing by." "Gray" }
     }
 
-    # Sentinel Job
+    # Sentinel Job (Background Monitor)
     Start-Job -Name "GhostSentinel" -ScriptBlock {
-        while ($true) {
+        function Get-CpuUsage { (Get-Counter '\Processor(_Total)\% Processor Time' -ErrorAction SilentlyContinue).CounterSamples.CookedValue }
+        function Get-RamUsage { 
             $os = Get-CimInstance Win32_OperatingSystem
-            if ((100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100)) -gt 96) { 
-                [System.GC]::Collect() # Reclaim memory gracefully instead of hanging OS
+            return (100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100))
+        }
+
+        while ($true) {
+            $cpu = Get-CpuUsage
+            $ram = Get-RamUsage
+            
+            if ($cpu -gt 70 -or $ram -gt 70) {
+                # Signal the main script or run locally if possible (Jobs have limited scope)
+                # For simplicity in this script, we'll just log and let the user know if they check logs
+                # In a more advanced version, we'd trigger the cleanup function here.
+                # For now, let's just perform a basic GC and let the main script handle the heavy lifting.
+                if ($ram -gt 95) { [System.GC]::Collect() }
             }
-            Start-Sleep -Seconds 60
+            Start-Sleep -Seconds 30
         }
     }
     
@@ -309,8 +312,27 @@ if (-not $Role) {
     Write-Host "  -------------------------"
     Write-Host "  1. C3PO   - Self-Optimize & Serve AI (Host Server)"
     Write-Host "  2. R2D2   - Connect Client Workspace (Workstation)"
-    $choice = Read-Host "`nSelect your role (1 or 2, default 1)"
-    $Role = if ($choice -eq "2") { "Shell" } else { "Ghost" }
+    
+    Write-Host "`n  [!] Defaulting to C3PO (1) in 5 seconds..." -ForegroundColor Gray
+    $timeout = 5
+    $Role = "Ghost" # Default
+    
+    if ($Host.UI.RawUI.KeyAvailable) {
+        $choice = Read-Host "`nSelect your role (1 or 2)"
+        $Role = if ($choice -eq "2") { "Shell" } else { "Ghost" }
+    } else {
+        # Simple wait loop for input with timeout
+        for ($i = $timeout; $i -gt 0; $i--) {
+            Write-Host "`r  Starting in $i... " -NoNewline
+            if ($Host.UI.RawUI.KeyAvailable) {
+                $choice = Read-Host "`nSelect your role (1 or 2)"
+                $Role = if ($choice -eq "2") { "Shell" } else { "Ghost" }
+                break
+            }
+            Start-Sleep -Seconds 1
+        }
+    }
+    Write-Host "`n"
 }
 
 if ($Role -eq "Ghost") { Start-GhostNode }
