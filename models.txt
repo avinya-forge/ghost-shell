@@ -1,0 +1,14 @@
+# [ GHOST-SHELL AGENTIC MODEL QUEUE ]
+# -----------------------------------
+# To add a model: Simply add its name on a new line.
+# To remove: Delete the line.
+
+# --- TOP-TIER AGENTS (2026) ---
+deepseek-r1:7b         # BEST Planning & Reasoning
+qwen2.5-coder:7b       # BEST Tool-Calling & Execution
+llama-3.1-8b-instruct  # BEST Fast Specialist
+nomic-embed-text       # ESSENTIAL for Agentic Memory (RAG)
+
+# --- EXPERIMENTAL AGENTS ---
+# bartowski/Llama-3.3-70B-Instruct-GGUF:Q4_K_M (If you have 64GB+ RAM)
+# firefunction-v2 (Niche tool-calling specialist)

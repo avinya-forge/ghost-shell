@@ -88,6 +88,32 @@ function Sync-HFModel {
     return $false
 }
 
+# --- DISCARD MODEL ---
+function Discard-Model {
+    Write-Host "`n  [ DISCARD MODEL ]" -ForegroundColor Red
+    $list = & ollama list | Select-Object -Skip 1 | ForEach-Object { $_.Split(" ")[0] }
+    if (-not $list) { Write-Host "  No models installed to discard." -ForegroundColor Gray; return }
+    
+    Write-Host "  Current Models:" -ForegroundColor Gray
+    for ($i=0; $i -lt $list.Count; $i++) { Write-Host "  $($i+1). $($list[$i])" }
+    
+    $choice = Read-Host "`n  Enter # to Discard (or 'm' to edit models.txt)"
+    if ($choice -eq "m") {
+        Start-Process notepad "models.txt"
+        return
+    }
+    
+    if ($choice -match "^\d+$") {
+        $idx = [int]$choice - 1
+        if ($idx -ge 0 -and $idx -lt $list.Count) {
+            $target = $list[$idx]
+            Write-Host "  Removing $target..." -ForegroundColor Red
+            & ollama rm $target
+            Write-Host "  Model discarded." -ForegroundColor Green
+        }
+    }
+}
+
 # --- THE GHOST (SERVER) ---
 function Start-GhostNode {
     $machineName = hostname
@@ -116,19 +142,41 @@ function Start-GhostNode {
     Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 5
 
-    Write-Log "Synchronizing Mental Models (Thinking & Coding Expert)..." "Yellow"
-    # MODELS: deepseek-r1 for thinking/planning, qwen2.5-coder for best-in-class coding
-    $models = @("qwen2.5-coder:7b", "qwen2.5-coder:1.5b", "deepseek-r1:7b", "llama3.1:8b", "nomic-embed-text")
-    foreach ($m in $models) {
-        Write-Log "Syncing: $m..." "Gray"
-        & $ollama pull $m | Out-Null
-    }
+    Start-Process $ollama -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 5
 
-    # HUGGING FACE SYNC OPTION
-    $hfSync = Read-Host "`n  Pull a Hugging Face Model (hf.co)? (y/n)"
-    if ($hfSync -match "^[yY]$") {
-        Sync-HFModel | Out-Null
+    # ITERATIVE MODEL SYNC (1-AT-A-TIME)
+    Write-Log "Initializing Agentic Model Synchronization..." "Yellow"
+    $modelFile = Join-Path $PSScriptRoot "models.txt"
+    if (Test-Path $modelFile) {
+        $queue = Get-Content $modelFile | Where-Object { $_ -match "^[^#\s]" } | ForEach-Object { $_.Split("#")[0].Trim() }
+        Write-Log "Found $($queue.Count) models in queue." "Gray"
+        
+        foreach ($m in $queue) {
+            $existing = & ollama list | Select-String $m
+            if ($existing) {
+                Write-Log "Model already synced: $m" "Gray"
+                continue
+            }
+            
+            $pullNext = Read-Host "`n  Pull next Agentic Model from queue ($m)? (y/n/manual)"
+            if ($pullNext -eq "manual") {
+                Sync-HFModel | Out-Null
+            }
+            elseif ($pullNext -match "^[yY]$") {
+                Write-Log "Syncing: $m..." "Cyan"
+                & $ollama pull $m
+                if ($LASTEXITCODE -eq 0) { Write-Log "SUCCESS: $m is ready." "Green" }
+                else { Write-Log "FAILED: Could not pull $m." "Red" }
+            }
+        }
+    } else {
+        Write-Log "WARNING: models.txt not found. Skipping automatic sync." "Yellow"
     }
+    
+    # DISCARD OPTIONS UI
+    $manage = Read-Host "`n  Manage / Discard models now? (y/n)"
+    if ($manage -match "^[yY]$") { Discard-Model }
     
     Write-Log "Initializing GhostSentinel (Background Optimization)..." "Gray"
     
