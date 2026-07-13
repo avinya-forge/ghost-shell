@@ -1,0 +1,24 @@
+{
+  "last_updated": "2026-06-03T19:49:00Z",
+  "project": "Vishwa-Vani",
+  "architecture": {
+    "framework": "Next.js 16, React 19",
+    "patterns": ["Server Components", "Tailwind 4", "SQLite WASM", "TypeScript strict"],
+    "data": ["JSON shards", "SQLite lake files", "NVF 1.0 format"]
+  },
+  "current_sprint": {
+    "priority_gate": "STABILITY GATE - EPIC 7",
+    "active_tasks": [
+      "BUG-069",
+      "BUG-070",
+      "BUG-071"
+    ]
+  },
+  "memory_pointers": {
+    "rules": ".agents/rules/code-style-guide.md",
+    "backlog": "docs/backlog.md",
+    "release_notes": "docs/release-notes.md",
+    "vision": "docs/vision.md",
+    "blueprint": "docs/architecture/blueprint.md"
+  }
+}
