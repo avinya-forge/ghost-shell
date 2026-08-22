@@ -510,6 +510,19 @@ Implement scalable, performant, and modern React and Next.js applications.
 
 
 ---
+# Skill: Strict Repository Health & CI Maintenance
+
+## Objective
+Maintain a pristine, perfectly healthy codebase at all times.
+
+## Directives
+1. **Zero Tolerance for CI/Lint Failures:** You are responsible for ensuring that CI pipelines, linters, type checkers, and formatters always pass.
+2. **Proactive Checks:** Before proposing changes or finalizing a task, proactively run local linters, type checkers, and test suites.
+3. **Immediate Remediation:** If a build breaks, a test fails, or a linter complains, drop all other feature work and fix the regression immediately. Feature work cannot continue if the codebase is unhealthy.
+4. **Continuous Maintenance:** Whenever you observe a broken pipeline or unhealthy state in the repository, automatically diagnose and resolve the underlying issue without waiting for explicit user prompting.
+
+
+---
 # Tech: Testing & Quality Assurance Best Practices
 
 ## Goal
@@ -673,6 +686,40 @@ Maximize the value delivered in each Pull Request (PR) by enabling AI developers
 3. **PR Packing & Submission:**
    - Structure atomic commits per sub-task or feature module.
    - Draft comprehensive PR description summarizing all completed backlog items, verification results, and documentation updates.
+
+
+---
+# Skill: Verified Specification-Driven Development Workflow
+
+## Trigger
+When the user prompts `start implementation` or requests to begin the development lifecycle, engage this workflow automatically.
+
+## Objective
+Transition from purely task-based backlog development to a holistic, specification-driven approach. This ensures features are deeply analyzed against the overarching vision, strictly verified, and continuously healthy.
+
+## Phases of Execution
+
+### Phase 1: Deep Vision & Specification Analysis
+1. **Read Repo Context:** Automatically locate and read the relevant `repo-contexts/<repo-name>.md` file (or similar context documents) to understand the business value, target users, and existing architecture.
+2. **Vision to Backlog Mapping:** Analyze the high-level vision and extract required features. List these down in a high-level backlog.
+3. **Triangulation:** Cross-reference the stated vision, the current state of the codebase, and the drafted backlog to ensure alignment.
+
+### Phase 2: Granular Feature Breakdown (Just-In-Time)
+For the highest priority feature in the backlog:
+1. Conduct a deep-dive analysis on the specific feature.
+2. Break the feature down into granular, actionable tasks.
+3. Establish clear technical specifications and acceptance criteria for each task before writing code.
+
+### Phase 3: Implementation
+1. Execute the granular tasks sequentially.
+2. Ensure you adhere strictly to the specs defined in Phase 2.
+
+### Phase 4: Post-Implementation Verification & Auditing
+After a feature's granular tasks are implemented:
+1. **Bug Hunting:** Actively search for edge cases, race conditions, memory leaks, and logic flaws within the new feature.
+2. **Deep Verification:** Validate that the implementation perfectly matches the initial technical specifications and acceptance criteria.
+3. **Integration Testing:** Audit how the new feature interacts with existing systems. Ensure no existing functionality is broken.
+4. **Completion:** ONLY when the feature passes this rigorous audit, mark it complete and automatically move back to Phase 2 for the next feature.
 
 
 
