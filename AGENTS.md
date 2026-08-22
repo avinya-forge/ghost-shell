@@ -572,72 +572,6 @@ Translate a high-level project vision statement into actionable epics and phases
 
 
 ---
-# Workflow: Continuous Autonomous Loop
-
-## Goal
-Enable AI agents to run continuously and deterministically upon receiving simple triggers such as `"start working"` or `"start working based on skills"`. The agent encapsulates all engineering personas, operates through a Finite State Machine (Phases 0-5), and autonomously loops through backlog items without requiring intermediate human prompts.
-
----
-
-## Trigger Commands
-- `"start working"`
-- `"start working based on skills"`
-- `"execute backlog"`
-- `"run autonomous loop"`
-
----
-
-## Autonomous Loop Protocol (Finite State Machine)
-
-### PHASE 0: Vision Alignment & Backlog Grooming
-1. **Locate & Read Docs:** Check root directory or `/docs/` for single-source-of-truth files (`vision.md`, `backlog.md`, `release-notes.md`).
-2. **Groom & Sort Backlog:**
-   - **Priority 0:** Bugs & Broken Tests (unless marked `[BLOCKED: Needs Human/Architect Review]`).
-   - **Priority 1:** Active Feature / Data / Core Pipeline Tasks.
-   - **Priority 2:** Enhancements, Integrations & UI Polish.
-3. **Select Execution Target:** Pick the highest-priority unblocked item from `backlog.md`. Group tasks logically by module or component.
-
----
-
-### PHASE 1: QA, Bug Hunt & Baseline Verification
-1. **Execute Verification Suite:** Run test command (e.g., `npm test`, `pytest`, `go test`) and bug-hunting routines.
-2. **Resolve Priority 0 Issues:** Address any failing baseline tests immediately.
-3. **Apply Circuit Breaker Rule:** If a fix fails 3 consecutive times, trigger [Circuit Breaker Protocol] (`skills/circuit-breaker.md`) to safely revert and pivot to the next item.
-
----
-
-### PHASE 2: Implementation & Technical Excellence
-1. **Design & Architect:** Formulate technical design aligning with `vision.md` and system architecture standards.
-2. **Execute Development:**
-   - Implement feature code or data/UI pipelines cleanly.
-   - Write automated unit and integration tests.
-3. **Adaptive Execution:** If architecturally blocked, refactor implementation locally without waiting for external input while preserving overarching vision goals.
-
----
-
-### PHASE 3: Audit & End-to-End Verification
-1. **Code Audit:** Verify code strictly satisfies acceptance criteria and follows repository coding guidelines.
-2. **Pipeline/Build Check:** Execute `npm run build` (or language-specific build script) and run all automated tests.
-3. **Verification Handling:** If build or tests break, apply the [Circuit Breaker Rule] if unresolved after 3 attempts.
-
----
-
-### PHASE 4: Single Source of Truth & Documentation Sync
-1. **Sync Backlog & Release Notes:**
-   - Remove completed task from `backlog.md`.
-   - Append completed entry to `release-notes.md`.
-2. **Update Status Summaries:** Ensure repository state metrics accurately reflect physical code and test status.
-
----
-
-### PHASE 5: Loop Trigger & Continuous Execution
-1. **Output Session Summary:** Report concise status to terminal (Completed Tasks, Bug Queue, Circuit Breakers Tripped, Next Target).
-2. **Trigger Next Loop:** Immediately output:
-   > *"Initiating next loop iteration..."*
-3. **Self-Prompt:** Transition back to **Phase 0** to process the next highest-priority backlog item without pausing for user input.
-
-
----
 # Workflow: Deep Context Gathering & Structured Reasoning
 
 ## Goal
@@ -666,60 +600,42 @@ Formulate an internal architectural plan prior to code execution:
 
 
 ---
-# Workflow: Maximum PR Throughput
-
-## Goal
-Maximize the value delivered in each Pull Request (PR) by enabling AI developers to work continuously through prioritized backlog items while maintaining strict code quality, testing standards, and git hygiene.
-
-## Core Strategy
-1. **Backlog Batching:**
-   - Group high-priority items from `backlog.md` into coherent execution batches (e.g., related feature set, backend + matching frontend UI, or bug fix + test suite enhancement).
-   - Ensure the batch scope remains manageable for code review while delivering maximum completion volume.
-
-2. **Continuous Backlog Loop:**
-   - **Step 1: Pick Priority Task:** Select top priority item from `backlog.md`.
-   - **Step 2: Implement & Test:** Develop feature/fix and write automated unit/integration tests.
-   - **Step 3: Verify Locally:** Run test suite and static checks.
-   - **Step 4: Sync Docs & State:** Update `backlog.md` (remove completed task) and `release-notes.md` (add entry).
-   - **Step 5: Check PR Capacity:** If capacity permits and top priority backlog tasks remain, proceed immediately to Step 1 for the next item within the same PR session.
-
-3. **PR Packing & Submission:**
-   - Structure atomic commits per sub-task or feature module.
-   - Draft comprehensive PR description summarizing all completed backlog items, verification results, and documentation updates.
-
-
----
-# Skill: Verified Specification-Driven Development Workflow
+# Skill: Verified Specification-Driven Development Workflow & Session Batching
 
 ## Trigger
 When the user prompts `start implementation` or requests to begin the development lifecycle, engage this workflow automatically.
 
 ## Objective
-Transition from purely task-based backlog development to a holistic, specification-driven approach. This ensures features are deeply analyzed against the overarching vision, strictly verified, and continuously healthy.
+Transition from purely task-based development to a specification-driven approach, while **maximizing the Unit of Work per single AI session**. Sessions must aggressively batch tasks, execute deep verification, and leave a clean state (via the backlog) if they hit capacity limits.
 
-## Phases of Execution
+## The 'Unit of Work' for a Single Session
+Each AI session has finite context and execution capacity. To maximize output, a session's Unit of Work is defined as:
+1. **Analyze & Plan:** Deep vision mapping and granular specification generation for the next major feature.
+2. **Execute (Batched):** Implement as many granular tasks within that feature as the session can safely handle without breaking repo health.
+3. **Verify:** Perform bug hunting, auditing, and integration checks on the executed batch.
+4. **Handoff (Backlog):** If the session cannot finish the entire feature, it must append the remaining uncompleted tasks with their full specifications into the acklog.md so the next session can pick up exactly where it left off.
+
+## Phases of Execution (The Session Loop)
 
 ### Phase 1: Deep Vision & Specification Analysis
-1. **Read Repo Context:** Automatically locate and read the relevant `repo-contexts/<repo-name>.md` file (or similar context documents) to understand the business value, target users, and existing architecture.
-2. **Vision to Backlog Mapping:** Analyze the high-level vision and extract required features. List these down in a high-level backlog.
-3. **Triangulation:** Cross-reference the stated vision, the current state of the codebase, and the drafted backlog to ensure alignment.
+1. **Context Loading:** Read epo-contexts/<repo-name>.md to understand business value and architecture.
+2. **Vision to Backlog Mapping:** Analyze the high-level vision and extract required features.
+3. **Just-In-Time Breakdown:** For the highest priority feature, conduct a deep-dive analysis. Break the feature down into granular, actionable tasks. Establish clear technical specifications and acceptance criteria for each.
 
-### Phase 2: Granular Feature Breakdown (Just-In-Time)
-For the highest priority feature in the backlog:
-1. Conduct a deep-dive analysis on the specific feature.
-2. Break the feature down into granular, actionable tasks.
-3. Establish clear technical specifications and acceptance criteria for each task before writing code.
+### Phase 2: High-Throughput Implementation (Batching)
+1. **Sequential Execution:** Begin implementing the granular tasks sequentially in the current session.
+2. **Continuous Health:** Strictly adhere to the specs and ensure no CI/Lint failures occur (as per 	ech-repo-health-maintenance.md).
+3. **Capacity Check:** If you realize the session is running out of context/capacity, STOP feature work. Do not leave half-finished code. 
 
-### Phase 3: Implementation
-1. Execute the granular tasks sequentially.
-2. Ensure you adhere strictly to the specs defined in Phase 2.
+### Phase 3: Post-Implementation Verification & Auditing
+For the tasks completed in this session's batch:
+1. **Bug Hunting:** Actively search for edge cases, race conditions, memory leaks, and logic flaws.
+2. **Deep Verification:** Validate that the implementation matches the technical specifications and acceptance criteria.
+3. **Integration Testing:** Audit how the newly batched code interacts with existing systems.
 
-### Phase 4: Post-Implementation Verification & Auditing
-After a feature's granular tasks are implemented:
-1. **Bug Hunting:** Actively search for edge cases, race conditions, memory leaks, and logic flaws within the new feature.
-2. **Deep Verification:** Validate that the implementation perfectly matches the initial technical specifications and acceptance criteria.
-3. **Integration Testing:** Audit how the new feature interacts with existing systems. Ensure no existing functionality is broken.
-4. **Completion:** ONLY when the feature passes this rigorous audit, mark it complete and automatically move back to Phase 2 for the next feature.
+### Phase 4: Clean Handoff & State Sync
+1. **Update Backlog:** Remove completed tasks from acklog.md. If the overarching feature was not fully completed, explicitly add the remaining granular tasks to the backlog with their defined specifications.
+2. **Commit & End Session:** Commit the verified batch. The repo is now in a pristine state, ready for the next "start implementation" prompt to seamlessly resume work on the remaining backlog tasks.
 
 
 
