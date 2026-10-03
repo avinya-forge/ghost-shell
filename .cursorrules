@@ -709,14 +709,15 @@ Design and build resilient, scalable, and well-structured RESTful and GraphQL AP
 # Tech: CI/CD & DevOps Standards
 
 ## Goal
-Automate code integration, verification, containerization, and continuous deployment pipelines.
+Automate code integration, verification, and continuous deployment pipelines while keeping GitHub Actions lean, robust, and free of failing legacy bloat.
 
 ## Guidelines
-1. **Automated Integration (CI):** Run automated linting, type checking, unit tests, and security scans on every pull request and push to primary branches.
-2. **Containerization (Docker):** Write minimal, multi-stage Dockerfiles adhering to security best practices (non-root users, explicit base image tags, minimal layers).
-3. **Environment Parity:** Keep development, staging, and production environments as similar as possible using Infrastructure as Code (IaC) or declarative configurations.
-4. **Deployment Strategies:** Use reliable deployment practices (blue/green, canary, or rolling updates) with health check endpoints (`/healthz`) to prevent downtime.
-5. **Pipeline Security:** Secure CI/CD pipelines by masking secrets, scoping workflow permissions, and using OIDC tokens instead of long-lived service keys where possible.
+1. **Minimal, Reliable GitHub Actions:** GitHub Actions must be explicitly scoped only for running builds and tests after commits to ensure everything is working. If a workflow is failing, unnecessary, or overly complex, remove it entirely. Simplicity and reliability are paramount.
+2. **Automated Integration (CI):** Run automated unit tests and build verification on every pull request and push to primary branches to catch breakages early.
+3. **Dependabot Optimization:** Enable Dependabot to keep repository dependencies secure and up-to-date, but configure it for a very low frequency to avoid noise. Create a `.github/dependabot.yml` that limits updates to `schedule.interval: "monthly"` and sets `open-pull-requests-limit: 1`.
+4. **Containerization (Docker):** Write minimal, multi-stage Dockerfiles adhering to security best practices (non-root users, explicit base image tags, minimal layers).
+5. **Environment Parity & Checks:** Keep development, staging, and production environments similar using declarative configurations. Ensure services implement health check endpoints (`/healthz`).
+6. **Pipeline Security:** Secure CI/CD pipelines by masking secrets, scoping workflow permissions strictly (`permissions: contents: read`), and avoiding bloated third-party actions where simple scripts suffice.
 
 
 ---
@@ -1052,7 +1053,8 @@ To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e
 1. **Single Point of Entry:** Always use `.\one.ps1` for multi-repo actions. 
    - `.\one.ps1 skills -All` updates AI skills across all sibling repositories.
    - `.\one.ps1 deploy -All` initiates local infrastructure redeployment across all sibling repositories.
-2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local` or `Sync-Skills` functions of `one.ps1`.
+   - `.\one.ps1 actions -All` optimizes GitHub actions, removing bloat and configuring Dependabot.
+2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local`, `Sync-Skills`, or `Optimize-Actions` functions of `one.ps1`.
 3. **Avoid Duplicate Scripts:** Do not create separate `.sh` files or individual `setup-*` scripts. Consolidate logic into `one.ps1` using clean PowerShell parameters and `switch` statements.
 4. **Git Safety:** Always ensure that `one.ps1` actions that touch git repos (like fetching/pulling) appropriately handle discarded local changes (e.g., `git clean -fd`, `git reset --hard`) only where intended, and always commit/push updated settings automatically.
 
