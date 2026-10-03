@@ -1258,6 +1258,23 @@ Formulate an internal architectural plan prior to code execution:
 
 
 ---
+<!-- SKILL MODULE: workflow-local-deployment.md -->
+# Goal
+Define a streamlined, autonomous local deployment workflow that automatically builds and redeploys local instances of the application whenever new code is pulled from the remote repository or pushed to it.
+
+# Context
+Local environments can quickly become out-of-sync with the remote codebase when collaborating with other agents or developers. To maintain an uninterrupted workflow and test changes dynamically, it is necessary to establish an automated loop or checklist for local deployment. 
+
+# Guidelines
+1. **Automated Hooking:** Use post-checkout, post-merge, and post-rewrite Git hooks to trigger local builds, database migrations, and service restarts. Alternatively, use a file watcher (like nodemon, air, or reflex) for seamless hot-reloading when the branch updates.
+2. **Local Infrastructure Reset:** Before redeploying, ensure local databases, containers, or memory stores are adequately reset or migrated to match the incoming remote state to prevent schema drift errors.
+3. **Containerized Deployment:** If the project uses Docker (or Docker Compose), run `docker compose down && docker compose up --build -d` upon pulling latest changes to guarantee parity.
+4. **Dependency Sync:** Automatically run `npm install`, `pip install`, `go mod tidy`, or the respective package manager command if lockfiles (`package-lock.json`, `requirements.txt`, `go.sum`) are modified during a pull.
+5. **Readiness Checks:** After deployment, explicitly verify `/healthz`, `/metrics`, or basic root endpoints to confirm that the local application has successfully started before continuing with tasks.
+6. **Error Recovery:** If local redeployment fails, surface logs immediately, attempt a clean install or container purge, and if it still fails, block subsequent tests and ask for architectural/human review.
+
+
+---
 <!-- SKILL MODULE: workflow-memory-and-context.md -->
 # Workflow: Memory Builder & Token Headroom Optimization
 
