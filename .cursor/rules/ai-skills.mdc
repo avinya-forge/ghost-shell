@@ -2,16 +2,14 @@
 
 ## MANDATE: 8-STAGE FEATURE LIFECYCLE, DESIGN THINKING, WORK MEASUREMENT & HIGH PR THROUGHPUT
 
-1. **8-Stage Feature Execution Lifecycle:** Process every backlog feature through 8 mandatory stages:
-   Vision Alignment & Triangulation -> Feature Validation & Design Thinking/Spike -> HLD/LLD Architecture & Granular Tasks -> Iterative Implementation & Refactoring -> Testing & Verification -> System Integration Audit -> Bug Hunting & OWASP Security Audit -> SSOT Sync & Feature Transition.
-2. **Continuous Cleanup & Optimization:** Refactor, simplify, and reuse existing codebase utilities during implementationâ€”never write redundant duplicated code.
-3. **Continuous Autonomous Loop Execution:** When triggered with commands like "start working", "start working based on skills", or "run autonomous loop", operate continuously through prioritized backlog items (acklog.md). Do NOT stop after completing a single minor edit or trivial fix.
-4. **Programmatic Work Measurement (git diff --shortstat):** At the end of each completed item, run git diff --shortstat HEAD to measure total lines of code added/modified and files changed across source and test files.
-5. **Session Yield & Target PR Scope (200-500 LOC / 2-4 Items):** Batch adjacent prioritized tasks into each PR session to deliver substantial functional value (target: 200â€“500 LOC or 2â€“4 completed features/fixes with full automated unit/integration test coverage). IF total lines changed < 200 AND completed items < 2 while unblocked backlog tasks remain, DO NOT STOPâ€”self-prompt and trigger the next loop iteration immediately.
-6. **Circuit Breaker Anti-Stuck Safety:** If a fix or test fails 3 consecutive times, apply skills/circuit-breaker.md: revert failing changes to baseline, tag item as [BLOCKED: Needs Human/Architect Review] in acklog.md with concise diagnostic notes, and immediately pivot to the next unblocked priority task.
-7. **Single Source of Truth (SSOT) Maintenance:** Continually update ision.md, acklog.md, and elease-notes.md. Move completed items to release notes and expand vision/backlog as new roadmap capabilities emerge.
-8. **Rigorous Verification & Memory:** Physically execute test suites (
-pm test, pytest, go test) in the local environmentâ€”never assume code passes without execution. Record key project insights via initiate_memory_recording where applicable.
+1. **8-Stage Feature Execution Lifecycle:** Process every backlog feature through 8 mandatory stages.
+2. **Continuous Cleanup & Optimization:** Refactor, simplify, and reuse existing codebase utilities.
+3. **Continuous Autonomous Loop Execution:** Operate continuously through prioritized backlog items.
+4. **Programmatic Work Measurement (git diff --shortstat):** Measure total lines of code added/modified.
+5. **Session Yield & Target PR Scope:** Batch adjacent prioritized tasks into each PR session.
+6. **Circuit Breaker Anti-Stuck Safety:** If a fix or test fails 3 consecutive times, apply circuit-breaker.
+7. **Single Source of Truth (SSOT) Maintenance:** Continually update vision.md, backlog.md, release-notes.md.
+8. **Rigorous Verification & Memory:** Physically execute test suites locally.
 
 ---
 
@@ -1043,6 +1041,23 @@ Ensure robust type safety and consistent, maintainable UI styling across project
 
 
 ---
+<!-- SKILL MODULE: tool-one-cli.md -->
+# Goal
+Define and maintain the unified `one.ps1` CLI tool as the central automation script for all repository synchronization, AI skill aggregation, and local deployments.
+
+# Context
+To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e.g., `setup-ai-settings.sh`, `scripts/deploy-local.ps1`), the project uses a single unified PowerShell script located at `ai-skills-repo/one.ps1`. This script is the single entry point for broad repository actions on Windows.
+
+# Guidelines
+1. **Single Point of Entry:** Always use `.\one.ps1` for multi-repo actions. 
+   - `.\one.ps1 skills -All` updates AI skills across all sibling repositories.
+   - `.\one.ps1 deploy -All` initiates local infrastructure redeployment across all sibling repositories.
+2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local` or `Sync-Skills` functions of `one.ps1`.
+3. **Avoid Duplicate Scripts:** Do not create separate `.sh` files or individual `setup-*` scripts. Consolidate logic into `one.ps1` using clean PowerShell parameters and `switch` statements.
+4. **Git Safety:** Always ensure that `one.ps1` actions that touch git repos (like fetching/pulling) appropriately handle discarded local changes (e.g., `git clean -fd`, `git reset --hard`) only where intended, and always commit/push updated settings automatically.
+
+
+---
 <!-- SKILL MODULE: ui-ux-pro-max.md -->
 # Skill: UI/UX Pro Max & 21st.dev Magic Server Design Intelligence
 
@@ -1263,10 +1278,10 @@ Formulate an internal architectural plan prior to code execution:
 Define a reliable, zero-touch autonomous local deployment workflow that automatically builds, redeploys, and exposes local instances of the application whenever new code is pulled from the remote repository or pushed to it.
 
 # Context
-Local environments can quickly become out-of-sync with the remote codebase. To maintain an uninterrupted workflow, projects must have a default, reliable local script framework (e.g., `scripts/local-deploy.ps1`) that executes automatically without repeated prompting. Furthermore, the user prefers lightweight local deployments using Rancher Desktop or bare-metal localhost over heavy Docker installations, and wants local services securely exposed via Cloudflare Tunnels with custom domains (e.g., `vishwavani.app`).
+Local environments can quickly become out-of-sync with the remote codebase. To maintain an uninterrupted workflow, projects must leverage the unified `one.ps1` CLI tool (e.g., `.\one.ps1 deploy -All`) that executes automatically without repeated prompting. Furthermore, the user prefers lightweight local deployments using Rancher Desktop or bare-metal localhost over heavy Docker installations, and wants local services securely exposed via Cloudflare Tunnels with custom domains (e.g., `vishwavani.app`).
 
 # Guidelines
-1. **Automated Hooking Framework:** Every repository must implement a reliable, default script (e.g., `scripts/deploy-local.ps1`) that handles the end-to-end local build and deployment. This script should be hooked into Git (`post-merge`, `post-checkout`) so it works by default without manual instruction.
+1. **Automated Hooking Framework:** Every repository is managed by the unified `one.ps1` script at the root of `ai-skills-repo`. By running `.\one.ps1 deploy -All`, it handles the end-to-end local build and deployment across all repositories.
 2. **Lightweight Containerization (Rancher Desktop):** Avoid heavy Docker Desktop installations. Prefer Rancher Desktop (using `nerdctl` or its lightweight docker socket) for containerized deployments. Alternatively, run the application directly on localhost (bare-metal) using native runtimes (`uv`, `npm`, `go run`).
 3. **Local Domain Resolution:** Configure custom local domains (e.g., `vishwavani.app`) for testing. Automatically update the local `hosts` file (`C:\Windows\System32\drivers\etc\hosts`) or use a local reverse proxy (like Caddy) to route traffic to the correct local port seamlessly.
 4. **Cloudflare Tunnel Integration:** Hook up the local environment to Cloudflare using `cloudflared`. The deployment script should automatically establish a Cloudflare tunnel so the local application can be securely accessed, tested, and webhook-integrated from anywhere.
