@@ -3,7 +3,7 @@
     "21st": {
       "url": "https://21st.dev/api/mcp",
       "headers": {
-        "x-api-key": "$ApiKey"
+        "x-api-key": "${TWENTYFIRST_API_KEY}"
       }
     }
   }

@@ -337,6 +337,83 @@ If a task fix or test fails **3 consecutive times**:
 
 
 ---
+<!-- SKILL MODULE: role-security-dependency-auditor.md -->
+# Role: Security & Dependency Auditor Agent (Local Dependabot)
+
+## Goal
+Act as an autonomous security researcher and local dependency manager. Hunt for vulnerabilities (CVEs), outdated packages, and architectural security flaws using SAST, DAST, and manual package analysis, adding remediation tasks to the backlog.
+
+---
+
+## Core Execution Loop
+
+### 1. Local Dependabot (Package Auditing)
+- **Dependency Sweep**: Regularly scan `package.json`, `requirements.txt`, or `go.mod` for outdated dependencies.
+- **Vulnerability Checks**: Run `npm audit`, `yarn audit`, or equivalent checks to identify compromised transitive or direct dependencies.
+- **Backlog Logging**: Instead of randomly updating packages and breaking the build, log updates into `backlog.md` under `Epic: Security & Maintenance`. 
+  - Format: `- [ ] \`SEC-DEP-XXX\` **Bump [Package] to [Version]**: Fixes [CVE/Deprecation]. Verify unit tests post-bump.`
+
+### 2. SAST & Static Analysis
+- **Code Scanning**: Act as a Static Application Security Testing (SAST) tool. Scan code for hardcoded secrets, SQL injection, XSS vulnerabilities, and improper cryptography.
+- **Rulesets**: Enforce OWASP Top 10 rules. Any identified flaw must be immediately logged as a `Priority 0` bug.
+
+### 3. DAST / ZAP Alignment
+- **Dynamic Posture**: Ensure the application is configured to pass Dynamic Application Security Testing (DAST) tools like OWASP ZAP. 
+- **Configuration Tickets**: If security headers (HSTS, CSP), rate limiting, or WAF configurations are missing, add specific tasks to the backlog to implement them.
+
+
+---
+<!-- SKILL MODULE: role-ui-ux-auditor.md -->
+# Role: UI/UX Auditor & Trend Analyst Agent
+
+## Goal
+Act as an autonomous UI/UX inspector. Systematically audit the frontend for visual bugs, accessibility violations, and UX friction. Compare current implementations against modern design trends (e.g., bento-box layouts, glassmorphism, fluid typography). 
+
+---
+
+## Core Execution Loop
+
+### 1. Granular UI Bug Hunting
+- **Component Scanning**: Audit every page and component for alignment issues, broken responsive breakpoints (mobile/tablet/desktop), and contrast failures.
+- **Backlog Logging**: Log every identified UI bug directly into `backlog.md` under a `Priority 1 (UI Fixes)` or `Priority 2 (UX Polish)` section. Format: `- [ ] \`UI-BUG-XXX\` **[Component]**: Description of visual or interactive flaw.`
+
+### 2. Modern Redesign Analysis
+- **Trend Evaluation**: Compare the existing UI against current industry standards (e.g., Apple-like minimalism, Radix primitives, Framer Motion animations).
+- **Epic Generation**: If the UI looks dated or requires a holistic overhaul, DO NOT just tweak CSS. Instead, generate a complete, granular Epic in `backlog.md`.
+  - Define the `Epic: UI/UX Modernization`.
+  - Break it down into bite-sized tasks (e.g., `Update Typography Scale`, `Implement CSS Container Queries`, `Add Page Transition Animations`).
+
+### 3. Accessibility (a11y) Verification
+- Ensure ARIA labels, semantic HTML (nav, main, article), and keyboard navigation are flawless. Any violation immediately becomes a bug ticket.
+
+
+---
+<!-- SKILL MODULE: tech-auth-database.md -->
+# Tech: Database & Authentication Integration
+
+## Goal
+Establish secure, scalable, and resilient database and authentication architectures for full-stack applications, prioritizing data integrity and seamless user onboarding (Sign-in/Sign-up, OAuth).
+
+---
+
+## Core Engineering Standards
+
+### 1. Authentication & Authorization
+- **Unified Identity Providers:** Implement standard OAuth flows (Google, Facebook, GitHub, Apple) and Magic Links for frictionless sign-in and sign-up.
+- **Next-Gen Auth Libraries:** Utilize industry-standard solutions like **Auth.js (NextAuth.js)** or **Lucia** to handle session management, JWT signing, and encrypted cookies securely out-of-the-box.
+- **RBAC:** Implement Role-Based Access Control on both the client (UI rendering) and server (API endpoints).
+
+### 2. Database Infrastructure
+- **Production-Ready Databases:** Migrate from ephemeral local databases (like SQLite) to robust production environments (e.g., PostgreSQL via Vercel Postgres, Supabase, or Neon) before deploying to serverless platforms.
+- **ORM Standardization:** Use modern ORMs like **Prisma** or **Drizzle ORM** for type-safe database queries, schema migrations, and built-in protection against SQL injection.
+- **Connection Pooling:** Ensure the database connection handles serverless cold starts gracefully using connection pooling (e.g., PgBouncer).
+
+### 3. User Data Security
+- **PII Protection:** Encrypt sensitive Personally Identifiable Information (PII) at rest and in transit.
+- **Stateless Sessions:** Prefer secure HTTP-only cookies over local storage for session tokens to prevent XSS theft.
+
+
+---
 <!-- SKILL MODULE: tech-backend-api.md -->
 # Tech: Backend API Development Best Practices
 
@@ -365,6 +442,10 @@ Automate code integration, verification, and continuous deployment pipelines whi
 4. **Containerization (Docker):** Write minimal, multi-stage Dockerfiles adhering to security best practices (non-root users, explicit base image tags, minimal layers).
 5. **Environment Parity & Checks:** Keep development, staging, and production environments similar using declarative configurations. Ensure services implement health check endpoints (`/healthz`).
 6. **Pipeline Security:** Secure CI/CD pipelines by masking secrets, scoping workflow permissions strictly (`permissions: contents: read`), and avoiding bloated third-party actions where simple scripts suffice.
+7. **Gated Deployment Standard:** Use one `ci-cd.yml` per repo. The `deploy` job must declare `needs: ci` and run only on `push` to `main`. PRs run CI only. Add `concurrency` (cancel stale PR runs, never cancel a production deploy).
+8. **Secrets Placement:** Deployment tokens (e.g. `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) go in a GitHub **Environment** named `production`, restricted to `main`, and are referenced via `environment: production`. Application runtime secrets (API keys) live **only** in the hosting provider (e.g. Vercel Environment Variables) and are pulled at build time. Never commit tokens to workflow files, `vercel.json`, `.env*` (except placeholder-only `.env.example`), MCP configs, or commit messages; reference env vars like `${VAR}` instead.
+9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` â†’ `vercel build --prod` â†’ `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
+10. **Free Hosting Defaults:** Next.js/SSR â†’ Vercel Hobby (non-commercial). Static sites â†’ GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
 
 
 ---
@@ -380,6 +461,35 @@ Ensure clean database schema design, efficient querying, reliable migrations, an
 3. **Migration Management:** Use versioned, reproducible migration scripts (e.g., Prisma, Drizzle, TypeORM, Alembic, Flyway). Never perform manual schema modifications in production.
 4. **ORM & Query Builders:** Use type-safe ORMs or query builders while retaining awareness of generated SQL query execution and transaction boundaries.
 5. **Data Integrity & Transactions:** Enforce database-level integrity (unique constraints, cascades, nullability) and wrap multi-step write operations in ACID transactions.
+
+
+---
+<!-- SKILL MODULE: tech-dependency-management.md -->
+# Tech: Dependency & Package Management
+
+## Goal
+Maintain a clean, secure, and consistent dependency tree across all repositories, ensuring single-purpose packages and reliable automated upgrades that do not break the build.
+
+---
+
+## Core Engineering Standards
+
+### 1. Package Consistency & Unification
+- **Single Tool Per Purpose:** Enforce the use of a single library for a specific capability (e.g., use only native `fetch` instead of mixing `axios`, `node-fetch`, and `request`).
+- **Standardization Audits:** Before adding a new dependency, audit existing packages to see if the capability already exists.
+- **Pruning:** Actively remove deprecated or duplicate packages to minimize the attack surface and bundle size.
+
+### 2. Dependency Upgrades
+- **Latest Secure Versions:** Ensure all dependencies are kept up to date to receive security patches and performance improvements.
+- **Automated Update Workflow:**
+  1. Bump dependency versions securely using tools like Dependabot or `npm-check-updates`.
+  2. Automatically trigger the build (`npm run build`).
+  3. Automatically run unit and integration tests to catch regressions.
+  4. Automatically run code fixers (e.g., `eslint --fix`) if the upgrade introduces new linting rules.
+
+### 3. Build & Test Reliability
+- **Lockfile Integrity:** Always commit `package-lock.json` or equivalent to ensure deterministic builds.
+- **Semantic Versioning:** Respect semver constraints, but lock critical packages if regressions are frequent.
 
 
 ---
@@ -603,6 +713,37 @@ Build scalable, performant, accessible, and resilient React and Next.js applicat
 
 
 ---
+<!-- SKILL MODULE: tech-security-hardening.md -->
+# Tech: Security Hardening & Hack-Proofing
+
+## Goal
+Ensure all web applications and APIs are resilient against common attack vectors (OWASP Top 10), automated abuse, and data breaches.
+
+---
+
+## Core Engineering Standards
+
+### 1. Web Application Firewall (WAF) & Rate Limiting
+- **Edge Protection:** Deploy a WAF (e.g., Vercel Edge WAF, Cloudflare) to block malicious traffic before it hits the application server.
+- **Rate Limiting:** Implement strict rate limits on critical routes (e.g., Sign-in, Sign-up, Password Reset, and Web Crawling APIs) to prevent brute-force attacks and DDoS. Use Redis-backed limiters (e.g., `@upstash/ratelimit`).
+
+### 2. Input Validation & Sanitization
+- **Strict Typing:** Never trust client data. Validate all incoming API requests and form submissions using schema validation libraries like **Zod**.
+- **Sanitization:** Strip dangerous HTML/script tags from user inputs to prevent Stored and Reflected XSS.
+
+### 3. HTTP Security Headers
+- **Configuration:** Enforce strict security policies in the server configuration (e.g., `next.config.ts`).
+  - `Content-Security-Policy` (CSP) to restrict resource origins.
+  - `X-Frame-Options: DENY` to prevent Clickjacking.
+  - `Strict-Transport-Security` (HSTS) to enforce HTTPS.
+  - `X-Content-Type-Options: nosniff`.
+
+### 4. CSRF & XSS Protection
+- **CSRF Tokens:** Use Anti-CSRF tokens for all state-changing mutations if not natively handled by the Auth provider (like Auth.js).
+- **React Escaping:** Rely on React's automatic string escaping. Strictly avoid `dangerouslySetInnerHTML` unless absolutely necessary and paired with DOMPurify.
+
+
+---
 <!-- SKILL MODULE: tech-testing-automation.md -->
 # Tech: Testing & Quality Assurance Standards
 
@@ -633,6 +774,58 @@ Enforce enterprise-grade automated testing standards, test-driven development (T
 
 
 ---
+<!-- SKILL MODULE: tech-universal-web-standards.md -->
+# Tech: Universal Web Platform Standards
+
+## Goal
+Enforce a baseline set of enterprise-grade features and configurations across ALL web repositories and applications. No application should go to production without these universal components.
+
+---
+
+## Universal Checklist (Must be present in all Repos)
+
+### 1. Telemetry & Analytics
+- **Google Analytics / Posthog**: Every web application must integrate a telemetry system to gather meaningful data on user interaction, bounce rates, and session durations.
+- **Privacy Compliance**: Ensure telemetry respects Do Not Track (DNT) headers and includes cookie consent mechanisms (GDPR/CCPA compliant).
+
+### 2. Authentication & User Identity
+- **Login Mechanism**: All apps requiring user state must implement a standardized authentication flow (e.g., Auth.js / NextAuth) supporting at least OAuth (Google/GitHub/Facebook) or Magic Links.
+- **Data Collection Strategy**: Have a defined strategy (`user-registration-goals.md`) outlining *why* user data is being collected and how it enhances the product UX.
+
+### 3. Developer Info & Feedback Loops
+- **Developer Presence (`ui-developer-bio`)**: Every site must include an `/about` or `/developer` route showcasing the project's architecture, developer credentials (LinkedIn, Resume), and GitHub repository.
+- **Feedback Mechanism**: Include a widget or form where users can report bugs, suggest features, or provide direct feedback to the team.
+
+### 4. Enforcement via Backlog
+If an agent audits a repository and finds any of these 3 pillars missing, the agent MUST immediately create an `Epic: Universal Web Standards Integration` in the `backlog.md` with granular tasks to implement them.
+
+
+---
+<!-- SKILL MODULE: tech-web-scraping-resilience.md -->
+# Tech: Web Scraping & Crawler Resilience
+
+## Goal
+Build robust, ethical, and highly resilient data-gathering agents capable of bypassing automated bot detection and blocks while respecting target infrastructure.
+
+---
+
+## Core Engineering Standards
+
+### 1. Evasion & Anti-Bot Detection (Stealth)
+- **Browser Fingerprinting:** When using headless browsers (Playwright/Puppeteer), utilize stealth plugins (e.g., `puppeteer-extra-plugin-stealth` adapted for Playwright) to mask WebDriver flags, fix navigator properties, and randomize viewport sizes.
+- **Human Emulation:** Introduce jitter and randomized delays between actions. Emulate natural mouse movements, scrolling, and typing cadences.
+
+### 2. IP Rotation & Proxy Management
+- **Proxy Pools:** Never rely on a single IP address for scraping. Integrate residential or datacenter proxy rotation networks.
+- **Session Persistence:** Maintain session stickiness (using the same proxy IP for a single continuous user journey) to avoid triggering security alerts on the target site.
+- **Crawlee Integration:** Utilize `Crawlee`'s built-in `ProxyConfiguration` and `SessionPool` to automate proxy rotation and handle retries intelligently.
+
+### 3. Efficiency & Resource Management
+- **Protocol-Level Scraping:** Prefer HTTP request-based scraping (e.g., using `fetch` or `cheerio` for parsing HTML) over headless browsers for speed and lower resource consumption, unless JavaScript rendering is explicitly required.
+- **Concurrency & Backoff:** Implement intelligent concurrency limits and exponential backoff strategies to handle 429 Too Many Requests errors gracefully.
+
+
+---
 <!-- SKILL MODULE: tool-one-cli.md -->
 # Goal
 Define and maintain the unified `one.ps1` CLI tool as the central automation script for all repository synchronization, AI skill aggregation, and local deployments.
@@ -648,6 +841,34 @@ To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e
 2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local`, `Sync-Skills`, or `Optimize-Actions` functions of `one.ps1`.
 3. **Avoid Duplicate Scripts:** Do not create separate `.sh` files or individual `setup-*` scripts. Consolidate logic into `one.ps1` using clean PowerShell parameters and `switch` statements.
 4. **Git Safety:** Always ensure that `one.ps1` actions that touch git repos (like fetching/pulling) appropriately handle discarded local changes (e.g., `git clean -fd`, `git reset --hard`) only where intended, and always commit/push updated settings automatically.
+
+
+---
+<!-- SKILL MODULE: ui-developer-bio.md -->
+# UI/UX: Developer Presence & Bio Standards
+
+## Goal
+Enforce a standardized, professional, and accessible Developer/Author profile across all repositories. Every deployed application must contain an easily accessible route (e.g., `/developer` or `/about`) that highlights the developer's credentials, project architecture, and contact information.
+
+---
+
+## Core Guidelines
+
+### 1. Mandatory Bio Components
+Every `/developer` or `/about` page must structurally include:
+- **Professional Summary**: A concise paragraph detailing the developer's technical focus (e.g., AI integration, Next.js, systems architecture).
+- **LinkedIn Link**: A prominent button or link directing to the developer's professional LinkedIn profile.
+- **Resume/CV Link**: A direct download or view link to the latest PDF resume (`/resume.pdf`).
+- **GitHub Link**: Link to the individual's or project's GitHub organization.
+
+### 2. UI/UX Implementation Rules
+- **Full-Width Hero or Dedicated Card**: The developer bio should not be hidden in a footer; it should command a dedicated card or section.
+- **Iconography**: Use standardized icons (e.g., Lucide-react `Linkedin`, `FileText`, `Github`, `User`) to make the links instantly recognizable.
+- **Accessible Contrasts**: Ensure buttons (like the LinkedIn blue `#0A66C2`) have sufficient contrast against dark and light mode backgrounds.
+
+### 3. Ecosystem Integration
+- **Footer Routing**: The page must be permanently linked in the main global `Footer.tsx` (usually under an "Ecosystem", "Connect", or "About" column) so that it can be navigated to from any page.
+- **Feedback Mechanism**: Combine the developer bio with a user feedback form (e.g., a "Connect with Us" or "Leave Feedback" widget) to maximize the utility of the page.
 
 
 ---
