@@ -332,59 +332,9 @@ If a task fix or test fails **3 consecutive times**:
 - **Microservices & System Topology:** Apply `skills/tech-microservices-modular.md` (Modular Monolith, DDD, Event-Driven).
 - **Security & OWASP:** Apply `skills/tech-llm-security-owasp.md` (AppSec & OWASP Top 10 / LLM Top 10).
 - **Testing & Quality Assurance:** Apply `skills/tech-testing-automation.md` (TDD, >=80% coverage, test pyramid).
-- **DevOps & Infrastructure:** Apply `skills/tech-cicd-devops.md` (GitHub Actions, Docker, deployment hygiene).
+- **DevOps, CI & Infrastructure:** Apply `skills/tech-cicd-devops.md` (GitHub Actions, Docker, deployment hygiene). *Always prioritize fixing failing CI pipelines, linting, and type-check errors over new features.*
 - **Context & Memory Management:** Apply `skills/workflow-memory-and-context.md` (token headroom, `initiate_memory_recording`).
-
-
----
-<!-- SKILL MODULE: role-security-dependency-auditor.md -->
-# Role: Security & Dependency Auditor Agent (Local Dependabot)
-
-## Goal
-Act as an autonomous security researcher and local dependency manager. Hunt for vulnerabilities (CVEs), outdated packages, and architectural security flaws using SAST, DAST, and manual package analysis, adding remediation tasks to the backlog.
-
----
-
-## Core Execution Loop
-
-### 1. Local Dependabot (Package Auditing)
-- **Dependency Sweep**: Regularly scan `package.json`, `requirements.txt`, or `go.mod` for outdated dependencies.
-- **Vulnerability Checks**: Run `npm audit`, `yarn audit`, or equivalent checks to identify compromised transitive or direct dependencies.
-- **Backlog Logging**: Instead of randomly updating packages and breaking the build, log updates into `backlog.md` under `Epic: Security & Maintenance`. 
-  - Format: `- [ ] \`SEC-DEP-XXX\` **Bump [Package] to [Version]**: Fixes [CVE/Deprecation]. Verify unit tests post-bump.`
-
-### 2. SAST & Static Analysis
-- **Code Scanning**: Act as a Static Application Security Testing (SAST) tool. Scan code for hardcoded secrets, SQL injection, XSS vulnerabilities, and improper cryptography.
-- **Rulesets**: Enforce OWASP Top 10 rules. Any identified flaw must be immediately logged as a `Priority 0` bug.
-
-### 3. DAST / ZAP Alignment
-- **Dynamic Posture**: Ensure the application is configured to pass Dynamic Application Security Testing (DAST) tools like OWASP ZAP. 
-- **Configuration Tickets**: If security headers (HSTS, CSP), rate limiting, or WAF configurations are missing, add specific tasks to the backlog to implement them.
-
-
----
-<!-- SKILL MODULE: role-ui-ux-auditor.md -->
-# Role: UI/UX Auditor & Trend Analyst Agent
-
-## Goal
-Act as an autonomous UI/UX inspector. Systematically audit the frontend for visual bugs, accessibility violations, and UX friction. Compare current implementations against modern design trends (e.g., bento-box layouts, glassmorphism, fluid typography). 
-
----
-
-## Core Execution Loop
-
-### 1. Granular UI Bug Hunting
-- **Component Scanning**: Audit every page and component for alignment issues, broken responsive breakpoints (mobile/tablet/desktop), and contrast failures.
-- **Backlog Logging**: Log every identified UI bug directly into `backlog.md` under a `Priority 1 (UI Fixes)` or `Priority 2 (UX Polish)` section. Format: `- [ ] \`UI-BUG-XXX\` **[Component]**: Description of visual or interactive flaw.`
-
-### 2. Modern Redesign Analysis
-- **Trend Evaluation**: Compare the existing UI against current industry standards (e.g., Apple-like minimalism, Radix primitives, Framer Motion animations).
-- **Epic Generation**: If the UI looks dated or requires a holistic overhaul, DO NOT just tweak CSS. Instead, generate a complete, granular Epic in `backlog.md`.
-  - Define the `Epic: UI/UX Modernization`.
-  - Break it down into bite-sized tasks (e.g., `Update Typography Scale`, `Implement CSS Container Queries`, `Add Page Transition Animations`).
-
-### 3. Accessibility (a11y) Verification
-- Ensure ARIA labels, semantic HTML (nav, main, article), and keyboard navigation are flawless. Any violation immediately becomes a bug ticket.
+- **LLM/AI Model Integration (JEV & Air LLM):** When a project requires embedded intelligence or local models, route logic to integrate Hugging Face models, JEV, or Air LLM frameworks seamlessly into the architecture.
 
 
 ---
@@ -436,8 +386,8 @@ Design and build resilient, scalable, and well-structured RESTful and GraphQL AP
 Automate code integration, verification, and continuous deployment pipelines while keeping GitHub Actions lean, robust, and free of failing legacy bloat.
 
 ## Guidelines
-1. **Minimal, Reliable GitHub Actions:** GitHub Actions must be explicitly scoped only for running builds and tests after commits to ensure everything is working. If a workflow is failing, unnecessary, or overly complex, remove it entirely. Simplicity and reliability are paramount.
-2. **Automated Integration (CI):** Run automated unit tests and build verification on every pull request and push to primary branches to catch breakages early.
+1. **Minimal, Reliable & Passing GitHub Actions:** GitHub Actions must be explicitly scoped to run linting, type-checking, building, and testing after commits. The pipeline must *always* pass. If an agent detects a failing workflow, its immediate priority is to fix the underlying code, lint errors, or type mismatches until the build and tests succeed.
+2. **Automated Integration (CI):** Run automated unit tests, strict type-checking, and build verification on every pull request and push to primary branches to catch breakages early and maintain production-ready code.
 3. **Dependabot Optimization:** Enable Dependabot to keep repository dependencies secure and up-to-date, but configure it for a very low frequency to avoid noise. Create a `.github/dependabot.yml` that limits updates to `schedule.interval: "monthly"` and sets `open-pull-requests-limit: 1`.
 4. **Containerization (Docker):** Write minimal, multi-stage Dockerfiles adhering to security best practices (non-root users, explicit base image tags, minimal layers).
 5. **Environment Parity & Checks:** Keep development, staging, and production environments similar using declarative configurations. Ensure services implement health check endpoints (`/healthz`).
@@ -742,6 +692,10 @@ Ensure all web applications and APIs are resilient against common attack vectors
 - **CSRF Tokens:** Use Anti-CSRF tokens for all state-changing mutations if not natively handled by the Auth provider (like Auth.js).
 - **React Escaping:** Rely on React's automatic string escaping. Strictly avoid `dangerouslySetInnerHTML` unless absolutely necessary and paired with DOMPurify.
 
+### 5. Frontend Security Analysis & Verification
+- **Detailed Frontend Audits:** Continuously analyze and verify the website's frontend security posture in exhaustive detail. Ensure all interactive components (tabs, nav bars, links, forms) securely handle user input without exposing client-side vulnerabilities.
+- **Client-Side Validation:** Check that client-side routing, data fetching, and storage mechanisms (e.g., localStorage, cookies) enforce strict security bounds and don't leak sensitive session data.
+
 
 ---
 <!-- SKILL MODULE: tech-testing-automation.md -->
@@ -758,8 +712,14 @@ Enforce enterprise-grade automated testing standards, test-driven development (T
 - **Unit Tests (Base Layer - 70%):** Fast, isolated tests for pure functions, domain models, Pydantic/Zod validators, and utility modules (Vitest, PyTest, Go `testing`).
 - **Integration Tests (Middle Layer - 20%):** Service and database layer verification using test containers or local test database fixtures (HTTPX AsyncClient, Go table-driven API handlers).
 - **End-to-End (E2E) Tests (Top Layer - 10%):** Key user journey verification using headless browser automation (Playwright).
+- **Regression Testing Suites:** Build and maintain detailed regression testing suites to ensure that structural, functional, or visual makeovers do not degrade existing functionalities or layout integrity.
 
-### 2. Test-Driven Development (TDD) Workflow
+### 2. Comprehensive Frontend Testing & Bug Reporting
+- **Granular UI Analysis & Token Headroom Optimization:** Testing agents must execute full-length, highly detailed analyses across all visual elements. To preserve context headroom and prevent token overflow during extensive reviews, analyze the UI in isolated chunks (e.g., component by component). This includes meticulously checking each tab, nav bar menu, page, individual link, and the orientation of every card and item while maximizing the signal-to-noise ratio.
+- **Backlog Reporting:** Report all discovered flaws, misalignments, or functional issues as highly granular level tasks into the `backlog.md`.
+- **Highest Priority Bug Logging:** Any UI regressions, visual artifacts, or functional bugs identified during testing must be explicitly tagged as highest priority (e.g., `[P0-CRITICAL]` or `[P1-HIGH]`) to ensure immediate resolution.
+
+### 3. Test-Driven Development (TDD) Workflow
 - **Red -> Green -> Refactor:** Write a failing test for the acceptance criteria before writing feature code. Ensure the test fails for the expected reason before implementing the minimal code required to pass.
 - **Boundary & Negative Testing:** Test edge cases, empty payloads, null inputs, invalid auth tokens, network timeouts, and boundary values alongside happy-path cases.
 
@@ -771,33 +731,6 @@ Enforce enterprise-grade automated testing standards, test-driven development (T
 - **TypeScript / React:** Use Vitest + React Testing Library for components; use Playwright for browser E2E workflows.
 - **Python:** Use `pytest` + `pytest-asyncio` + `httpx.AsyncClient` for async FastAPI endpoints.
 - **Go:** Use native Go `testing` package with table-driven test structs (`tests := []struct{ name string; ... }`).
-
-
----
-<!-- SKILL MODULE: tech-universal-web-standards.md -->
-# Tech: Universal Web Platform Standards
-
-## Goal
-Enforce a baseline set of enterprise-grade features and configurations across ALL web repositories and applications. No application should go to production without these universal components.
-
----
-
-## Universal Checklist (Must be present in all Repos)
-
-### 1. Telemetry & Analytics
-- **Google Analytics / Posthog**: Every web application must integrate a telemetry system to gather meaningful data on user interaction, bounce rates, and session durations.
-- **Privacy Compliance**: Ensure telemetry respects Do Not Track (DNT) headers and includes cookie consent mechanisms (GDPR/CCPA compliant).
-
-### 2. Authentication & User Identity
-- **Login Mechanism**: All apps requiring user state must implement a standardized authentication flow (e.g., Auth.js / NextAuth) supporting at least OAuth (Google/GitHub/Facebook) or Magic Links.
-- **Data Collection Strategy**: Have a defined strategy (`user-registration-goals.md`) outlining *why* user data is being collected and how it enhances the product UX.
-
-### 3. Developer Info & Feedback Loops
-- **Developer Presence (`ui-developer-bio`)**: Every site must include an `/about` or `/developer` route showcasing the project's architecture, developer credentials (LinkedIn, Resume), and GitHub repository.
-- **Feedback Mechanism**: Include a widget or form where users can report bugs, suggest features, or provide direct feedback to the team.
-
-### 4. Enforcement via Backlog
-If an agent audits a repository and finds any of these 3 pillars missing, the agent MUST immediately create an `Epic: Universal Web Standards Integration` in the `backlog.md` with granular tasks to implement them.
 
 
 ---
@@ -844,34 +777,6 @@ To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e
 
 
 ---
-<!-- SKILL MODULE: ui-developer-bio.md -->
-# UI/UX: Developer Presence & Bio Standards
-
-## Goal
-Enforce a standardized, professional, and accessible Developer/Author profile across all repositories. Every deployed application must contain an easily accessible route (e.g., `/developer` or `/about`) that highlights the developer's credentials, project architecture, and contact information.
-
----
-
-## Core Guidelines
-
-### 1. Mandatory Bio Components
-Every `/developer` or `/about` page must structurally include:
-- **Professional Summary**: A concise paragraph detailing the developer's technical focus (e.g., AI integration, Next.js, systems architecture).
-- **LinkedIn Link**: A prominent button or link directing to the developer's professional LinkedIn profile.
-- **Resume/CV Link**: A direct download or view link to the latest PDF resume (`/resume.pdf`).
-- **GitHub Link**: Link to the individual's or project's GitHub organization.
-
-### 2. UI/UX Implementation Rules
-- **Full-Width Hero or Dedicated Card**: The developer bio should not be hidden in a footer; it should command a dedicated card or section.
-- **Iconography**: Use standardized icons (e.g., Lucide-react `Linkedin`, `FileText`, `Github`, `User`) to make the links instantly recognizable.
-- **Accessible Contrasts**: Ensure buttons (like the LinkedIn blue `#0A66C2`) have sufficient contrast against dark and light mode backgrounds.
-
-### 3. Ecosystem Integration
-- **Footer Routing**: The page must be permanently linked in the main global `Footer.tsx` (usually under an "Ecosystem", "Connect", or "About" column) so that it can be navigated to from any page.
-- **Feedback Mechanism**: Combine the developer bio with a user feedback form (e.g., a "Connect with Us" or "Leave Feedback" widget) to maximize the utility of the page.
-
-
----
 <!-- SKILL MODULE: ui-ux-pro-max.md -->
 # Skill: UI/UX Pro Max & 21st.dev Magic Server Design Intelligence
 
@@ -895,7 +800,32 @@ Provide enterprise-grade UI/UX design intelligence, automated design system gene
 - **Visual Taxonomy:** Glassmorphism, Claymorphism, Minimalism, Brutalism, Neumorphism, Bento Grid, Dark Mode, AI-Native UI, Soft UI Evolution, Modern SaaS, Fluent 2, Shopify Polaris, Adobe Spectrum, and more.
 - **BM25 Search Engine:** Built-in Python BM25 search engine matches user intent to curated visual styles, 192 color palettes, and 74 Google Font pairings.
 
-### 4. 21st.dev Magic Server Integration (MCP)
+### 4. Premium & Production-Ready Design Principles (Apple-Inspired)
+- **Premium Typography & Text Formats:** Use variable fonts (e.g., SF Pro, Inter, Roboto Flex), fluid typography, and optical sizing. Apply precise line-heights and tracking adjustments. Utilize `text-wrap: balance` for headings and `text-wrap: pretty` for long-form content to ensure a premium reading experience. Keep font sizes simple and optimized for legibility.
+- **Lightweight & Simple Layouts:** Maximize screen real estate with edge-to-edge designs and modern bento grids. Better fit pages on the screen without unnecessary scrolling. Employ generous macro and micro whitespace to avoid clutter and let the content breathe. Maintain an ultra-minimalist, purposeful, and incredibly lightweight architectural structure to mitigate frontend performance bottlenecks.
+- **Animations & Micro-interactions:** Implement silky-smooth, physics-based (spring) animations. Optimize all animations to be hardware-accelerated (e.g., using `transform` and `opacity`) ensuring high performance without frame drops. Use scroll-triggered reveals. Motion should feel natural, responsive, and never abrupt.
+- **Visual Language & Depth:** Apply subtle glassmorphism (backdrop blurs), soft deep shadows for elevation, and 1px low-opacity borders (e.g., `border-white/10` or `border-black/5`). Strive for a premium, high-quality finish matching the latest industry aesthetics.
+
+### 5. Rigorous UI Audit & Flaw Resolution Protocol
+Transform legacy or basic UIs into highly attractive, production-ready makeovers by thoroughly and rigorously auditing minute details across the entire frontend:
+- **Proactive UI Bug Hunting:** Actively hunt for hidden, unknown, or edge-case UI/UX issues that might not be immediately obvious. Ensure the design is truly production-ready without layout shifts, overflow bugs, or broken states.
+- **Comprehensive Element Inspection & Headroom Management:** Meticulously check each tab, navigation bar menu, page, and individual link. To maintain efficient context headroom, chunk large pages and analyze them component-by-component. Ensure all interactive states (hover, focus, active) are consistent and visually appealing.
+- **Orientation & Layout Validation:** Check the orientation and alignment for each card, list item, and media container. Verify that items scale and fit perfectly on the screen across all viewports.
+- **Visual Clutter Analysis:** Identify and remove unnecessary dividers, borders, and backgrounds. Replace with whitespace and structural alignment to ensure the UI feels completely unburdened.
+- **Spacing & Alignment Check:** Enforce strict adherence to a 4px/8px spatial grid system. Resolve inconsistent paddings, margins, and off-by-one pixel errors to guarantee pixel-perfect execution.
+- **Typography & Hierarchy Review:** Ensure correct font weight scaling and simple, legible font sizes. Check color contrast for primary, secondary, and tertiary text layers to establish a clear visual hierarchy.
+- **Premium Makeover Transformation:** Upgrade the overall attractiveness by integrating the premium design principles, ensuring a polished, deeply scrutinized, modern, and high-end feel that solves all existing visual flaws.
+
+### 6. Design Taste & Aesthetics Skill
+- **Cultivating Premium Taste:** Exercise high visual judgment by curating sophisticated, cohesive color palettes and refined typography pairings.
+- **Anti-AI-Slop Principle:** Strictly avoid generic, over-designed, or cluttered visual elements. Prioritize elegance, subtlety, and modern taste over loud, aggressive gradients or disjointed themes.
+
+### 7. Modern UI Techniques & State Management
+- **Loading & Skeleton Templates:** Implement skeleton screen loaders (shimmer effects) for data-fetching states to reduce perceived latency and prevent jarring layout shifts.
+- **Error & Empty States:** Ensure resilient, beautifully designed fallback states (e.g., "Network Not Available", 404, 500 errors). Always provide polished empty state templates for grids, lists, and dashboards that clearly guide user next steps.
+- **Basic Templates Availability:** Maintain an accessible library of essential, premium layout templates (dashboards, auth screens, settings) to establish a strong architectural foundation instantly.
+
+### 8. 21st.dev Magic Server Integration (MCP)
 - **Real-Time Component Discovery:** Seamlessly connects to the 21st.dev MCP endpoint (`https://21st.dev/api/mcp`) for discovering production-ready React/Tailwind magic UI components, animated buttons, hero sections, and interactive cards.
 - **Header Authentication:** Configures `x-api-key` header (supported via `TWENTYFIRST_API_KEY` environment variable).
 
@@ -936,6 +866,9 @@ Enforce this checklist before finalizing any generated UI or layout:
 - [ ] **Clickable Indicators:** Ensure explicit `cursor-pointer` on all interactive chips, buttons, and rows.
 - [ ] **WCAG 2.1 AA Compliance:** Minimum 4.5:1 text contrast ratio for body text; visible focus rings for keyboard navigation.
 - [ ] **Resilient Text & Line Balancing:** Apply `text-wrap: balance` for headings; ensure badges, chips, and tags reflow without text clipping or overflow across breakpoints (375px, 768px, 1024px, 1440px).
+- [ ] **Premium Typography Scaling:** Verify fluid typography scales correctly across mobile and desktop.
+- [ ] **Pixel-Perfect Alignment:** Confirm strict adherence to the spatial grid and ensure consistent border radii across all elements.
+- [ ] **Silky-Smooth Performance:** Verify scroll performance and ensure animations/transitions are hardware-accelerated, natural, and not jarring.
 - [ ] **Reduced Motion Support:** Respect `prefers-reduced-motion` and ensure micro-interactions fail safely during rapid user input.
 
 
