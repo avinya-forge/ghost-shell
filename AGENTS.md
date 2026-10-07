@@ -1,4 +1,4 @@
-# EXECUTIVE DIRECTIVE FOR AI CODING AGENTS (JULES, ANTIGRAVITY, CURSOR, CLAUDE, COPILOT)
+# EXECUTIVE DIRECTIVE FOR AI CODING AGENTS (JULES, ANTIGRAVITY, GEMINI, CLAUDE, COPILOT, CODEX)
 
 ## MANDATE: 8-STAGE FEATURE LIFECYCLE, DESIGN THINKING, WORK MEASUREMENT & HIGH PR THROUGHPUT
 
@@ -13,7 +13,31 @@
 
 ---
 
-This project uses the following custom AI Skills and Instructions, optimized for Jules, Google Antigravity, Cursor, Claude, Copilot, and Coding Agents:
+This project uses the following custom AI Skills and Instructions, optimized for Jules, Google Antigravity, Gemini, Claude, GitHub Copilot, and Codex:
+---
+<!-- SKILL MODULE: asd-ste100-simplified-english.md -->
+---
+description: Apply ASD-STE100 Simplified Technical English guidelines, tuned to 80% strictness for a balance of clarity and natural flow.
+---
+
+# ASD-STE100 Simplified Technical English
+
+## Context
+Use this skill when drafting documentation, UI copy, and system messages that require high clarity, especially for global audiences. The strictness is tuned to 80% to allow for some natural flow while maintaining the core benefits of the standard.
+
+## Guidelines (80% Tuning)
+
+1. **Short Sentences:** Keep sentences under 20 words (procedural) or 25 words (descriptive).
+2. **Simple Vocabulary:** Use approved, simple verbs and nouns. Avoid complex synonyms.
+3. **Active Voice:** Write in the active voice. Tell the user exactly who does what.
+4. **No Jargon:** Omit unnecessary technical jargon unless defined.
+5. **Direct Instructions:** Start procedural steps with an imperative verb (e.g., "Click the button", not "The button should be clicked").
+6. **Consistent Terminology:** Use one word for one concept (e.g., don't mix "start", "run", and "execute").
+
+## Application
+- Apply to `README.md`, docs, UI texts, and prompts.
+- When applying, focus on clarity, brevity, and eliminating ambiguity. If a strict rule makes the text sound robotic, relax it slightly (the 20% margin) to ensure it remains approachable and natural.
+
 ---
 <!-- SKILL MODULE: circuit-breaker.md -->
 # Circuit Breaker Protocol (Anti-Stuck Mechanism)
@@ -47,7 +71,6 @@ The Circuit Breaker is triggered when **a single task, build, test, or bug fix f
    - Select the next available unblocked highest-priority task from `backlog.md`.
    - Resume continuous execution without pausing or waiting for human prompt.
 
-
 ---
 <!-- SKILL MODULE: coding-standards.md -->
 # Coding Standards & Clean Code Practices
@@ -68,7 +91,7 @@ Maintain enterprise-grade code quality, industry-standard design patterns, consi
 
 ### 2. Clean Code & DRY
 - **Don't Repeat Yourself (DRY):** Eliminate code duplication by extracting shared logic into reusable modules or utilities.
-- **KISS & YAGNI:** Keep it simple, stupid. You aren't gonna need itâ€”avoid over-engineering before requirements demand it.
+- **KISS & YAGNI:** Keep it simple, stupid. You aren't gonna need it—avoid over-engineering before requirements demand it.
 - **Self-Documenting Code:** Write intention-revealing variable and function names. Avoid redundant comments that merely restate what the code does.
 
 ### 3. Skill Overlap & Multi-Skill Resolution
@@ -84,17 +107,16 @@ When multiple skill files apply to a single task or domain:
 - **Boolean Prefixes:** Always prefix boolean variables with `is`, `has`, `should`, or `can` (e.g., `isAuthorized`, `hasCompleted`).
 - **Domain Alignment:** Use consistent domain vocabulary matching `vision.md` and `backlog.md`.
 
-
 ---
 <!-- SKILL MODULE: loop-engineering.md -->
 # Skill: Loop Engineering & Autonomous Execution Velocity
 
 ## Goal
-Transform AI agent execution from single-task, low-yield responses into sustained, high-throughput engineering loops. Loop Engineering enables AI agents (including Jules, Cursor, Antigravity, and Claude Code) to autonomously measure work done, batch backlog items, execute, test, verify, and document multi-task packages within a single session, fully utilizing session capacity without halting prematurely or producing superficial edits.
+Transform AI agent execution from single-task, low-yield responses into sustained, high-throughput engineering loops. Loop Engineering enables AI agents (including Jules, Gemini, Antigravity, and Claude Code) to autonomously measure work done, batch backlog items, execute, test, verify, and document multi-task packages within a single session, fully utilizing session capacity without halting prematurely or producing superficial edits.
 
 ---
 
-## ðŸ“Š Work Measurement & Session Yield Protocol
+## 📊 Work Measurement & Session Yield Protocol
 
 ### 1. Programmatic Work Measurement
 At the end of every completed task item within a session, the agent MUST run programmatic measurement commands to quantify physical output before deciding whether to end the session or continue:
@@ -125,35 +147,35 @@ Evaluate work done against explicit threshold metrics:
 
 ### 1. Target PR Scope Thresholds (Anti-Trivial Execution)
 - **Minimum Batch Requirement:** Do not stop execution or return control after completing a single trivial fix or minor single-line edit unless the backlog is completely empty or explicit human intervention is requested.
-- **PR Scope Target:** Process 2 to 4 logically connected backlog items per PR session or reach a target diff volume of approximately 200â€“500 lines of functional code and tests.
+- **PR Scope Target:** Process 2 to 4 logically connected backlog items per PR session or reach a target diff volume of approximately 200–500 lines of functional code and tests.
 - **Atomic Progress within Session:** Execute each backlog item in discrete, self-contained implementation + test steps while keeping the outer loop running continuously.
 
 ### 2. The Loop Engineering State Machine
 The agent operates continuously across 6 deterministic loop states:
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                        LOOP ENGINEERING FSM                             â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
- [STATE 0: SCAN & BATCH] â”€â”€â–º Inspect vision.md & backlog.md; select 2-4 items.
-           â”‚
-           â–¼
- [STATE 1: SPEC & PLAN]  â”€â”€â–º Run light Spec Kit breakdown (Specify -> Plan -> Tasks).
-           â”‚
-           â–¼
- [STATE 2: IMPLEMENT]    â”€â”€â–º Write robust code adhering to architecture & standards.
-           â”‚
-           â–¼
- [STATE 3: TEST & AUDIT] â”€â”€â–º Execute local tests & static checks; run bug hunt.
-           â”‚                     â”œâ”€â–º Fail 3x? Apply Circuit Breaker -> Tag & Pivot.
-           â”‚                     â””â”€â–º Pass? Proceed to State 4.
-           â–¼
- [STATE 4: MEASURE & SYNC]â”€â”€â–º Run `git diff --shortstat`; update backlog.md & release-notes.md.
-           â”‚                     â”œâ”€â–º Yield threshold met OR backlog empty? Ready PR.
-           â”‚                     â””â”€â–º Yield below threshold & tasks remain?
-           â”‚                         Self-prompt -> Return to STATE 0.
-           â–¼
- [STATE 5: COMMIT & PR]  â”€â”€â–º Package comprehensive PR with detailed summary & diffs.
+┌────────────────────────────────────────────────────────────────────────┐
+│                        LOOP ENGINEERING FSM                             │
+└────────────────────────────────────────────────────────────────────────┘
+ [STATE 0: SCAN & BATCH] ──► Inspect vision.md & backlog.md; select 2-4 items.
+           │
+           ▼
+ [STATE 1: SPEC & PLAN]  ──► Run light Spec Kit breakdown (Specify -> Plan -> Tasks).
+           │
+           ▼
+ [STATE 2: IMPLEMENT]    ──► Write robust code adhering to architecture & standards.
+           │
+           ▼
+ [STATE 3: TEST & AUDIT] ──► Execute local tests & static checks; run bug hunt.
+           │                     ├─► Fail 3x? Apply Circuit Breaker -> Tag & Pivot.
+           │                     └─► Pass? Proceed to State 4.
+           ▼
+ [STATE 4: MEASURE & SYNC]──► Run `git diff --shortstat`; update backlog.md & release-notes.md.
+           │                     ├─► Yield threshold met OR backlog empty? Ready PR.
+           │                     └─► Yield below threshold & tasks remain?
+           │                         Self-prompt -> Return to STATE 0.
+           ▼
+ [STATE 5: COMMIT & PR]  ──► Package comprehensive PR with detailed summary & diffs.
 ```
 
 ### 3. Anti-Halting & Self-Prompting Directive
@@ -169,7 +191,7 @@ The agent operates continuously across 6 deterministic loop states:
 
 ---
 
-## Directives for AI Coding Assistants (Jules, Cursor, Claude, Antigravity)
+## Directives for AI Coding Assistants (Jules, Gemini, Claude, Antigravity)
 
 1. **Maximize Yield Per Turn:** Perform complete multi-file implementations, test creation, and verification within each turn.
 2. **Never Quit Mid-Batch:** Measure work done using `git diff --shortstat`. If yield is under 200 LOC or <2 tasks, continue processing unblocked items in `backlog.md`.
@@ -190,7 +212,7 @@ Act as an elite AI Agent Engineer and Systems Architect specialized in autonomou
 ### 1. Multi-Agent Orchestration & Task Decomposition
 - **Autonomous Sub-agent Routing:** Design multi-agent hierarchies where specialized sub-agents handle discrete domains (e.g., Code Search, Code Edit, Verification, Security Audit) with clear parent-child context boundaries.
 - **State Machine Mechanics:** Structure complex agent flows as explicit Finite State Machines (FSM) or Directed Acyclic Graphs (DAGs) rather than loose unconstrained conversation loops.
-- **Dynamic Plan Refinement:** Enforce runtime plan evaluationâ€”agents must evaluate progress after each action step and update execution plans dynamically when unexpected outputs or errors arise.
+- **Dynamic Plan Refinement:** Enforce runtime plan evaluation—agents must evaluate progress after each action step and update execution plans dynamically when unexpected outputs or errors arise.
 
 ### 2. Tool Definition & Agentic Tool Execution
 - **Strict Schema Definitions:** Craft explicit tool parameters using standard JSON Schema / Pydantic v2 schemas with precise field constraints, type validations, and descriptive docstrings.
@@ -214,13 +236,12 @@ Act as an elite AI Agent Engineer and Systems Architect specialized in autonomou
 2. **Evaluations (Evals):** Require programmatic evaluation benchmarks (accuracy, tool-call accuracy, latency, token consumption, safety guardrails) for all agent workflows.
 3. **Observability & Tracing:** Instrument agent operations with full trace telemetry (span tracking for prompt preparation, LLM invocation, tool execution, and response parsing).
 
-
 ---
 <!-- SKILL MODULE: role-autonomous-sdlc-agent.md -->
 # Skill: Master Autonomous Agile AI SDLC Agent & Loop Engine
 
 ## Goal
-Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100% complete, production-ready software products rapidly and extensively with AI coding tools (Jules, Cursor, Claude, Google AI, Copilot). Operates through continuous Loop Engineering, programmatic work-done measurements (`git diff --shortstat`), 8-stage feature execution, automated PR code review audits, backlog re-prioritization, and strict quality gates (>=80% unit test coverage).
+Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100% complete, production-ready software products rapidly and extensively with AI coding tools (Jules, Gemini, Claude, Google AI, Copilot). Operates through continuous Loop Engineering, programmatic work-done measurements (`git diff --shortstat`), 8-stage feature execution, automated PR code review audits, backlog re-prioritization, and strict quality gates (>=80% unit test coverage).
 
 ---
 
@@ -253,25 +274,25 @@ Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100
 The agent executes as a real-life autonomous software development team without requiring manual intervention:
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                  AUTONOMOUS AGILE SDLC AGENT ENGINE                    â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
- [1. EPIC & BACKLOG BREAKDOWN] â”€â”€â–º Parse vision.md; break epics into granular tasks in backlog.md.
-              â”‚
-              â–¼
- [2. FEATURE IMPLEMENTATION]   â”€â”€â–º Create new branch from main; write modular code & tests.
-              â”‚
-              â–¼
- [3. COVERAGE & VERIFICATION]  â”€â”€â–º Verify >=80% unit test coverage & physical test passing.
-              â”‚
-              â–¼
- [4. DETAILED PR REVIEW AUDIT] â”€â”€â–º Audit architecture, OWASP Top 25, code smells, coverage gaps.
-              â”‚                     â””â”€â–º Found issues? Raise structured bugs in backlog.md.
-              â–¼
- [5. BACKLOG PRIORITIZATION]   â”€â”€â–º Re-prioritize backlog.md; update .status project metrics.
-              â”‚
-              â–¼
- [6. DEV BUG-FIXING LOOP]      â”€â”€â–º Pull highest priority bug/task from backlog; rebase & repeat!
+┌────────────────────────────────────────────────────────────────────────┐
+│                  AUTONOMOUS AGILE SDLC AGENT ENGINE                    │
+└────────────────────────────────────────────────────────────────────────┘
+ [1. EPIC & BACKLOG BREAKDOWN] ──► Parse vision.md; break epics into granular tasks in backlog.md.
+              │
+              ▼
+ [2. FEATURE IMPLEMENTATION]   ──► Create new branch from main; write modular code & tests.
+              │
+              ▼
+ [3. COVERAGE & VERIFICATION]  ──► Verify >=80% unit test coverage & physical test passing.
+              │
+              ▼
+ [4. DETAILED PR REVIEW AUDIT] ──► Audit architecture, OWASP Top 25, code smells, coverage gaps.
+              │                     └─► Found issues? Raise structured bugs in backlog.md.
+              ▼
+ [5. BACKLOG PRIORITIZATION]   ──► Re-prioritize backlog.md; update .status project metrics.
+              │
+              ▼
+ [6. DEV BUG-FIXING LOOP]      ──► Pull highest priority bug/task from backlog; rebase & repeat!
 ```
 
 ---
@@ -338,6 +359,30 @@ If a task fix or test fails **3 consecutive times**:
 
 
 ---
+<!-- SKILL MODULE: tech-agentic-automation-tools.md -->
+# Tech: Advanced Agentic Automation & Decision Support
+
+## Goal
+Utilize cutting-edge local LLM optimization, observability, and deterministic decision-making frameworks to ensure highly efficient, scalable, and introspective AI agents.
+
+## Core Frameworks & Tooling
+
+### 1. AirLLM & VRAM Optimization
+- **AirLLM Usage:** When running large models (70B+) on limited local hardware or constrained cloud instances, utilize AirLLM to layer-load weights. This ensures high-capability reasoning without catastrophic Out-of-Memory (OOM) failures.
+
+### 2. JEV (Joint Evaluation & Verification) / Decision Making
+- **Decision Trees:** Use JEV (or similar Joint Evaluation architectures) to cross-verify agent decisions. Before executing a high-risk system command or committing code, the agent must simulate the output and evaluate the confidence score.
+
+### 3. Task Observers & AgentOps
+- **Observability:** Integrate Task Observers (like AgentOps or LangSmith) to trace agent execution loops. Every tool call, LLM prompt, and action must be logged with its latency, token usage, and outcome to prevent infinite loops and hallucination spirals.
+
+### 4. Context Headroom Management
+- **Headroom Optimization:** Actively monitor the LLM's context window. Implement rolling summaries and Vector DB (RAG) offloading to maintain at least 20% "headroom" in the context window to prevent truncation during complex reasoning tasks.
+
+### 5. Ponytail / Task Queuing
+- **Automation Queues:** Use robust task queuing and orchestration (often referred to in automation paradigms as ponytail/pigtail tracking) to ensure that background tasks and scheduled agent runs do not block the main event loop.
+
+---
 <!-- SKILL MODULE: tech-auth-database.md -->
 # Tech: Database & Authentication Integration
 
@@ -362,7 +407,6 @@ Establish secure, scalable, and resilient database and authentication architectu
 - **PII Protection:** Encrypt sensitive Personally Identifiable Information (PII) at rest and in transit.
 - **Stateless Sessions:** Prefer secure HTTP-only cookies over local storage for session tokens to prevent XSS theft.
 
-
 ---
 <!-- SKILL MODULE: tech-backend-api.md -->
 # Tech: Backend API Development Best Practices
@@ -376,7 +420,6 @@ Design and build resilient, scalable, and well-structured RESTful and GraphQL AP
 3. **Consistent Error Responses:** Return standard JSON error responses containing status codes, error codes, user-friendly messages, and optional field-level validation errors.
 4. **Middleware & Interceptors:** Use modular middleware for logging, rate limiting, authentication, CORS, and request tracking (correlation IDs).
 5. **API Documentation:** Maintain up-to-date OpenAPI/Swagger definitions or GraphQL schemas that reflect actual backend endpoints and request/response payloads.
-
 
 ---
 <!-- SKILL MODULE: tech-cicd-devops.md -->
@@ -394,9 +437,8 @@ Automate code integration, verification, and continuous deployment pipelines whi
 6. **Pipeline Security:** Secure CI/CD pipelines by masking secrets, scoping workflow permissions strictly (`permissions: contents: read`), and avoiding bloated third-party actions where simple scripts suffice.
 7. **Gated Deployment Standard:** Use one `ci-cd.yml` per repo. The `deploy` job must declare `needs: ci` and run only on `push` to `main`. PRs run CI only. Add `concurrency` (cancel stale PR runs, never cancel a production deploy).
 8. **Secrets Placement:** Deployment tokens (e.g. `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) go in a GitHub **Environment** named `production`, restricted to `main`, and are referenced via `environment: production`. Application runtime secrets (API keys) live **only** in the hosting provider (e.g. Vercel Environment Variables) and are pulled at build time. Never commit tokens to workflow files, `vercel.json`, `.env*` (except placeholder-only `.env.example`), MCP configs, or commit messages; reference env vars like `${VAR}` instead.
-9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` â†’ `vercel build --prod` â†’ `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
-10. **Free Hosting Defaults:** Next.js/SSR â†’ Vercel Hobby (non-commercial). Static sites â†’ GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
-
+9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
+10. **Free Hosting Defaults:** Next.js/SSR → Vercel Hobby (non-commercial). Static sites → GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
 
 ---
 <!-- SKILL MODULE: tech-database-sql.md -->
@@ -411,7 +453,6 @@ Ensure clean database schema design, efficient querying, reliable migrations, an
 3. **Migration Management:** Use versioned, reproducible migration scripts (e.g., Prisma, Drizzle, TypeORM, Alembic, Flyway). Never perform manual schema modifications in production.
 4. **ORM & Query Builders:** Use type-safe ORMs or query builders while retaining awareness of generated SQL query execution and transaction boundaries.
 5. **Data Integrity & Transactions:** Enforce database-level integrity (unique constraints, cascades, nullability) and wrap multi-step write operations in ACID transactions.
-
 
 ---
 <!-- SKILL MODULE: tech-dependency-management.md -->
@@ -441,7 +482,6 @@ Maintain a clean, secure, and consistent dependency tree across all repositories
 - **Lockfile Integrity:** Always commit `package-lock.json` or equivalent to ensure deterministic builds.
 - **Semantic Versioning:** Respect semver constraints, but lock critical packages if regressions are frequent.
 
-
 ---
 <!-- SKILL MODULE: tech-git-workflow.md -->
 # Tech: Git & Version Control Workflow
@@ -455,7 +495,6 @@ Maintain a clean, linear, and searchable git history that facilitates collaborat
 3. **Atomic Commits:** Keep commits focused on a single logical change. Avoid mixing refactoring, formatting, and feature code in a single commit.
 4. **Pull Request Standards & Max Throughput:** Provide clear PR descriptions summarizing all batched items executed from `backlog.md`, including motivation, implementation summary, testing steps, and relevant screenshots or logs. Aim to deliver fully tested, high-value backlog batches in a single PR.
 5. **Clean History:** Rebase feature branches on main/master prior to merging to prevent unnecessary merge commits where team conventions require linear history.
-
 
 ---
 <!-- SKILL MODULE: tech-go-clean-arch.md -->
@@ -487,6 +526,26 @@ Enforce idiomatic, high-performance, maintainable Go 1.22+ development standards
 - **Table-Driven Tests:** Structure unit tests using Go table-driven test patterns with `t.Run(tt.name, func(t *testing.T) { ... })`.
 - **Strict Linting:** Enforce `golangci-lint` with enabled checkers (`govet`, `errcheck`, `staticcheck`, `gosec`, `ineffassign`).
 
+---
+<!-- SKILL MODULE: tech-legal-compliance-gdpr.md -->
+# Tech: Legal Compliance, UK GDPR & Age Verification
+
+## Goal
+Ensure all applications strictly comply with UK GDPR, EU GDPR, and the UK Age Appropriate Design Code (AADC). Protect user privacy, avoid regulatory fines, and ensure ethical data handling.
+
+## Core Guidelines
+
+### 1. UK GDPR & Data Privacy
+- **Cookie Consent:** Implement explicit, active consent mechanisms for all non-essential cookies (e.g., using OneTrust, Cookiebot, or a custom strict banner). No tracking pixels or analytics can fire before consent is granted.
+- **Right to be Forgotten:** Provide a one-click automated mechanism for users to delete their entire account and all associated PII (Personally Identifiable Information) permanently.
+- **Data Minimization & Encryption:** Only collect data absolutely necessary. Encrypt all PII at rest (AES-256) and in transit (TLS 1.3). Never log plaintext emails, passwords, or IP addresses.
+
+### 2. Age Verification & Child Protection (AADC)
+- **Age Gating:** Implement strict age verification during the signup flow. Ensure no under-age children (under 13 for general, under 18 for specific services) can create accounts.
+- **Default Privacy:** For younger users (if allowed), all privacy settings must default to the strictest possible level (no public profiles, no location tracking).
+
+### 3. Terms of Service & Privacy Policies
+- **Accessibility:** Link Terms of Service, Privacy Policy, and Cookie Policy in the footer of every public-facing page. Use plain English (ASD-STE100 standard) so users clearly understand what happens to their data.
 
 ---
 <!-- SKILL MODULE: tech-llm-security-owasp.md -->
@@ -534,7 +593,6 @@ Establish rigorous security controls, audit protocols, and defense-in-depth patt
 - [ ] Maximum step limits and token caps prevent DoS / infinite loops.
 - [ ] Agent execution operates within isolated directory scopes or sandboxes.
 
-
 ---
 <!-- SKILL MODULE: tech-mcp-agentic-tools.md -->
 # Technical Standard: Model Context Protocol (MCP) & Agentic Tools
@@ -570,7 +628,6 @@ Provide a standardized specification for creating, exposing, consuming, and secu
 - [ ] MCP configuration avoids committed plain-text API keys or tokens.
 - [ ] Long outputs are truncated or paginated to preserve context headroom.
 
-
 ---
 <!-- SKILL MODULE: tech-microservices-modular.md -->
 # Tech: Modern Architecture (Modular Monolith, Microservices & DDD)
@@ -596,7 +653,6 @@ Enforce clean, scalable, maintainable architectural patterns across projects, su
 - **Ubiquitous Language:** Align domain model names, entities, and methods with business domain terminology.
 - **Entities & Value Objects:** Model state with immutable Value Objects where identity is irrelevant, and Entities where identity persists.
 - **Aggregates & Repositories:** Enforce consistency boundaries within Aggregates; abstract data persistence behind clean Repository interfaces.
-
 
 ---
 <!-- SKILL MODULE: tech-python-fastapi.md -->
@@ -627,7 +683,6 @@ Enforce clean, performant, type-safe Python development standards using modern P
 ### 4. Quality & Testing Standards
 - **Ruff & Pyright:** Enforce `ruff check` and `ruff format` for linting and formatting; use `pyright` or `mypy --strict` for static type checking.
 - **Async Pytest Suite:** Write unit and integration tests using `pytest-asyncio` and `httpx.AsyncClient` against test database fixtures.
-
 
 ---
 <!-- SKILL MODULE: tech-react-nextjs.md -->
@@ -660,7 +715,6 @@ Build scalable, performant, accessible, and resilient React and Next.js applicat
 ### 5. Web Vitals & Media Optimization
 - **Zero-CLS Layouts:** Always use `<Image src={...} alt={...} width={...} height={...} priority />` for hero media to eliminate Cumulative Layout Shift.
 - **Font Optimization:** Use `next/font` (`Geist`, `Inter`) with `subsets: ['latin']` for zero-CLS typography.
-
 
 ---
 <!-- SKILL MODULE: tech-security-hardening.md -->
@@ -696,6 +750,12 @@ Ensure all web applications and APIs are resilient against common attack vectors
 - **Detailed Frontend Audits:** Continuously analyze and verify the website's frontend security posture in exhaustive detail. Ensure all interactive components (tabs, nav bars, links, forms) securely handle user input without exposing client-side vulnerabilities.
 - **Client-Side Validation:** Check that client-side routing, data fetching, and storage mechanisms (e.g., localStorage, cookies) enforce strict security bounds and don't leak sensitive session data.
 
+### 6. Anti-Scraping & Bot Immunity
+- **Scraper Proofing:** Protect exposed live domains with robust bot mitigation. Implement Cloudflare Turnstile (invisible CAPTCHA) or reCAPTCHA v3 on all forms and data endpoints.
+- **Obfuscation:** For public directories or sensitive content, employ dynamic rendering and rate-limiting to make automated scraping computationally unfeasible.
+
+### 7. Encryption Standards
+- **Data at Rest & Transit:** All databases must be encrypted at rest. Enforce TLS 1.3 across the board. Secrets must never be stored in plaintext.
 
 ---
 <!-- SKILL MODULE: tech-testing-automation.md -->
@@ -732,7 +792,6 @@ Enforce enterprise-grade automated testing standards, test-driven development (T
 - **Python:** Use `pytest` + `pytest-asyncio` + `httpx.AsyncClient` for async FastAPI endpoints.
 - **Go:** Use native Go `testing` package with table-driven test structs (`tests := []struct{ name string; ... }`).
 
-
 ---
 <!-- SKILL MODULE: tech-web-scraping-resilience.md -->
 # Tech: Web Scraping & Crawler Resilience
@@ -757,7 +816,6 @@ Build robust, ethical, and highly resilient data-gathering agents capable of byp
 - **Protocol-Level Scraping:** Prefer HTTP request-based scraping (e.g., using `fetch` or `cheerio` for parsing HTML) over headless browsers for speed and lower resource consumption, unless JavaScript rendering is explicitly required.
 - **Concurrency & Backoff:** Implement intelligent concurrency limits and exponential backoff strategies to handle 429 Too Many Requests errors gracefully.
 
-
 ---
 <!-- SKILL MODULE: tool-one-cli.md -->
 # Goal
@@ -774,7 +832,6 @@ To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e
 2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local`, `Sync-Skills`, or `Optimize-Actions` functions of `one.ps1`.
 3. **Avoid Duplicate Scripts:** Do not create separate `.sh` files or individual `setup-*` scripts. Consolidate logic into `one.ps1` using clean PowerShell parameters and `switch` statements.
 4. **Git Safety:** Always ensure that `one.ps1` actions that touch git repos (like fetching/pulling) appropriately handle discarded local changes (e.g., `git clean -fd`, `git reset --hard`) only where intended, and always commit/push updated settings automatically.
-
 
 ---
 <!-- SKILL MODULE: ui-ux-pro-max.md -->
@@ -872,6 +929,7 @@ Enforce this checklist before finalizing any generated UI or layout:
 - [ ] **Reduced Motion Support:** Respect `prefers-reduced-motion` and ensure micro-interactions fail safely during rapid user input.
 
 
+
 ---
 <!-- SKILL MODULE: workflow-local-deployment.md -->
 # Goal
@@ -887,7 +945,6 @@ Local environments can quickly become out-of-sync with the remote codebase. To m
 4. **Cloudflare Tunnel Integration:** Hook up the local environment to Cloudflare using `cloudflared`. The deployment script should automatically establish a Cloudflare tunnel so the local application can be securely accessed, tested, and webhook-integrated from anywhere.
 5. **Dependency & Infrastructure Sync:** The automated script must run package managers (`npm install`, `uv sync`, `go mod tidy`) if lockfiles change, and reset/migrate local databases to prevent schema drift.
 6. **Readiness Checks:** The deployment script must explicitly verify `/healthz` or basic root endpoints to confirm successful startup before yielding control back to the user or agent.
-
 
 ---
 <!-- SKILL MODULE: workflow-memory-and-context.md -->
@@ -918,7 +975,6 @@ Manage context window headroom efficiently, reduce token consumption while maxim
 - **Direct & Actionable Responses:** Avoid generic pleasantries or verbose conversational fluff. Focus outputs on clear technical reasoning, exact diffs, and verification steps.
 - **Structured Code Diffs:** Use precise git merge diffs or block updates rather than rewriting entire un-impacted files.
 
-
 ---
 <!-- SKILL MODULE: workflow-spec-driven-implementation.md -->
 # Skill: End-to-End Feature Execution Engine & Specification-Driven Implementation
@@ -936,31 +992,31 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
 ## The 8-Stage Feature Execution Lifecycle
 
 ```
- â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
- â”‚                   8-STAGE FEATURE EXECUTION ENGINE                     â”‚
- â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-  [STAGE 1: VISION TRIANGULATION & FEATURE SELECTION] â”€â”€â–º Compare vision vs backlog; expand vision.
-            â”‚
-            â–¼
-  [STAGE 2: FEATURE VALIDATION & DESIGN THINKING / SPIKE]â”€â”€â–º Run feasibility analysis & Design Thinking.
-            â”‚
-            â–¼
-  [STAGE 3: HLD & LLD ARCHITECTURE & GRANULAR DECOMPOSITION]â–º High/Low-Level Design & sub-tasking.
-            â”‚
-            â–¼
-  [STAGE 4: ITERATIVE IMPLEMENTATION & REFACTORED CODE]  â”€â”€â–º Write clean code; refactor/optimize.
-            â”‚
-            â–¼
-  [STAGE 5: VERIFICATION & AUTOMATED UNIT/INT TESTS]     â”€â”€â–º Unit, integration & regression tests.
-            â”‚
-            â–¼
-  [STAGE 6: SYSTEM INTEGRATION AUDIT]                    â”€â”€â–º Verify integration with existing software.
-            â”‚
-            â–¼
-  [STAGE 7: BUG HUNT & SECURITY AUDIT]                   â”€â”€â–º OWASP check, race condition & bug hunting.
-            â”‚
-            â–¼
-  [STAGE 8: SSOT SYNC & AUTONOMOUS TRANSITION]            â”€â”€â–º Measure `git diff --shortstat`, update docs,
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                   8-STAGE FEATURE EXECUTION ENGINE                     │
+ └────────────────────────────────────────────────────────────────────────┘
+  [STAGE 1: VISION TRIANGULATION & FEATURE SELECTION] ──► Compare vision vs backlog; expand vision.
+            │
+            ▼
+  [STAGE 2: FEATURE VALIDATION & DESIGN THINKING / SPIKE]──► Run feasibility analysis & Design Thinking.
+            │
+            ▼
+  [STAGE 3: HLD & LLD ARCHITECTURE & GRANULAR DECOMPOSITION]► High/Low-Level Design & sub-tasking.
+            │
+            ▼
+  [STAGE 4: ITERATIVE IMPLEMENTATION & REFACTORED CODE]  ──► Write clean code; refactor/optimize.
+            │
+            ▼
+  [STAGE 5: VERIFICATION & AUTOMATED UNIT/INT TESTS]     ──► Unit, integration & regression tests.
+            │
+            ▼
+  [STAGE 6: SYSTEM INTEGRATION AUDIT]                    ──► Verify integration with existing software.
+            │
+            ▼
+  [STAGE 7: BUG HUNT & SECURITY AUDIT]                   ──► OWASP check, race condition & bug hunting.
+            │
+            ▼
+  [STAGE 8: SSOT SYNC & AUTONOMOUS TRANSITION]            ──► Measure `git diff --shortstat`, update docs,
                                                               and transition autonomously to next feature.
 ```
 
@@ -989,7 +1045,7 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
 
 ### STAGE 5: Verification & Automated Unit/Integration Testing
 1. **Automated Test Creation:** Write comprehensive unit, integration, and E2E tests covering happy paths, edge cases, null inputs, and error states.
-2. **Physical Execution:** Run `npm test`, `pytest`, `go test`, or relevant test command in the environment. Verify all tests pass physicallyâ€”never hallucinate test results.
+2. **Physical Execution:** Run `npm test`, `pytest`, `go test`, or relevant test command in the environment. Verify all tests pass physically—never hallucinate test results.
 3. **Circuit Breaker Rule:** If a fix or test fails 3 consecutive times, trigger [Circuit Breaker Protocol] (`skills/circuit-breaker.md`) to revert to baseline, tag `[BLOCKED: Needs Human/Architect Review]` in `backlog.md`, and pivot.
 
 ### STAGE 6: System Integration Audit
@@ -1009,4 +1065,4 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
    - Update `vision.md` or `.status` metrics if milestones were achieved.
 3. **Autonomous Transition:** If session capacity permits (< 500 LOC / < 4 tasks) and unblocked backlog items remain, self-prompt and transition immediately back to **STAGE 1** for the next feature without halting.
 
-
+---

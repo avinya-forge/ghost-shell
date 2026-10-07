@@ -1,7 +1,7 @@
 # Skill: Loop Engineering & Autonomous Execution Velocity
 
 ## Goal
-Transform AI agent execution from single-task, low-yield responses into sustained, high-throughput engineering loops. Loop Engineering enables AI agents (including Jules, Cursor, Antigravity, and Claude Code) to autonomously measure work done, batch backlog items, execute, test, verify, and document multi-task packages within a single session, fully utilizing session capacity without halting prematurely or producing superficial edits.
+Transform AI agent execution from single-task, low-yield responses into sustained, high-throughput engineering loops. Loop Engineering enables AI agents (including Jules, Gemini, Antigravity, and Claude Code) to autonomously measure work done, batch backlog items, execute, test, verify, and document multi-task packages within a single session, fully utilizing session capacity without halting prematurely or producing superficial edits.
 
 ---
 
@@ -80,8 +80,9 @@ The agent operates continuously across 6 deterministic loop states:
 
 ---
 
-## Directives for AI Coding Assistants (Jules, Cursor, Claude, Antigravity)
+## Directives for AI Coding Assistants (Jules, Gemini, Claude, Antigravity)
 
 1. **Maximize Yield Per Turn:** Perform complete multi-file implementations, test creation, and verification within each turn.
 2. **Never Quit Mid-Batch:** Measure work done using `git diff --shortstat`. If yield is under 200 LOC or <2 tasks, continue processing unblocked items in `backlog.md`.
 3. **Keep State Clean:** Update `backlog.md` and `release-notes.md` incrementally after each completed item within the loop session.
+

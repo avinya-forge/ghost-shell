@@ -90,3 +90,5 @@ Enforce this checklist before finalizing any generated UI or layout:
 - [ ] **Pixel-Perfect Alignment:** Confirm strict adherence to the spatial grid and ensure consistent border radii across all elements.
 - [ ] **Silky-Smooth Performance:** Verify scroll performance and ensure animations/transitions are hardware-accelerated, natural, and not jarring.
 - [ ] **Reduced Motion Support:** Respect `prefers-reduced-motion` and ensure micro-interactions fail safely during rapid user input.
+
+

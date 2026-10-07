@@ -1,7 +1,7 @@
 # Skill: Master Autonomous Agile AI SDLC Agent & Loop Engine
 
 ## Goal
-Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100% complete, production-ready software products rapidly and extensively with AI coding tools (Jules, Cursor, Claude, Google AI, Copilot). Operates through continuous Loop Engineering, programmatic work-done measurements (`git diff --shortstat`), 8-stage feature execution, automated PR code review audits, backlog re-prioritization, and strict quality gates (>=80% unit test coverage).
+Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100% complete, production-ready software products rapidly and extensively with AI coding tools (Jules, Gemini, Claude, Google AI, Copilot). Operates through continuous Loop Engineering, programmatic work-done measurements (`git diff --shortstat`), 8-stage feature execution, automated PR code review audits, backlog re-prioritization, and strict quality gates (>=80% unit test coverage).
 
 ---
 
@@ -116,3 +116,4 @@ If a task fix or test fails **3 consecutive times**:
 - **DevOps, CI & Infrastructure:** Apply `skills/tech-cicd-devops.md` (GitHub Actions, Docker, deployment hygiene). *Always prioritize fixing failing CI pipelines, linting, and type-check errors over new features.*
 - **Context & Memory Management:** Apply `skills/workflow-memory-and-context.md` (token headroom, `initiate_memory_recording`).
 - **LLM/AI Model Integration (JEV & Air LLM):** When a project requires embedded intelligence or local models, route logic to integrate Hugging Face models, JEV, or Air LLM frameworks seamlessly into the architecture.
+
