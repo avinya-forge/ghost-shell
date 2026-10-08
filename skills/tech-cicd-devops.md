@@ -19,3 +19,7 @@ Automate code integration, verification, and continuous deployment pipelines whi
 If GitHub Actions / CI/CD pipelines are failing in the repository, fixing them is your absolute highest priority. 
 - You must halt new feature development until the pipeline is green.
 - Debug .github/workflows/*.yml files, fix dependency mismatches, resolve linting errors, and repair broken tests. A broken pipeline means the project is paralyzed. Fix it first.
+
+### Zero Tolerance for Remote Pipeline Failures
+- The remote CI/CD pipeline must never fail.
+- Always use Local Pre-Commit Hooks (defined in 	ech-git-hooks-local-ci.md) to execute cleanup, lint fixing, building, and testing locally. If the local hook fails, fix it locally before pushing to remote.

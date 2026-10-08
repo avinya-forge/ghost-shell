@@ -474,6 +474,10 @@ If GitHub Actions / CI/CD pipelines are failing in the repository, fixing them i
 - You must halt new feature development until the pipeline is green.
 - Debug .github/workflows/*.yml files, fix dependency mismatches, resolve linting errors, and repair broken tests. A broken pipeline means the project is paralyzed. Fix it first.
 
+### Zero Tolerance for Remote Pipeline Failures
+- The remote CI/CD pipeline must never fail.
+- Always use Local Pre-Commit Hooks (defined in 	ech-git-hooks-local-ci.md) to execute cleanup, lint fixing, building, and testing locally. If the local hook fails, fix it locally before pushing to remote.
+
 ---
 <!-- SKILL MODULE: tech-database-sql.md -->
 # Tech: Database & SQL Architecture Standards
@@ -515,6 +519,34 @@ Maintain a clean, secure, and consistent dependency tree across all repositories
 ### 3. Build & Test Reliability
 - **Lockfile Integrity:** Always commit `package-lock.json` or equivalent to ensure deterministic builds.
 - **Semantic Versioning:** Respect semver constraints, but lock critical packages if regressions are frequent.
+
+---
+<!-- SKILL MODULE: tech-git-hooks-local-ci.md -->
+# Tech: Git Hooks & Local CI/CD Pipeline Validations
+
+## Goal
+Guarantee that the remote CI/CD pipeline always stays green. Never push broken code, linting errors, or failing tests to the remote repository. Ensure the AI agent enforces local pipeline replication before every commit.
+
+## Core Directives
+
+### 1. Mandatory Pre-Commit Hooks
+All projects must implement local pre-commit hooks to simulate the CI/CD pipeline locally before a commit is allowed.
+- **Node.js/TypeScript:** Install and configure husky and lint-staged.
+- **Python:** Use the pre-commit framework with .pre-commit-config.yaml.
+- **Go:** Use native .git/hooks/pre-commit enforcing golangci-lint and go test.
+
+### 2. The Local Pre-Commit Pipeline Steps
+The git hook must sequentially execute the following commands. If any step fails, the hook MUST exit with a non-zero status (exit 1), aborting the commit.
+1. **Cleanup & Formatting:** Auto-format code (e.g., prettier --write, lack).
+2. **Lint Auto-Fixing:** Run linter with auto-fix (e.g., eslint --fix, uff check --fix).
+3. **Type Checking:** Run strict type checks (e.g., 	sc --noEmit, mypy).
+4. **Build Replication:** Run the production build command (e.g., 
+pm run build, go build) to catch build-time errors that CI would catch.
+5. **Unit Tests:** Run local test suites (e.g., 
+pm test, pytest).
+
+### 3. Agent Execution Directive
+As an autonomous agent, if you trigger a commit and the hook blocks it, you must read the hook's error output, fix the underlying lint, type, or build issue, and attempt the commit again. Do not disable or bypass the hooks (--no-verify is strictly forbidden).
 
 ---
 <!-- SKILL MODULE: tech-git-workflow.md -->
