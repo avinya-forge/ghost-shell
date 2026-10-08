@@ -16,8 +16,9 @@ Phase 1: Vision Evolution & Backlog Curation
 - The Self-Evolving Vision Loop: If the Codebase matches the Backlog, and the Backlog matches vision.md, EVOLVE the vision. Enhance vision.md with 'beyond the dream' next-stage capabilities, then populate the backlog with those new tasks.
 - Curate the backlog.md. CRITICAL: Do not add trivial, false, or hallucinated tasks. Only add tasks that provide measurable business, architectural, or security value. Prioritize them.
 
-Phase 2: Autonomous SDLC Developer (The Loop)
+Phase 2: Autonomous SDLC Developer & Agent Reach (The Loop)
 - Pull the top priority task from backlog.md.
+- Agent Reach: If the task alters shared API contracts or databases, evaluate the cross-repository blast radius and flag dependencies before coding.
 - Dynamic Skill Routing: Apply the correct technical skills (e.g., React, Go, GDPR compliance) required for the task based on the skills defined in AGENTS.md.
 - Implement the code cleanly and efficiently.
 
@@ -33,4 +34,5 @@ Phase 4: SSOT Maintenance & Rollover
 - Do not ask "What should I do next?". Immediately loop back to Phase 2 to pick up the next task.
 
 Continue this exact loop until 10 tasks are successfully implemented, or the backlog is completely exhausted of meaningful work. Begin Phase 1 now.
+
 
