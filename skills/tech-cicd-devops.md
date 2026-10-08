@@ -14,3 +14,8 @@ Automate code integration, verification, and continuous deployment pipelines whi
 8. **Secrets Placement:** Deployment tokens (e.g. `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) go in a GitHub **Environment** named `production`, restricted to `main`, and are referenced via `environment: production`. Application runtime secrets (API keys) live **only** in the hosting provider (e.g. Vercel Environment Variables) and are pulled at build time. Never commit tokens to workflow files, `vercel.json`, `.env*` (except placeholder-only `.env.example`), MCP configs, or commit messages; reference env vars like `${VAR}` instead.
 9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
 10. **Free Hosting Defaults:** Next.js/SSR → Vercel Hobby (non-commercial). Static sites → GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
+
+## PRIORITY ZERO (P0): CI/CD & GITHUB ACTIONS
+If GitHub Actions / CI/CD pipelines are failing in the repository, fixing them is your absolute highest priority. 
+- You must halt new feature development until the pipeline is green.
+- Debug .github/workflows/*.yml files, fix dependency mismatches, resolve linting errors, and repair broken tests. A broken pipeline means the project is paralyzed. Fix it first.
