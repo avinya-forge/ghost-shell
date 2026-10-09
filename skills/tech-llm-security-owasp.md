@@ -41,3 +41,9 @@ Establish rigorous security controls, audit protocols, and defense-in-depth patt
 - [ ] No raw API keys, secrets, or PII exist in prompts, code, or logs.
 - [ ] Maximum step limits and token caps prevent DoS / infinite loops.
 - [ ] Agent execution operates within isolated directory scopes or sandboxes.
+
+### Agent Vulnerability Prevention (Anti-Hallucination)
+- **Dependency Auditing:** Never introduce new 
+pm, pip, or go dependencies without verifying their exact existence and security standing. Hallucinated packages lead to supply chain attacks.
+- **Hook Compliance:** Never use --no-verify on git commits. You must never bypass local CI/CD security hooks.
+- **Secure by Default:** Do not disable SSL verifications, do not log credentials, and do not commit secrets.
