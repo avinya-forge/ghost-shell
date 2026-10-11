@@ -1,0 +1,45 @@
+#!/bin/sh
+# ==============================================================================
+# 
+ghost-shell
+: Pre-push Verification Hook (Vishwa-Vani Style)
+# ==============================================================================
+
+echo "================================================="
+echo "🚀 
+ghost-shell
+: Pre-push Verification Hook"
+echo "================================================="
+
+if [ -f package.json ]; then
+    if grep -q '"verify":' package.json; then
+        echo "Running npm run verify..."
+        if ! npm run verify; then
+            echo "❌ Verification failed! Please fix the errors before pushing."
+            exit 1
+        fi
+    elif grep -q '"test":' package.json; then
+        echo "Running npm test..."
+        if ! npm test; then
+            echo "❌ Tests failed! Please fix the errors before pushing."
+            exit 1
+        fi
+    fi
+elif [ -f Makefile ]; then
+    echo "Running make test..."
+    if ! make test; then
+        echo "❌ Make test failed! Please fix the errors before pushing."
+        exit 1
+    fi
+elif [ -f pytest.ini ] || [ -f requirements.txt ]; then
+    if command -v pytest >/dev/null 2>&1; then
+        echo "Running pytest..."
+        if ! pytest; then
+            echo "❌ Pytest failed! Please fix the errors before pushing."
+            exit 1
+        fi
+    fi
+fi
+
+echo "✅ Pre-push verification checks passed! Safe to push to CI/CD."
+exit 0
