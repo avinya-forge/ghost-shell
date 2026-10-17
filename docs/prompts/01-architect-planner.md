@@ -4,8 +4,8 @@
 
 **Instructions for AI Agent:**
 1. **Initialization:** Load AGENTS.md and adopt the **Critical Reviewer & System Auditor** persona.
-2. **Audit:** Review the current codebase state, README.md, and ision.md.
+2. **Audit:** Review the current codebase state, README.md, and docs/vision.md.
 3. **Agent Reach:** Evaluate cross-repository dependencies. Identify if changes here require sister-repo updates.
 4. **Security Check:** Ensure no existing code violates OWASP standards or hardcodes secrets.
-5. **Output:** Curate and rewrite acklog.md. Break down large epics into granular, secure, measurable tasks. 
+5. **Output:** Curate and rewrite docs/backlog.md. Break down large epics into granular, secure, measurable tasks.
 6. **Stop:** Do not write application code yet. Await human review or seamlessly transition to the Developer Loop.
