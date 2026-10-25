@@ -1,4 +1,4 @@
-# EXECUTIVE DIRECTIVE FOR AI CODING AGENTS (JULES, ANTIGRAVITY, GEMINI, CLAUDE, COPILOT, CODEX)
+# EXECUTIVE DIRECTIVE FOR AI CODING AGENTS (JULES, ANTIGRAVITY, CURSOR, CLAUDE, COPILOT)
 
 ## MANDATE: 8-STAGE FEATURE LIFECYCLE, DESIGN THINKING, WORK MEASUREMENT & HIGH PR THROUGHPUT
 
@@ -13,7 +13,7 @@
 
 ---
 
-This project uses the following custom AI Skills and Instructions, optimized for Jules, Google Antigravity, Gemini, Claude, GitHub Copilot, and Codex:
+This project uses the following custom AI Skills and Instructions, optimized for Jules, Google Antigravity, Cursor, Claude, Copilot, and Coding Agents:
 ---
 <!-- SKILL MODULE: asd-ste100-simplified-english.md -->
 ---
@@ -37,6 +37,61 @@ Use this skill when drafting documentation, UI copy, and system messages that re
 ## Application
 - Apply to `README.md`, docs, UI texts, and prompts.
 - When applying, focus on clarity, brevity, and eliminating ambiguity. If a strict rule makes the text sound robotic, relax it slightly (the 20% margin) to ensure it remains approachable and natural.
+
+
+---
+<!-- SKILL MODULE: ast-100.md -->
+---
+name: ast-100
+description: Atomic Skill Template and Simplified Technical English standard for clear, high-density AI skill documentation.
+version: 1.0.0
+category: standard
+---
+
+# AST-100: Atomic Skill Template Standard
+
+## Context
+AI context windows require concise, unambiguous instructions.
+Ambiguity causes hallucinations and drift.
+Bloated prose exhausts token budgets.
+AST-100 enforces high-density, actionable skill definitions.
+
+## Core Rules
+1. Keep sentences under 25 words.
+2. Use active voice and imperative verbs.
+3. Replace passive descriptions with explicit actions.
+4. Provide concrete commands and code snippets.
+5. Limit each skill to a single domain capability.
+6. Structure skills into six mandatory sections:
+   - Metadata (YAML frontmatter)
+   - Context
+   - Core Rules
+   - Implementation Steps
+   - Verification Checklist
+   - Anti-Patterns
+
+## Implementation Steps
+1. Define YAML frontmatter with `name`, `description`, `version`, and `category`.
+2. Write a 2-4 sentence Context section stating problem and scope.
+3. Enumerate numbered Core Rules. Use imperative verbs (e.g., "Run", "Verify", "Avoid").
+4. Provide concise Implementation Steps with code blocks.
+5. Include a bulleted Verification Checklist with testable criteria.
+6. Detail Anti-Patterns to explicitly ban failure modes.
+
+## Verification Checklist
+- [ ] YAML frontmatter exists with all four required keys.
+- [ ] Every sentence contains 25 words or fewer.
+- [ ] No passive voice ("is created by", "should be done").
+- [ ] Concrete code or command examples included.
+- [ ] Verification checklist contains pass/fail criteria.
+- [ ] Anti-patterns section lists at least 3 failure cases.
+
+## Anti-Patterns
+- Conversational filler ("In this tutorial, we will explore...").
+- Abstract advice without commands or code.
+- Compound sentences exceeding 25 words.
+- Inconsistent section headings.
+
 
 ---
 <!-- SKILL MODULE: circuit-breaker.md -->
@@ -71,6 +126,7 @@ The Circuit Breaker is triggered when **a single task, build, test, or bug fix f
    - Select the next available unblocked highest-priority task from `backlog.md`.
    - Resume continuous execution without pausing or waiting for human prompt.
 
+
 ---
 <!-- SKILL MODULE: coding-standards.md -->
 # Coding Standards & Clean Code Practices
@@ -91,7 +147,7 @@ Maintain enterprise-grade code quality, industry-standard design patterns, consi
 
 ### 2. Clean Code & DRY
 - **Don't Repeat Yourself (DRY):** Eliminate code duplication by extracting shared logic into reusable modules or utilities.
-- **KISS & YAGNI:** Keep it simple, stupid. You aren't gonna need it—avoid over-engineering before requirements demand it.
+- **KISS & YAGNI:** Keep it simple, stupid. You aren't gonna need itâ€”avoid over-engineering before requirements demand it.
 - **Self-Documenting Code:** Write intention-revealing variable and function names. Avoid redundant comments that merely restate what the code does.
 
 ### 3. Skill Overlap & Multi-Skill Resolution
@@ -107,6 +163,7 @@ When multiple skill files apply to a single task or domain:
 - **Boolean Prefixes:** Always prefix boolean variables with `is`, `has`, `should`, or `can` (e.g., `isAuthorized`, `hasCompleted`).
 - **Domain Alignment:** Use consistent domain vocabulary matching `vision.md` and `backlog.md`.
 
+
 ---
 <!-- SKILL MODULE: loop-engineering.md -->
 # Skill: Loop Engineering & Autonomous Execution Velocity
@@ -116,7 +173,7 @@ Transform AI agent execution from single-task, low-yield responses into sustaine
 
 ---
 
-## 📊 Work Measurement & Session Yield Protocol
+## ðŸ“Š Work Measurement & Session Yield Protocol
 
 ### 1. Programmatic Work Measurement
 At the end of every completed task item within a session, the agent MUST run programmatic measurement commands to quantify physical output before deciding whether to end the session or continue:
@@ -147,35 +204,35 @@ Evaluate work done against explicit threshold metrics:
 
 ### 1. Target PR Scope Thresholds (Anti-Trivial Execution)
 - **Minimum Batch Requirement:** Do not stop execution or return control after completing a single trivial fix or minor single-line edit unless the backlog is completely empty or explicit human intervention is requested.
-- **PR Scope Target:** Process 2 to 4 logically connected backlog items per PR session or reach a target diff volume of approximately 200–500 lines of functional code and tests.
+- **PR Scope Target:** Process 2 to 4 logically connected backlog items per PR session or reach a target diff volume of approximately 200â€“500 lines of functional code and tests.
 - **Atomic Progress within Session:** Execute each backlog item in discrete, self-contained implementation + test steps while keeping the outer loop running continuously.
 
 ### 2. The Loop Engineering State Machine
 The agent operates continuously across 6 deterministic loop states:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        LOOP ENGINEERING FSM                             │
-└────────────────────────────────────────────────────────────────────────┘
- [STATE 0: SCAN & BATCH] ──► Inspect vision.md & backlog.md; select 2-4 items.
-           │
-           ▼
- [STATE 1: SPEC & PLAN]  ──► Run light Spec Kit breakdown (Specify -> Plan -> Tasks).
-           │
-           ▼
- [STATE 2: IMPLEMENT]    ──► Write robust code adhering to architecture & standards.
-           │
-           ▼
- [STATE 3: TEST & AUDIT] ──► Execute local tests & static checks; run bug hunt.
-           │                     ├─► Fail 3x? Apply Circuit Breaker -> Tag & Pivot.
-           │                     └─► Pass? Proceed to State 4.
-           ▼
- [STATE 4: MEASURE & SYNC]──► Run `git diff --shortstat`; update backlog.md & release-notes.md.
-           │                     ├─► Yield threshold met OR backlog empty? Ready PR.
-           │                     └─► Yield below threshold & tasks remain?
-           │                         Self-prompt -> Return to STATE 0.
-           ▼
- [STATE 5: COMMIT & PR]  ──► Package comprehensive PR with detailed summary & diffs.
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                        LOOP ENGINEERING FSM                             â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+ [STATE 0: SCAN & BATCH] â”€â”€â–º Inspect vision.md & backlog.md; select 2-4 items.
+           â”‚
+           â–¼
+ [STATE 1: SPEC & PLAN]  â”€â”€â–º Run light Spec Kit breakdown (Specify -> Plan -> Tasks).
+           â”‚
+           â–¼
+ [STATE 2: IMPLEMENT]    â”€â”€â–º Write robust code adhering to architecture & standards.
+           â”‚
+           â–¼
+ [STATE 3: TEST & AUDIT] â”€â”€â–º Execute local tests & static checks; run bug hunt.
+           â”‚                     â”œâ”€â–º Fail 3x? Apply Circuit Breaker -> Tag & Pivot.
+           â”‚                     â””â”€â–º Pass? Proceed to State 4.
+           â–¼
+ [STATE 4: MEASURE & SYNC]â”€â”€â–º Run `git diff --shortstat`; update backlog.md & release-notes.md.
+           â”‚                     â”œâ”€â–º Yield threshold met OR backlog empty? Ready PR.
+           â”‚                     â””â”€â–º Yield below threshold & tasks remain?
+           â”‚                         Self-prompt -> Return to STATE 0.
+           â–¼
+ [STATE 5: COMMIT & PR]  â”€â”€â–º Package comprehensive PR with detailed summary & diffs.
 ```
 
 ### 3. Anti-Halting & Self-Prompting Directive
@@ -198,6 +255,7 @@ The agent operates continuously across 6 deterministic loop states:
 3. **Keep State Clean:** Update `backlog.md` and `release-notes.md` incrementally after each completed item within the loop session.
 
 
+
 ---
 <!-- SKILL MODULE: role-ai-agent-engineer.md -->
 # Role: AI Agent Engineer & Agentic Systems Architect
@@ -212,7 +270,7 @@ Act as an elite AI Agent Engineer and Systems Architect specialized in autonomou
 ### 1. Multi-Agent Orchestration & Task Decomposition
 - **Autonomous Sub-agent Routing:** Design multi-agent hierarchies where specialized sub-agents handle discrete domains (e.g., Code Search, Code Edit, Verification, Security Audit) with clear parent-child context boundaries.
 - **State Machine Mechanics:** Structure complex agent flows as explicit Finite State Machines (FSM) or Directed Acyclic Graphs (DAGs) rather than loose unconstrained conversation loops.
-- **Dynamic Plan Refinement:** Enforce runtime plan evaluation—agents must evaluate progress after each action step and update execution plans dynamically when unexpected outputs or errors arise.
+- **Dynamic Plan Refinement:** Enforce runtime plan evaluationâ€”agents must evaluate progress after each action step and update execution plans dynamically when unexpected outputs or errors arise.
 
 ### 2. Tool Definition & Agentic Tool Execution
 - **Strict Schema Definitions:** Craft explicit tool parameters using standard JSON Schema / Pydantic v2 schemas with precise field constraints, type validations, and descriptive docstrings.
@@ -235,6 +293,7 @@ Act as an elite AI Agent Engineer and Systems Architect specialized in autonomou
 1. **Explicit System Directives:** Always frame system instructions with clear role scope, constraints, input/output schemas, and step-by-step reasoning steps.
 2. **Evaluations (Evals):** Require programmatic evaluation benchmarks (accuracy, tool-call accuracy, latency, token consumption, safety guardrails) for all agent workflows.
 3. **Observability & Tracing:** Instrument agent operations with full trace telemetry (span tracking for prompt preparation, LLM invocation, tool execution, and response parsing).
+
 
 ---
 <!-- SKILL MODULE: role-autonomous-sdlc-agent.md -->
@@ -274,25 +333,25 @@ Act as the ultimate, highly autonomous Agile AI SDLC Agent designed to build 100
 The agent executes as a real-life autonomous software development team without requiring manual intervention:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                  AUTONOMOUS AGILE SDLC AGENT ENGINE                    │
-└────────────────────────────────────────────────────────────────────────┘
- [1. EPIC & BACKLOG BREAKDOWN] ──► Parse vision.md; break epics into granular tasks in backlog.md.
-              │
-              ▼
- [2. FEATURE IMPLEMENTATION]   ──► Create new branch from main; write modular code & tests.
-              │
-              ▼
- [3. COVERAGE & VERIFICATION]  ──► Verify >=80% unit test coverage & physical test passing.
-              │
-              ▼
- [4. DETAILED PR REVIEW AUDIT] ──► Audit architecture, OWASP Top 25, code smells, coverage gaps.
-              │                     └─► Found issues? Raise structured bugs in backlog.md.
-              ▼
- [5. BACKLOG PRIORITIZATION]   ──► Re-prioritize backlog.md; update .status project metrics.
-              │
-              ▼
- [6. DEV BUG-FIXING LOOP]      ──► Pull highest priority bug/task from backlog; rebase & repeat!
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                  AUTONOMOUS AGILE SDLC AGENT ENGINE                    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+ [1. EPIC & BACKLOG BREAKDOWN] â”€â”€â–º Parse vision.md; break epics into granular tasks in backlog.md.
+              â”‚
+              â–¼
+ [2. FEATURE IMPLEMENTATION]   â”€â”€â–º Create new branch from main; write modular code & tests.
+              â”‚
+              â–¼
+ [3. COVERAGE & VERIFICATION]  â”€â”€â–º Verify >=80% unit test coverage & physical test passing.
+              â”‚
+              â–¼
+ [4. DETAILED PR REVIEW AUDIT] â”€â”€â–º Audit architecture, OWASP Top 25, code smells, coverage gaps.
+              â”‚                     â””â”€â–º Found issues? Raise structured bugs in backlog.md.
+              â–¼
+ [5. BACKLOG PRIORITIZATION]   â”€â”€â–º Re-prioritize backlog.md; update .status project metrics.
+              â”‚
+              â–¼
+ [6. DEV BUG-FIXING LOOP]      â”€â”€â–º Pull highest priority bug/task from backlog; rebase & repeat!
 ```
 
 ---
@@ -358,6 +417,7 @@ If a task fix or test fails **3 consecutive times**:
 - **LLM/AI Model Integration (JEV & Air LLM):** When a project requires embedded intelligence or local models, route logic to integrate Hugging Face models, JEV, or Air LLM frameworks seamlessly into the architecture.
 
 
+
 ---
 <!-- SKILL MODULE: role-reviewer-auditor.md -->
 # Role: Critical Reviewer & System Auditor
@@ -387,27 +447,6 @@ When curating tasks or reviewing the application, evaluate the system from three
 - **Vision Enhancement:** If the backlog is empty because the current vision is complete, DO NOT stop. Evolve ision.md to the next stage. Brainstorm and explore possibilities that were previously "beyond the dream" of the initial developer.
 - **Generate Next-Gen Tasks:** Once ision.md is upgraded with ambitious new targets, immediately generate a fresh set of architectural and feature tasks in acklog.md to begin building towards that new horizon.
 
----
-<!-- SKILL MODULE: tech-agent-reach-orchestration.md -->
-# Tech: Agent Reach & Cross-Boundary Orchestration
-
-## Goal
-Empower the autonomous agent with "Agent Reach"A,??the capability to intelligently transcend single-repository silos, securely invoke external data streams, and map cross-system blast radiuses without requiring micromanagement.
-
-## Core Directives
-
-### 1. Cross-Repository Reach
-- When implementing a feature that alters an API schema, database contract, or shared library, you must exercise **Agent Reach**. 
-- Do not restrict your architectural thinking to the current repository. Mentally evaluate the Avinya Forge ecosystem (e.g., Aetheris, ghost-ops, OmniWallet) and document the cross-repo blast radius in elease-notes.md.
-- If an API contract breaks, generate a task specifically instructing the user (or the next agent instance) to apply the matching change in the dependent repository.
-
-### 2. External Intelligence & Tool Reach
-- If the current context or repository lacks the documentation required to implement an integration (e.g., a third-party SDK), use your Agent Reach capabilities (Web Search, File Read, MCP Servers) to independently hunt down the official documentation before writing code.
-- Never hallucinate API parameters. If you lack the knowledge, Reach out to the source of truth.
-
-### 3. Human-in-the-Loop (HitL) Reach
-- **Irreversible Actions:** Agent Reach includes knowing *when* to reach out to the human. If a task requires a destructive database migration, deletion of core infrastructure, or deploying live PII changes, halt execution.
-- Tag the task as [BLOCKED: Requires Human Architect Approval] and explicitly reach out to the user for a "Proceed" confirmation.
 
 ---
 <!-- SKILL MODULE: tech-agentic-automation-tools.md -->
@@ -432,6 +471,182 @@ Utilize cutting-edge local LLM optimization, observability, and deterministic de
 
 ### 5. Ponytail / Task Queuing
 - **Automation Queues:** Use robust task queuing and orchestration (often referred to in automation paradigms as ponytail/pigtail tracking) to ensure that background tasks and scheduled agent runs do not block the main event loop.
+
+
+---
+<!-- SKILL MODULE: tech-agentic-fsm-orchestration.md -->
+---
+name: tech-agentic-fsm-orchestration
+description: Coordinate autonomous multi-agent swarms with deterministic Finite State Machines, strict token budgets, and structured handoff protocols.
+version: 1.0.0
+category: agentic-ai
+---
+
+# Agentic Finite State Machine (FSM) Orchestration
+
+## Context
+Unstructured multi-agent loops drift into infinite cycles, duplicate work, and burn tokens.
+Autonomous swarms require deterministic state boundaries and explicit transition gates.
+Finite State Machine (FSM) orchestration enforces predictable progression from specification to deployment.
+
+## Core Rules
+1. Model agentic workflows as explicit Finite State Machines with discrete states and transitions.
+2. Cap maximum autonomous loop iterations at 5 turns before requiring human verification.
+3. Validate state transitions with deterministic unit tests or schema verifiers before handoff.
+4. Pass state between agents using validated JSON schemas rather than free-form text.
+5. Allocate strict token budgets per execution state to avoid context exhaustion.
+6. Trigger the circuit breaker immediately if an agent fails a transition test 3 consecutive times.
+
+## Implementation Steps
+1. Define FSM agent states and transition conditions in TypeScript:
+   ```typescript
+   export type AgentState = "PLANNING" | "CODING" | "TESTING" | "AUDITING" | "COMPLETED" | "FAILED";
+
+   export interface AgentTransition {
+       from: AgentState;
+       to: AgentState;
+       guard: () => Promise<boolean>;
+   }
+
+   export class AgentFSM {
+       private currentState: AgentState = "PLANNING";
+       private iterationCount = 0;
+       private readonly maxIterations = 5;
+
+       public async transition(nextState: AgentState, guard: () => Promise<boolean>): Promise<boolean> {
+           if (this.iterationCount >= this.maxIterations) {
+               this.currentState = "FAILED";
+               throw new Error("Loop iteration limit exceeded. Triggering circuit breaker.");
+           }
+           const canTransition = await guard();
+           if (canTransition) {
+               this.currentState = nextState;
+               this.iterationCount++;
+               return true;
+           }
+           return false;
+       }
+
+       public getState(): AgentState {
+           return this.currentState;
+       }
+   }
+   ```
+2. Log transitions to telemetry event streams with token consumption metadata.
+
+## Verification Checklist
+- [ ] Agent workflow states transition strictly according to predefined state graphs.
+- [ ] Transition guards execute deterministic tests before moving to downstream states.
+- [ ] Execution halts cleanly when reaching iteration limits without runaway API costs.
+- [ ] Intermediate artifacts validate against strict JSON schemas before handoff.
+- [ ] Failure state activates fallback mechanisms and notifies human operators.
+
+## Anti-Patterns
+- Allowing agents to self-assign arbitrary states without schema verification.
+- Running unconstrained autonomous loops without turn limits or timeouts.
+- Passing massive unprocessed transcript histories between specialized sub-agents.
+- Continuing execution loops after verification test failures without state rollback.
+
+
+---
+<!-- SKILL MODULE: tech-agent-reach-orchestration.md -->
+# Tech: Agent Reach & Cross-Boundary Orchestration
+
+## Goal
+Empower the autonomous agent with "Agent Reach"A,??the capability to intelligently transcend single-repository silos, securely invoke external data streams, and map cross-system blast radiuses without requiring micromanagement.
+
+## Core Directives
+
+### 1. Cross-Repository Reach
+- When implementing a feature that alters an API schema, database contract, or shared library, you must exercise **Agent Reach**. 
+- Do not restrict your architectural thinking to the current repository. Mentally evaluate the Avinya Forge ecosystem (e.g., Aetheris, ghost-ops, OmniWallet) and document the cross-repo blast radius in elease-notes.md.
+- If an API contract breaks, generate a task specifically instructing the user (or the next agent instance) to apply the matching change in the dependent repository.
+
+### 2. External Intelligence & Tool Reach
+- If the current context or repository lacks the documentation required to implement an integration (e.g., a third-party SDK), use your Agent Reach capabilities (Web Search, File Read, MCP Servers) to independently hunt down the official documentation before writing code.
+- Never hallucinate API parameters. If you lack the knowledge, Reach out to the source of truth.
+
+### 3. Human-in-the-Loop (HitL) Reach
+- **Irreversible Actions:** Agent Reach includes knowing *when* to reach out to the human. If a task requires a destructive database migration, deletion of core infrastructure, or deploying live PII changes, halt execution.
+- Tag the task as [BLOCKED: Requires Human Architect Approval] and explicitly reach out to the user for a "Proceed" confirmation.
+
+
+---
+<!-- SKILL MODULE: tech-airllm-inference-optimization.md -->
+---
+name: tech-airllm-inference-optimization
+description: Run 70B+ parameter LLMs on consumer GPUs (4GB-8GB VRAM) using layer-wise NVMe SSD streaming and quantization.
+version: 1.0.0
+category: ai-inference
+---
+
+# AirLLM Inference Optimization
+
+## Context
+Standard 70B parameter models require at least 140GB VRAM.
+Consumer GPUs offer limited VRAM (4GB to 16GB).
+AirLLM streams transformer layers sequentially from NVMe SSD into GPU memory.
+This enables local 70B inference without multi-GPU clusters.
+
+## Core Rules
+1. Store model weights on PCIe Gen 4/5 NVMe SSDs.
+2. Load only one transformer layer into GPU memory at a time.
+3. Free GPU memory immediately after each layer forward pass completes.
+4. Enable 4-bit or 8-bit quantization to reduce PCIe transfer overhead.
+5. Use batch size 1 for single-stream generation.
+6. Target throughput of 1-4 tokens per second on consumer hardware.
+
+## Implementation Steps
+1. Install AirLLM package:
+   ```bash
+   pip install airllm
+   ```
+2. Initialize model with disk offloading:
+   ```python
+   from airllm import AutoModel
+
+   model = AutoModel.from_pretrained(
+       "meta-llama/Meta-Llama-3-70B-Instruct",
+       compression="4bit",  # or "8bit"
+       profiling_mode=False
+   )
+   ```
+3. Tokenize input and execute layer-by-layer forward pass:
+   ```python
+   input_text = ["Describe quantum annealing in three sentences."]
+   input_tokens = model.tokenizer(
+       input_text,
+       return_tensors="pt",
+       truncation=True,
+       max_length=512
+   )
+   output = model.generate(
+       input_tokens["input_ids"].cuda(),
+       max_new_tokens=128,
+       use_cache=True
+   )
+   result = model.tokenizer.decode(output[0])
+   print(result)
+   ```
+4. Clear CUDA cache between generation runs:
+   ```python
+   import torch
+   torch.cuda.empty_cache()
+   ```
+
+## Verification Checklist
+- [ ] VRAM usage stays strictly below 8GB during 70B inference.
+- [ ] Model weights reside on high-speed NVMe storage.
+- [ ] Layer streaming executes without CUDA Out-Of-Memory (OOM) exceptions.
+- [ ] Token decoding matches expected base model response quality.
+- [ ] GPU memory returns to baseline after inference completes.
+
+## Anti-Patterns
+- Attempting full-model loading into VRAM on consumer GPUs.
+- Storing model weights on mechanical HDDs or network shares.
+- Using batch sizes greater than 1 without high-bandwidth PCIe Gen 5.
+- Retaining intermediate activation tensors in GPU memory across layers.
+
 
 ---
 <!-- SKILL MODULE: tech-auth-database.md -->
@@ -458,6 +673,7 @@ Establish secure, scalable, and resilient database and authentication architectu
 - **PII Protection:** Encrypt sensitive Personally Identifiable Information (PII) at rest and in transit.
 - **Stateless Sessions:** Prefer secure HTTP-only cookies over local storage for session tokens to prevent XSS theft.
 
+
 ---
 <!-- SKILL MODULE: tech-backend-api.md -->
 # Tech: Backend API Development Best Practices
@@ -471,6 +687,7 @@ Design and build resilient, scalable, and well-structured RESTful and GraphQL AP
 3. **Consistent Error Responses:** Return standard JSON error responses containing status codes, error codes, user-friendly messages, and optional field-level validation errors.
 4. **Middleware & Interceptors:** Use modular middleware for logging, rate limiting, authentication, CORS, and request tracking (correlation IDs).
 5. **API Documentation:** Maintain up-to-date OpenAPI/Swagger definitions or GraphQL schemas that reflect actual backend endpoints and request/response payloads.
+
 
 ---
 <!-- SKILL MODULE: tech-cicd-devops.md -->
@@ -488,8 +705,8 @@ Automate code integration, verification, and continuous deployment pipelines whi
 6. **Pipeline Security:** Secure CI/CD pipelines by masking secrets, scoping workflow permissions strictly (`permissions: contents: read`), and avoiding bloated third-party actions where simple scripts suffice.
 7. **Gated Deployment Standard:** Use one `ci-cd.yml` per repo. The `deploy` job must declare `needs: ci` and run only on `push` to `main`. PRs run CI only. Add `concurrency` (cancel stale PR runs, never cancel a production deploy).
 8. **Secrets Placement:** Deployment tokens (e.g. `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) go in a GitHub **Environment** named `production`, restricted to `main`, and are referenced via `environment: production`. Application runtime secrets (API keys) live **only** in the hosting provider (e.g. Vercel Environment Variables) and are pulled at build time. Never commit tokens to workflow files, `vercel.json`, `.env*` (except placeholder-only `.env.example`), MCP configs, or commit messages; reference env vars like `${VAR}` instead.
-9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
-10. **Free Hosting Defaults:** Next.js/SSR → Vercel Hobby (non-commercial). Static sites → GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
+9. **Official Tooling for Deploys:** Deploy with the provider's official CLI (e.g. `vercel pull` â†’ `vercel build --prod` â†’ `vercel deploy --prebuilt --prod`) rather than third-party actions that receive your token. Disable the provider's own Git auto-deploy (`"git": { "deploymentEnabled": false }`) so the CI-gated path is the only route to production.
+10. **Free Hosting Defaults:** Next.js/SSR â†’ Vercel Hobby (non-commercial). Static sites â†’ GitHub Pages or Cloudflare Pages. Custom domains: keep the registrar's nameservers and add the A/CNAME records the host specifies; never transfer the domain unless required.
 
 ## PRIORITY ZERO (P0): CI/CD & GITHUB ACTIONS
 If GitHub Actions / CI/CD pipelines are failing in the repository, fixing them is your absolute highest priority. 
@@ -499,6 +716,7 @@ If GitHub Actions / CI/CD pipelines are failing in the repository, fixing them i
 ### Zero Tolerance for Remote Pipeline Failures
 - The remote CI/CD pipeline must never fail.
 - Always use Local Pre-Commit Hooks (defined in 	ech-git-hooks-local-ci.md) to execute cleanup, lint fixing, building, and testing locally. If the local hook fails, fix it locally before pushing to remote.
+
 
 ---
 <!-- SKILL MODULE: tech-database-sql.md -->
@@ -513,6 +731,7 @@ Ensure clean database schema design, efficient querying, reliable migrations, an
 3. **Migration Management:** Use versioned, reproducible migration scripts (e.g., Prisma, Drizzle, TypeORM, Alembic, Flyway). Never perform manual schema modifications in production.
 4. **ORM & Query Builders:** Use type-safe ORMs or query builders while retaining awareness of generated SQL query execution and transaction boundaries.
 5. **Data Integrity & Transactions:** Enforce database-level integrity (unique constraints, cascades, nullability) and wrap multi-step write operations in ACID transactions.
+
 
 ---
 <!-- SKILL MODULE: tech-dependency-management.md -->
@@ -542,6 +761,80 @@ Maintain a clean, secure, and consistent dependency tree across all repositories
 - **Lockfile Integrity:** Always commit `package-lock.json` or equivalent to ensure deterministic builds.
 - **Semantic Versioning:** Respect semver constraints, but lock critical packages if regressions are frequent.
 
+
+---
+<!-- SKILL MODULE: tech-ebpf-observability-security.md -->
+---
+name: tech-ebpf-observability-security
+description: Instrument Linux kernel telemetry, detect security anomalies, and monitor high-throughput network sockets using eBPF programs.
+version: 1.0.0
+category: observability-security
+---
+
+# eBPF Observability & Kernel Security
+
+## Context
+User-space monitoring agents cause substantial CPU overhead and context-switching latency.
+Zero-day exploits and rootkits often bypass standard user-space detection tools.
+Extended Berkeley Packet Filter (eBPF) runs verified, sandboxed byte-code directly within the Linux kernel.
+
+## Core Rules
+1. Attach probes to kernel tracepoints rather than unstable kprobes whenever possible.
+2. Ensure eBPF bytecode satisfies Linux kernel in-kernel verifier constraints.
+3. Stream telemetry events to user space using BPF ring buffers instead of perf buffers.
+4. Minimize per-packet computation within XDP (eXpress Data Path) hooks.
+5. Filter sensitive payload contents before writing records to user-space memory buffers.
+6. Gracefully detach probes and release pinned maps during process termination.
+
+## Implementation Steps
+1. Write eBPF program in C to trace process execution (`sys_enter_execve`):
+   ```c
+   #include <vmlinux.h>
+   #include <bpf/bpf_helpers.h>
+
+   struct event_t {
+       u32 pid;
+       char comm[16];
+   };
+
+   struct {
+       __uint(type, BPF_MAP_TYPE_RINGBUF);
+       __uint(max_entries, 256 * 1024);
+   } events SEC(".maps");
+
+   SEC("tracepoint/syscalls/sys_enter_execve")
+   int trace_execve(struct trace_event_raw_sys_enter *ctx) {
+       struct event_t *event;
+       event = bpf_ringbuf_reserve(&events, sizeof(*event), 0);
+       if (!event) return 0;
+
+       event->pid = bpf_get_current_pid_tgid() >> 32;
+       bpf_get_current_comm(&event->comm, sizeof(event->comm));
+       bpf_ringbuf_submit(event, 0);
+       return 0;
+   }
+   char LICENSE[] SEC("license") = "GPL";
+   ```
+2. Compile eBPF program with Clang:
+   ```bash
+   clang -O2 -target bpf -c exec_trace.bpf.c -o exec_trace.bpf.o
+   ```
+3. Load program and consume ring buffer events using Go (cilium/ebpf) or Python (bcc).
+
+## Verification Checklist
+- [ ] eBPF bytecode passes the Linux kernel verifier without rejection.
+- [ ] Ring buffer drops zero events under high process creation workloads.
+- [ ] Telemetry captures PID and command strings for every executed binary.
+- [ ] Agent process uses less than 1% CPU utilization under load.
+- [ ] Probes detach cleanly upon SIGINT or SIGTERM signals.
+
+## Anti-Patterns
+- Using unbounded loops that fail kernel verifier safety checks.
+- Copying full memory buffers across the kernel-user boundary unnecessarily.
+- Relying on brittle kprobe signatures across shifting kernel versions.
+- Running unverified BPF binaries without explicit CAP_BPF or CAP_SYS_ADMIN capabilities.
+
+
 ---
 <!-- SKILL MODULE: tech-git-hooks-local-ci.md -->
 # Tech: Git Hooks & Local CI/CD Pipeline Validations
@@ -570,6 +863,7 @@ pm test, pytest).
 ### 3. Agent Execution Directive
 As an autonomous agent, if you trigger a commit and the hook blocks it, you must read the hook's error output, fix the underlying lint, type, or build issue, and attempt the commit again. Do not disable or bypass the hooks (--no-verify is strictly forbidden).
 
+
 ---
 <!-- SKILL MODULE: tech-git-workflow.md -->
 # Tech: Git & Version Control Workflow
@@ -583,6 +877,7 @@ Maintain a clean, linear, and searchable git history that facilitates collaborat
 3. **Atomic Commits:** Keep commits focused on a single logical change. Avoid mixing refactoring, formatting, and feature code in a single commit.
 4. **Pull Request Standards & Max Throughput:** Provide clear PR descriptions summarizing all batched items executed from `backlog.md`, including motivation, implementation summary, testing steps, and relevant screenshots or logs. Aim to deliver fully tested, high-value backlog batches in a single PR.
 5. **Clean History:** Rebase feature branches on main/master prior to merging to prevent unnecessary merge commits where team conventions require linear history.
+
 
 ---
 <!-- SKILL MODULE: tech-go-clean-arch.md -->
@@ -614,6 +909,70 @@ Enforce idiomatic, high-performance, maintainable Go 1.22+ development standards
 - **Table-Driven Tests:** Structure unit tests using Go table-driven test patterns with `t.Run(tt.name, func(t *testing.T) { ... })`.
 - **Strict Linting:** Enforce `golangci-lint` with enabled checkers (`govet`, `errcheck`, `staticcheck`, `gosec`, `ineffassign`).
 
+
+---
+<!-- SKILL MODULE: tech-green-software-engineering.md -->
+---
+name: tech-green-software-engineering
+description: Measure, audit, and minimize carbon intensity and energy consumption of software applications and AI inference workloads.
+version: 1.0.0
+category: green-computing
+---
+
+# Green Software Engineering & SCI Optimization
+
+## Context
+Data centers consume vast amounts of electrical grid energy.
+Inefficient loops, uncompressed payloads, and unoptimized model architectures inflate carbon emissions.
+Green Software Engineering applies Software Carbon Intensity (SCI) metrics to reduce carbon footprints.
+
+## Core Rules
+1. Calculate SCI score using the formula: $SCI = ((E \times I) + M) / R$.
+2. Measure CPU and DRAM energy consumption using Intel RAPL or AMD Energy counters.
+3. Schedule non-urgent batch and AI inference workloads during low-carbon grid hours.
+4. Replace active polling loops with event-driven architectures.
+5. Compress all data in transit using zstd or brotli to decrease network transmission power.
+6. Enforce strict budget thresholds for kilowatt-hours (kWh) in CI/CD pipelines.
+
+## Implementation Steps
+1. Measure live process energy using CodeCarbon in Python:
+   ```python
+   from codecarbon import track_emissions
+
+   @track_emissions(project_name="inference-carbon-audit")
+   def run_inference_workload():
+       # Model forward pass logic here
+       pass
+
+   if __name__ == "__main__":
+       run_inference_workload()
+   ```
+2. Query Electricity Maps API for real-time grid carbon intensity ($gCO_2eq/kWh$):
+   ```python
+   import requests
+
+   def get_grid_carbon_intensity(zone="US-CAL-CISO", api_key="YOUR_KEY"):
+       url = f"https://api.electricitymap.org/v3/carbon-intensity/latest?zone={zone}"
+       headers = {"auth-token": api_key}
+       response = requests.get(url, headers=headers).json()
+       return response["carbonIntensity"]
+   ```
+3. Audit AST syntax trees for carbon anti-patterns (busy waits, unthrottled loops).
+
+## Verification Checklist
+- [ ] CodeCarbon or RAPL metrics record energy usage per execution run.
+- [ ] Automated batch jobs defer execution when grid intensity exceeds 250 gCO2eq/kWh.
+- [ ] Compression ratios reduce serialized payload bytes by at least 40%.
+- [ ] CI pipeline fails if total CPU execution energy exceeds the defined energy budget.
+- [ ] Zero busy-wait CPU polling cycles observed in CPU telemetry.
+
+## Anti-Patterns
+- Continuous polling loops running with `sleep(0)` or empty wait blocks.
+- Running unquantized LLM inference for tasks solvable with rule-based heuristics.
+- Disregarding the carbon intensity variance of regional power grids.
+- Storing uncompressed, high-frequency telemetry logs indefinitely.
+
+
 ---
 <!-- SKILL MODULE: tech-legal-compliance-gdpr.md -->
 # Tech: Legal Compliance, UK GDPR & Age Verification
@@ -634,6 +993,72 @@ Ensure all applications strictly comply with UK GDPR, EU GDPR, and the UK Age Ap
 
 ### 3. Terms of Service & Privacy Policies
 - **Accessibility:** Link Terms of Service, Privacy Policy, and Cookie Policy in the footer of every public-facing page. Use plain English (ASD-STE100 standard) so users clearly understand what happens to their data.
+
+
+---
+<!-- SKILL MODULE: tech-llm-quantization-evals.md -->
+---
+name: tech-llm-quantization-evals
+description: Quantize LLMs (GGUF, AWQ, EXL2), train LoRA adapters, and benchmark task accuracy using automated evaluation harnesses.
+version: 1.0.0
+category: ai-optimization
+---
+
+# LLM Quantization, LoRA & Automated Evals
+
+## Context
+Full-precision models require excessive GPU memory and produce high inference latency.
+Careless quantization degrades model reasoning and leads to benchmark regressions.
+Systematic quantization paired with automated evaluation harnesses ensures model capability preservation.
+
+## Core Rules
+1. Quantize weights using AWQ for server inference and GGUF for edge/CPU inference.
+2. Retain critical attention layers in 16-bit precision if perplexity increases significantly.
+3. Train parameter-efficient LoRA adapters using rank 16 to 64 and alpha 32.
+4. Benchmark model accuracy before and after quantization using standardized eval datasets.
+5. Track tokens-per-second, time-to-first-token (TTFT), and GPU VRAM utilization metrics.
+6. Enforce automated quality gates in CI/CD before deploying quantized models.
+
+## Implementation Steps
+1. Quantize model weights to 4-bit AWQ using AutoAWQ in Python:
+   ```python
+   from awq import AutoAWQForCausalLM
+   from transformers import AutoTokenizer
+
+   model_path = "meta-llama/Meta-Llama-3-8B-Instruct"
+   quant_path = "llama-3-8b-awq"
+   quant_config = { "zero_point": True, "q_group_size": 128, "w_bit": 4, "version": "GEMM" }
+
+   model = AutoAWQForCausalLM.from_pretrained(model_path)
+   tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+
+   model.quantize(tokenizer, quant_config=quant_config)
+   model.save_quantized(quant_path)
+   tokenizer.save_pretrained(quant_path)
+   ```
+2. Run automated accuracy evaluation with lm-evaluation-harness:
+   ```bash
+   lm_eval --model hf \
+       --model_args pretrained=llama-3-8b-awq \
+       --tasks gsm8k,mmlu \
+       --batch_size 4 \
+       --output_path ./eval_results.json
+   ```
+3. Compare eval score to unquantized baseline to ensure less than 1.5% accuracy drop.
+
+## Verification Checklist
+- [ ] Quantized model VRAM usage decreases by at least 60% compared to FP16.
+- [ ] Inference generation throughput (tokens/sec) increases on target hardware.
+- [ ] Accuracy regression on target benchmarks stays within acceptable thresholds (< 2%).
+- [ ] LoRA adapters fuse cleanly into base weights without tensor dimension mismatches.
+- [ ] Automated evaluation harness produces reproducible JSON metric reports.
+
+## Anti-Patterns
+- Quantizing models without running validation benchmarks on domain-specific tasks.
+- Using 2-bit quantization on models smaller than 30 billion parameters.
+- Hardcoding inference prompts during accuracy evaluation runs.
+- Deploying quantized models without monitoring output hallucination rates.
+
 
 ---
 <!-- SKILL MODULE: tech-llm-security-owasp.md -->
@@ -687,6 +1112,77 @@ pm, pip, or go dependencies without verifying their exact existence and security
 - **Hook Compliance:** Never use --no-verify on git commits. You must never bypass local CI/CD security hooks.
 - **Secure by Default:** Do not disable SSL verifications, do not log credentials, and do not commit secrets.
 
+
+---
+<!-- SKILL MODULE: tech-local-rag-vector-search.md -->
+---
+name: tech-local-rag-vector-search
+description: Build zero-latency, privacy-preserving client-side vector search and RAG using IndexedDB, WebAssembly, and local embeddings.
+version: 1.0.0
+category: ai-architecture
+---
+
+# Local-First RAG & Vector Search
+
+## Context
+Cloud-based vector databases introduce network latency, egress costs, and privacy vulnerabilities.
+Edge applications require instant semantic search without sending sensitive text upstream.
+In-browser embeddings and client-side vector indexing deliver fast, private retrieval.
+
+## Core Rules
+1. Compute embeddings locally using ONNX Web runtime or Transformers.js.
+2. Store vector embeddings in IndexedDB or OPFS (Origin Private File System).
+3. Compute cosine similarity or dot-product using SIMD-accelerated WebAssembly.
+4. Chunk text into 256-512 token segments with 10% overlap.
+5. Limit search results to the top 5 most similar chunks.
+6. Fall back to exact keyword filtering if semantic confidence is low.
+
+## Implementation Steps
+1. Install Transformers.js for client-side embedding:
+   ```bash
+   npm install @xenova/transformers
+   ```
+2. Initialize local embedding pipeline in JavaScript:
+   ```javascript
+   import { pipeline } from '@xenova/transformers';
+
+   const embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+
+   export async function generateEmbedding(text) {
+       const output = await embedder(text, { pooling: 'mean', normalize: true });
+       return Array.from(output.data);
+   }
+   ```
+3. Calculate cosine similarity across stored vectors:
+   ```javascript
+   export function cosineSimilarity(vecA, vecB) {
+       let dotProduct = 0.0;
+       let normA = 0.0;
+       let normB = 0.0;
+       for (let i = 0; i < vecA.length; i++) {
+           dotProduct += vecA[i] * vecB[i];
+           normA += vecA[i] * vecA[i];
+           normB += vecB[i] * vecB[i];
+       }
+       return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+   }
+   ```
+4. Query IndexedDB store and rank top-k document passages.
+
+## Verification Checklist
+- [ ] Embeddings generate completely offline without external network requests.
+- [ ] Vector similarity calculation completes in under 50ms for 10,000 vectors.
+- [ ] IndexedDB persists document chunks and vector arrays across page reloads.
+- [ ] Retrieved context passages correctly match the user query semantic intent.
+- [ ] WebAssembly SIMD acceleration activates where hardware supports it.
+
+## Anti-Patterns
+- Sending unencrypted user documents to third-party embedding APIs.
+- Storing high-dimensional vectors in unindexed local storage strings.
+- Chunking documents without overlapping context boundaries.
+- Re-computing static document embeddings on every page load.
+
+
 ---
 <!-- SKILL MODULE: tech-mcp-agentic-tools.md -->
 # Technical Standard: Model Context Protocol (MCP) & Agentic Tools
@@ -722,6 +1218,7 @@ Provide a standardized specification for creating, exposing, consuming, and secu
 - [ ] MCP configuration avoids committed plain-text API keys or tokens.
 - [ ] Long outputs are truncated or paginated to preserve context headroom.
 
+
 ---
 <!-- SKILL MODULE: tech-microservices-modular.md -->
 # Tech: Modern Architecture (Modular Monolith, Microservices & DDD)
@@ -747,6 +1244,85 @@ Enforce clean, scalable, maintainable architectural patterns across projects, su
 - **Ubiquitous Language:** Align domain model names, entities, and methods with business domain terminology.
 - **Entities & Value Objects:** Model state with immutable Value Objects where identity is irrelevant, and Entities where identity persists.
 - **Aggregates & Repositories:** Enforce consistency boundaries within Aggregates; abstract data persistence behind clean Repository interfaces.
+
+
+---
+<!-- SKILL MODULE: tech-offline-first-crdt-sync.md -->
+---
+name: tech-offline-first-crdt-sync
+description: Design offline-first data architectures using IndexedDB, Dexie.js, and Conflict-Free Replicated Data Types (CRDTs) for seamless sync.
+version: 1.0.0
+category: distributed-systems
+---
+
+# Offline-First Data & CRDT Synchronization
+
+## Context
+Intermittent network connectivity causes data loss and broken user experiences.
+Standard client-server REST mutations fail when offline.
+Conflict-Free Replicated Data Types (CRDTs) and local-first databases allow seamless peer synchronization without conflicts.
+
+## Core Rules
+1. Write all mutations to local IndexedDB storage before initiating network requests.
+2. Resolve concurrent edits using state-based or operation-based CRDTs (Yjs or Automerge).
+3. Queue outgoing synchronization operations in a persistent IndexedDB transaction outbox.
+4. Render UI changes optimistically before server confirmation.
+5. Reconcile network disconnections automatically using exponential backoff retries.
+6. Prune tombstoned CRDT records only after verifying global peer acknowledgement.
+
+## Implementation Steps
+1. Configure Dexie.js local database schema:
+   ```javascript
+   import Dexie from "dexie";
+
+   export const db = new Dexie("AppOfflineDB");
+   db.version(1).stores({
+       documents: "id, updatedAt, syncStatus",
+       outbox: "++seq, action, payload, createdAt"
+   });
+   ```
+2. Apply local mutation and append operation to sync outbox:
+   ```javascript
+   export async function mutateDocument(docId, updates) {
+       await db.transaction("rw", db.documents, db.outbox, async () => {
+           const existing = await db.documents.get(docId) || {};
+           const updatedDoc = { ...existing, ...updates, id: docId, updatedAt: Date.now() };
+           await db.documents.put(updatedDoc);
+           await db.outbox.add({
+               action: "DOCUMENT_UPDATE",
+               payload: updatedDoc,
+               createdAt: Date.now()
+           });
+       });
+   }
+   ```
+3. Synchronize concurrent document edits using Yjs:
+   ```javascript
+   import * as Y from "yjs";
+   import { IndexeddbPersistence } from "y-indexeddb";
+
+   const ydoc = new Y.Doc();
+   const persistence = new IndexeddbPersistence("collaborative-workspace", ydoc);
+   const ytext = ydoc.getText("content");
+
+   persistence.on("synced", () => {
+       console.log("Local CRDT content synced from IndexedDB");
+   });
+   ```
+
+## Verification Checklist
+- [ ] Application functions fully with zero network connectivity.
+- [ ] Local mutations persist in IndexedDB across page reloads and browser restarts.
+- [ ] CRDT documents merge concurrent divergent edits deterministically without conflicts.
+- [ ] Outbox queue flushes and drains automatically upon network restoration.
+- [ ] Optimistic UI renders state updates immediately within 16 milliseconds.
+
+## Anti-Patterns
+- Blocking the UI waiting for remote server responses.
+- Relying on "last-write-wins" timestamps for concurrent text editing.
+- Storing unbounded sync queues in volatile in-memory variables.
+- Deleting local data immediately when a sync error occurs.
+
 
 ---
 <!-- SKILL MODULE: tech-python-fastapi.md -->
@@ -777,6 +1353,7 @@ Enforce clean, performant, type-safe Python development standards using modern P
 ### 4. Quality & Testing Standards
 - **Ruff & Pyright:** Enforce `ruff check` and `ruff format` for linting and formatting; use `pyright` or `mypy --strict` for static type checking.
 - **Async Pytest Suite:** Write unit and integration tests using `pytest-asyncio` and `httpx.AsyncClient` against test database fixtures.
+
 
 ---
 <!-- SKILL MODULE: tech-react-nextjs.md -->
@@ -809,6 +1386,73 @@ Build scalable, performant, accessible, and resilient React and Next.js applicat
 ### 5. Web Vitals & Media Optimization
 - **Zero-CLS Layouts:** Always use `<Image src={...} alt={...} width={...} height={...} priority />` for hero media to eliminate Cumulative Layout Shift.
 - **Font Optimization:** Use `next/font` (`Geist`, `Inter`) with `subsets: ['latin']` for zero-CLS typography.
+
+
+---
+<!-- SKILL MODULE: tech-reverse-engineering-rev.md -->
+---
+name: tech-reverse-engineering-rev
+description: Reverse engineer proprietary APIs, binaries, and network protocols using decompilation, Frida instrumentation, and proxy inspection.
+version: 1.0.0
+category: security
+---
+
+# REV: Reverse Engineering & Protocol Interception
+
+## Context
+Proprietary binaries and mobile applications hide undocumented APIs and schemas.
+Static and dynamic analysis reveals wire contracts and authentication flows.
+Reverse engineering extracts private endpoints for automation and testing.
+
+## Core Rules
+1. Perform static analysis before attempting dynamic runtime instrumentation.
+2. Intercept network traffic using TLS-decrypting MITM proxies.
+3. Hook runtime methods with Frida to bypass SSL pinning.
+4. Extract endpoint URLs, authentication headers, and payload structures.
+5. Decompile Android APKs with Jadx and native binaries with Ghidra.
+6. Isolate reverse engineering environments inside virtual machines or sandboxes.
+
+## Implementation Steps
+1. Decompile application package using Jadx:
+   ```bash
+   jadx -d ./decompiled_app target_app.apk
+   ```
+2. Start mitmproxy with CA certificate generation:
+   ```bash
+   mitmproxy -p 8080 --set block_global=false
+   ```
+3. Bypass Android SSL pinning using Frida runtime injection:
+   ```bash
+   frida -U -f com.example.targetapp -l universal-ssl-pinning-bypass.js
+   ```
+4. Hook internal API response handlers in JavaScript:
+   ```javascript
+   Java.perform(function () {
+       var ApiClient = Java.use("com.example.targetapp.network.ApiClient");
+       ApiClient.executeRequest.implementation = function (request) {
+           console.log("[*] Intercepted Request URL: " + request.getUrl());
+           console.log("[*] Intercepted Headers: " + request.getHeaders());
+           var response = this.executeRequest(request);
+           console.log("[*] Intercepted Response: " + response.getBody());
+           return response;
+       };
+   });
+   ```
+5. Export clean OpenAPI specifications from captured request logs.
+
+## Verification Checklist
+- [ ] TLS traffic decrypts cleanly in mitmproxy without handshake errors.
+- [ ] Frida attaches to target process and logs invoked methods.
+- [ ] Target API request headers and authentication tokens are decoded.
+- [ ] Captured payload contracts convert into automated HTTP client tests.
+- [ ] No residual debugger or instrumentation artifacts remain in production code.
+
+## Anti-Patterns
+- Testing dynamic instrumentation on unrooted host operating systems.
+- Trusting client-side validation logic without server protocol inspection.
+- Hardcoding expired authentication tokens instead of reverse engineering token exchange.
+- Altering binary instructions without creating reproducible Frida scripts.
+
 
 ---
 <!-- SKILL MODULE: tech-security-hardening.md -->
@@ -851,6 +1495,7 @@ Ensure all web applications and APIs are resilient against common attack vectors
 ### 7. Encryption Standards
 - **Data at Rest & Transit:** All databases must be encrypted at rest. Enforce TLS 1.3 across the board. Secrets must never be stored in plaintext.
 
+
 ---
 <!-- SKILL MODULE: tech-testing-automation.md -->
 # Tech: Testing & Quality Assurance Standards
@@ -886,6 +1531,262 @@ Enforce enterprise-grade automated testing standards, test-driven development (T
 - **Python:** Use `pytest` + `pytest-asyncio` + `httpx.AsyncClient` for async FastAPI endpoints.
 - **Go:** Use native Go `testing` package with table-driven test structs (`tests := []struct{ name string; ... }`).
 
+
+---
+<!-- SKILL MODULE: tech-voice-audio-intelligence.md -->
+---
+name: tech-voice-audio-intelligence
+description: Process streaming audio, implement Voice Activity Detection (VAD), chunk audio buffers, and transcribe speech with sub-second latency.
+version: 1.0.0
+category: audio-engineering
+---
+
+# Voice & Audio Streaming Intelligence
+
+## Context
+Real-time voice interfaces require low-latency audio capture and streaming inference.
+Unsegmented audio streams waste compute and cause transcription lag.
+Voice Activity Detection (VAD) and chunked WebAudio pipelines ensure immediate responsiveness.
+
+## Core Rules
+1. Capture microphone audio at 16,000 Hz sample rate in mono channel format.
+2. Filter silence and background noise using Silero VAD or WebRTC VAD.
+3. Slice continuous speech streams into 200ms to 500ms audio chunks.
+4. Stream audio buffers over WebSockets using binary Opus or Int16 PCM encoding.
+5. Trigger speech-to-text inference immediately when silence exceeds 300 milliseconds.
+6. Normalize audio volume levels using dynamic range compression before transcription.
+
+## Implementation Steps
+1. Capture and downsample audio using the Web Audio API in JavaScript:
+   ```javascript
+   const audioContext = new AudioContext({ sampleRate: 16000 });
+   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+   const source = audioContext.createMediaStreamSource(stream);
+   const processor = audioContext.createScriptProcessor(4096, 1, 1);
+
+   source.connect(processor);
+   processor.connect(audioContext.destination);
+
+   processor.onaudioprocess = (e) => {
+       const inputBuffer = e.inputBuffer.getChannelData(0);
+       const int16Buffer = convertFloat32ToInt16(inputBuffer);
+       socket.send(int16Buffer);
+   };
+
+   function convertFloat32ToInt16(float32Array) {
+       const int16Array = new Int16Array(float32Array.length);
+       for (let i = 0; i < float32Array.length; i++) {
+           const s = Math.max(-1, Math.min(1, float32Array[i]));
+           int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+       }
+       return int16Array.buffer;
+   }
+   ```
+2. Segment speech using Silero VAD in Python:
+   ```python
+   import torch
+
+   vad_model, utils = torch.hub.load(
+       repo_or_dir="snakers4/silero-vad",
+       model="silero_vad",
+       onnx=True
+   )
+   (get_speech_timestamps, save_audio, read_audio, VADIterator, collect_chunks) = utils
+
+   vad_iterator = VADIterator(vad_model, threshold=0.5, sampling_rate=16000)
+
+   def process_audio_chunk(audio_tensor):
+       speech_dict = vad_iterator(audio_tensor, return_seconds=True)
+       if speech_dict:
+           return speech_dict
+       return None
+   ```
+3. Forward active speech segments to Whisper ASR for streaming inference.
+
+## Verification Checklist
+- [ ] Audio inputs record at 16 kHz mono format.
+- [ ] Silero VAD accurately separates vocal speech from ambient background noise.
+- [ ] End-to-end audio streaming latency remains below 350 milliseconds.
+- [ ] Web Audio ScriptProcessor/AudioWorklet executes without dropping audio frames.
+- [ ] Silence threshold triggers buffer flush within 300 milliseconds of speech cessation.
+
+## Anti-Patterns
+- Streaming raw uncompressed 48 kHz stereo audio over WebSockets.
+- Processing entire multi-minute recordings as a single unchunked tensor.
+- Relying on simple volume thresholds instead of neural VAD filters.
+- Blocking the browser main thread during audio buffer transformations.
+
+
+---
+<!-- SKILL MODULE: tech-wasm-sandboxed-runtime.md -->
+---
+name: tech-wasm-sandboxed-runtime
+description: Execute untrusted code and agent plugins inside WebAssembly sandboxes using Wazero with zero host privilege escalation.
+version: 1.0.0
+category: runtime-security
+---
+
+# WebAssembly Sandboxed Micro-VM Runtime
+
+## Context
+Running untrusted code directly on host systems risks remote code execution.
+Standard Linux containers impose heavy virtualization startup overhead.
+WebAssembly (WASM) micro-VMs provide memory-safe, sub-millisecond sandboxed execution boundaries.
+
+## Core Rules
+1. Isolate untrusted execution inside memory-safe WebAssembly runtime sandboxes.
+2. Restrict guest filesystem access using explicit virtual directory mappings.
+3. Deny network socket creation unless explicitly authorized by host policies.
+4. Enforce strict CPU instruction count and execution timeout limits.
+5. Prevent host memory leaks by closing WASM runtime modules after execution completes.
+6. Communicate across the guest-host boundary via JSON or Protobuf memory buffers.
+
+## Implementation Steps
+1. Initialize Wazero runtime in Go:
+   ```go
+   package main
+
+   import (
+       "context"
+       "os"
+       "github.com/tetratelabs/wazero"
+       "github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
+   )
+
+   func main() {
+       ctx := context.Background()
+       runtime := wazero.NewRuntime(ctx)
+       defer runtime.Close(ctx)
+
+       wasi_snapshot_preview1.MustInstantiate(ctx, runtime)
+
+       wasmBytes, err := os.ReadFile("sandbox_plugin.wasm")
+       if err != nil {
+           panic(err)
+       }
+
+       modConfig := wazero.NewModuleConfig().
+           WithStdout(os.Stdout).
+           WithStderr(os.Stderr)
+
+       mod, err := runtime.InstantiateWithConfig(ctx, wasmBytes, modConfig)
+       if err != nil {
+           panic(err)
+       }
+       defer mod.Close(ctx)
+   }
+   ```
+2. Export callable guest functions and pass memory offsets.
+3. Validate memory access boundaries before reading guest linear memory.
+
+## Verification Checklist
+- [ ] WASM module executes in an isolated memory address space.
+- [ ] Guest execution cannot access host environment variables or file paths.
+- [ ] Runtime terminates guest execution if instruction budget exceeds limit.
+- [ ] Module teardown releases all allocated host memory.
+- [ ] Sandboxed binary startup completes in under 5 milliseconds.
+
+## Anti-Patterns
+- Granting unrestricted host filesystem access (`WithFS(os.DirFS("/"))`).
+- Omitting instruction limits on untrusted guest loops.
+- Passing raw host pointers directly into WASM linear memory.
+- Running unverified C/Rust native code without WASM compilation.
+
+
+---
+<!-- SKILL MODULE: tech-webcrypto-passkeys-zkp.md -->
+---
+name: tech-webcrypto-passkeys-zkp
+description: Implement WebCrypto encryption, FIDO2/WebAuthn biometric passkeys, and client-side zero-knowledge proofs for sovereign privacy.
+version: 1.0.0
+category: cryptography-security
+---
+
+# WebCrypto, Passkeys & Zero-Knowledge Verification
+
+## Context
+Centralized passwords and cloud-stored private keys invite catastrophic data breaches.
+WebAuthn passkeys bind cryptographic credentials directly to local device hardware.
+Client-side WebCrypto and Zero-Knowledge Proofs (ZKP) enable authentication without leaking secrets.
+
+## Core Rules
+1. Derive cryptographic encryption keys locally using PBKDF2 or Argon2id.
+2. Encrypt user payloads client-side using AES-GCM with unique 96-bit initialization vectors.
+3. Authenticate users via WebAuthn FIDO2 biometric passkeys instead of passwords.
+4. Verify membership or assertions with SnarkJS/Circom zero-knowledge proofs without exposing identifiers.
+5. Never transmit plaintext private keys, seed phrases, or unmasked biometric data.
+6. Store encrypted keys exclusively in IndexedDB or secure enclave storage.
+
+## Implementation Steps
+1. Encrypt text data using the WebCrypto API:
+   ```javascript
+   export async function encryptPayload(plaintext, rawKey) {
+       const iv = crypto.getRandomValues(new Uint8Array(12));
+       const encoder = new TextEncoder();
+       const encodedText = encoder.encode(plaintext);
+
+       const cryptoKey = await crypto.subtle.importKey(
+           "raw",
+           rawKey,
+           { name: "AES-GCM" },
+           false,
+           ["encrypt"]
+       );
+
+       const ciphertext = await crypto.subtle.encrypt(
+           { name: "AES-GCM", iv },
+           cryptoKey,
+           encodedText
+       );
+
+       return { ciphertext: new Uint8Array(ciphertext), iv };
+   }
+   ```
+2. Register WebAuthn passkey credential:
+   ```javascript
+   const publicKeyOptions = {
+       challenge: crypto.getRandomValues(new Uint8Array(32)),
+       rp: { name: "Avinya Forge Sovereign Auth", id: window.location.hostname },
+       user: {
+           id: crypto.getRandomValues(new Uint8Array(16)),
+           name: "operator@avinya.local",
+           displayName: "Sovereign Operator"
+       },
+       pubKeyCredParams: [{ alg: -7, type: "public-key" }], // ES256
+       authenticatorSelection: { userVerification: "required" },
+       timeout: 60000
+   };
+
+   const credential = await navigator.credentials.create({ publicKey: publicKeyOptions });
+   ```
+3. Generate zero-knowledge proof client-side using SnarkJS:
+   ```javascript
+   import { groth16 } from "snarkjs";
+
+   export async function generateZkProof(inputSignal, wasmPath, zkeyPath) {
+       const { proof, publicSignals } = await groth16.fullProve(
+           inputSignal,
+           wasmPath,
+           zkeyPath
+       );
+       return { proof, publicSignals };
+   }
+   ```
+
+## Verification Checklist
+- [ ] AES-GCM generates a cryptographically random 12-byte IV for every encryption call.
+- [ ] Decryption fails cleanly when an invalid IV or altered ciphertext is supplied.
+- [ ] WebAuthn credentials register successfully on biometric hardware.
+- [ ] Zero-knowledge proof verifies without revealing private input signals.
+- [ ] No plaintext cryptographic keys ever enter local storage or logging streams.
+
+## Anti-Patterns
+- Reusing the same initialization vector (IV) across multiple AES-GCM operations.
+- Storing decrypted cryptographic keys in insecure browser `localStorage`.
+- Transmitting raw passwords or recovery seeds over HTTP endpoints.
+- Verifying cryptographic proofs solely on the client side without backend challenge verification.
+
+
 ---
 <!-- SKILL MODULE: tech-web-scraping-resilience.md -->
 # Tech: Web Scraping & Crawler Resilience
@@ -910,6 +1811,69 @@ Build robust, ethical, and highly resilient data-gathering agents capable of byp
 - **Protocol-Level Scraping:** Prefer HTTP request-based scraping (e.g., using `fetch` or `cheerio` for parsing HTML) over headless browsers for speed and lower resource consumption, unless JavaScript rendering is explicitly required.
 - **Concurrency & Backoff:** Implement intelligent concurrency limits and exponential backoff strategies to handle 429 Too Many Requests errors gracefully.
 
+
+---
+<!-- SKILL MODULE: tech-youtube-social-intelligence.md -->
+---
+name: tech-youtube-social-intelligence
+description: Extract video transcripts, analyze audience retention psychology, optimize 0-3s hooks, and automate short-form video production.
+version: 1.0.0
+category: media-automation
+---
+
+# YouTube Social Intelligence & Viral Optimization
+
+## Context
+Short-form platforms demand immediate engagement within the initial 3 seconds.
+Viewer drop-off occurs when pacing stalls or visual patterns remain static.
+Automated transcript parsing and cognitive retention modeling maximize algorithmic reach.
+
+## Core Rules
+1. Deliver the primary thesis or visual punchline within 0 to 3 seconds.
+2. Maintain voiceover speech cadence between 150 and 170 words per minute.
+3. Trigger visual pattern interrupts every 2.5 to 3.5 seconds.
+4. Extract accurate subtitles using Whisper or YouTube transcript APIs.
+5. Render dynamic word-level subtitles centered in the lower-middle viewport.
+6. Target total duration between 30 and 58 seconds for optimal loop rate.
+
+## Implementation Steps
+1. Fetch video transcript via Python:
+   ```python
+   from youtube_transcript_api import YouTubeTranscriptApi
+
+   def extract_transcript(video_id: str) -> str:
+       transcript = YouTubeTranscriptApi.get_transcript(video_id)
+       text_chunks = [entry["text"] for entry in transcript]
+       return " ".join(text_chunks)
+   ```
+2. Generate synthetic voiceover with word-level boundaries using Edge-TTS:
+   ```bash
+   edge-tts --voice en-US-ChristopherNeural --text "This 70B AI runs on an $80 GPU." --write-media out.mp3 --write-subtitles out.vtt
+   ```
+3. Parse and structure the viral hook script:
+   - 0-3s Hook: "Do not buy an expensive cloud GPU."
+   - 3-15s Agitation: "70B models usually need $15,000 servers to run."
+   - 15-45s Solution: "AirLLM streams layers directly off your SSD."
+   - 45-55s Payoff / Call to Action: "Get the open-source pipeline in our bio."
+4. Compile vertical video (1080x1920) with FFmpeg:
+   ```bash
+   ffmpeg -i background.mp4 -i out.mp3 -vf "subtitles=out.vtt:force_style='FontSize=16,Alignment=2'" -c:a aac -shortest short_output.mp4
+   ```
+
+## Verification Checklist
+- [ ] Transcript captures 100% of spoken words with millisecond timestamps.
+- [ ] First hook sentence finishes before the 3.0-second timestamp mark.
+- [ ] Speech pacing stays between 150 and 170 words per minute.
+- [ ] Aspect ratio is exactly 9:16 (1080x1920 pixels) for vertical players.
+- [ ] Dynamic subtitles remain visible and clear on mobile screens.
+
+## Anti-Patterns
+- Long introductory logos, greetings, or channel branding.
+- Monotone speech cadence without dynamic pitch modulation.
+- Video duration exceeding 60 seconds for YouTube Shorts.
+- Placing essential subtitles in YouTube UI dead zones (bottom 15% and right 10%).
+
+
 ---
 <!-- SKILL MODULE: tool-one-cli.md -->
 # Goal
@@ -926,6 +1890,168 @@ To reduce clutter and avoid maintaining disparate bash and PowerShell scripts (e
 2. **Maintain Compatibility:** Ensure that enhancements to local deployment hooks, Cloudflare tunneling, or dependency installations are implemented as updates inside the `Deploy-Local`, `Sync-Skills`, or `Optimize-Actions` functions of `one.ps1`.
 3. **Avoid Duplicate Scripts:** Do not create separate `.sh` files or individual `setup-*` scripts. Consolidate logic into `one.ps1` using clean PowerShell parameters and `switch` statements.
 4. **Git Safety:** Always ensure that `one.ps1` actions that touch git repos (like fetching/pulling) appropriately handle discarded local changes (e.g., `git clean -fd`, `git reset --hard`) only where intended, and always commit/push updated settings automatically.
+
+
+---
+<!-- SKILL MODULE: ui-apple-design-principles.md -->
+---
+name: ui-apple-design-principles
+description: Apply Apple Human Interface Guidelines (HIG) with San Francisco typography, continuous curvature squircle geometry, and fluid spring animations.
+version: 1.0.0
+category: frontend-design
+---
+
+# Apple Design Principles & HIG Engineering
+
+## Context
+Standard web interfaces often appear rigid, flat, or unnatural.
+Apple Human Interface Guidelines prioritize clarity, deference, and depth.
+Precision typography, physical spring mechanics, and translucent materials elevate user interfaces.
+
+## Core Rules
+1. Use San Francisco system font stack with optical sizing.
+2. Render rounded corners using continuous curvature squircles (`border-corner-shape` or SVG).
+3. Apply translucent vibrancy materials using CSS `backdrop-filter: blur(20px)`.
+4. Implement fluid spring animations with zero bounce or damped harmonic motion.
+5. Provide high-contrast accessibility compliance exceeding WCAG AAA standards.
+6. Support native dark mode transitions seamlessly across all interface surfaces.
+
+## Implementation Steps
+1. Configure Apple typography system in CSS / Tailwind:
+   ```css
+   :root {
+       --font-sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+       --apple-blur: saturate(180%) blur(20px);
+       --apple-bg-translucent: rgba(255, 255, 255, 0.72);
+   }
+   @media (prefers-color-scheme: dark) {
+       :root {
+           --apple-bg-translucent: rgba(30, 30, 30, 0.75);
+       }
+   }
+   ```
+2. Build translucent vibrancy card with squircle curvature:
+   ```html
+   <div class="apple-card">
+       <h2>Designed in California</h2>
+       <p>Intuitively engineered with continuous curves and optical kerning.</p>
+   </div>
+
+   <style>
+   .apple-card {
+       font-family: var(--font-sf);
+       background: var(--apple-bg-translucent);
+       backdrop-filter: var(--apple-blur);
+       -webkit-backdrop-filter: var(--apple-blur);
+       border: 0.5px solid rgba(255, 255, 255, 0.2);
+       border-radius: 24px;
+       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+       padding: 24px;
+   }
+   </style>
+   ```
+3. Animate interactions using spring physics (Framer Motion / CSS):
+   ```javascript
+   const springTransition = {
+       type: "spring",
+       stiffness: 300,
+       damping: 30,
+       mass: 0.8
+   };
+   ```
+
+## Verification Checklist
+- [ ] Font rendering uses SF Pro or native system font stack.
+- [ ] Frosted glass effect uses `backdrop-filter: blur(20px)` and saturation boost.
+- [ ] Border radius contours follow continuous squircle curvature.
+- [ ] Hover and click animations follow critically damped spring dynamics.
+- [ ] Interface responds immediately to light and dark color scheme shifts.
+
+## Anti-Patterns
+- Hard 90-degree corners or circular radii without continuous curves.
+- Linear or aggressive overshoot spring transitions.
+- Heavy opaque drop shadows instead of subtle multi-stop ambient diffusion.
+- Monolithic fonts overriding platform-native optical text sizes.
+
+
+---
+<!-- SKILL MODULE: ui-spatial-webgl-visualization.md -->
+---
+name: ui-spatial-webgl-visualization
+description: Render high-performance 3D spatial scenes, particle systems, and real-time environmental data with WebGL and Three.js at 60 FPS.
+version: 1.0.0
+category: frontend-spatial
+---
+
+# Spatial WebGL & High-Performance 3D Graphics
+
+## Context
+Rendering complex geospatial models and dense particle clouds causes browser frame rate drops.
+Unoptimized geometry allocations trigger garbage collection pauses and stutter.
+Three.js and custom WebGL shaders maintain 60 FPS rendering under heavy data loads.
+
+## Core Rules
+1. Maintain consistent 60 frames per second by instancing repeated 3D meshes.
+2. Pool and reuse geometry and material buffers rather than creating new allocations in the render loop.
+3. Compute particle physics and spatial transformations on the GPU using custom vertex shaders.
+4. Scale render resolution adaptively using device pixel ratio throttling on low-power devices.
+5. Dispose of WebGL textures, geometries, and materials explicitly when components unmount.
+6. Decouple camera animation updates from network payload parsing using Web Workers.
+
+## Implementation Steps
+1. Create instanced mesh cluster in Three.js / React Three Fiber:
+   ```javascript
+   import * as THREE from "three";
+
+   export function createSpatialInstancedMesh(count = 5000) {
+       const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+       const material = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.2 });
+       const instancedMesh = new THREE.InstancedMesh(geometry, material, count);
+
+       const dummy = new THREE.Object3D();
+       for (let i = 0; i < count; i++) {
+           dummy.position.set(
+               (Math.random() - 0.5) * 50,
+               (Math.random() - 0.5) * 50,
+               (Math.random() - 0.5) * 50
+           );
+           dummy.updateMatrix();
+           instancedMesh.setMatrixAt(i, dummy.matrix);
+       }
+       instancedMesh.instanceMatrix.needsUpdate = true;
+       return instancedMesh;
+   }
+   ```
+2. Clean up WebGL resources when closing 3D views:
+   ```javascript
+   export function disposeScene(scene, renderer) {
+       scene.traverse((object) => {
+           if (object.geometry) object.geometry.dispose();
+           if (object.material) {
+               if (Array.isArray(object.material)) {
+                   object.material.forEach((mat) => mat.dispose());
+               } else {
+                   object.material.dispose();
+               }
+           }
+       });
+       renderer.dispose();
+   }
+   ```
+
+## Verification Checklist
+- [ ] Frame rate remains at 60 FPS during camera movement and rotation.
+- [ ] Number of WebGL draw calls stays below 50 per frame.
+- [ ] GPU memory utilization remains flat without progressive memory leaks.
+- [ ] Scene unmounting releases all GPU textures, geometries, and shaders cleanly.
+- [ ] Fallback canvas renders gracefully on devices lacking WebGL2 support.
+
+## Anti-Patterns
+- Instantiating individual `Mesh` objects in loops instead of using `InstancedMesh`.
+- Creating new `Vector3` or `Matrix4` objects inside the `requestAnimationFrame` loop.
+- Omitting explicit resource disposal on route changes or modal dismissals.
+- Running intensive physics calculations on the JavaScript main UI thread.
+
 
 ---
 <!-- SKILL MODULE: ui-ux-pro-max.md -->
@@ -1024,6 +2150,7 @@ Enforce this checklist before finalizing any generated UI or layout:
 
 
 
+
 ---
 <!-- SKILL MODULE: workflow-local-deployment.md -->
 # Goal
@@ -1039,6 +2166,7 @@ Local environments can quickly become out-of-sync with the remote codebase. To m
 4. **Cloudflare Tunnel Integration:** Hook up the local environment to Cloudflare using `cloudflared`. The deployment script should automatically establish a Cloudflare tunnel so the local application can be securely accessed, tested, and webhook-integrated from anywhere.
 5. **Dependency & Infrastructure Sync:** The automated script must run package managers (`npm install`, `uv sync`, `go mod tidy`) if lockfiles change, and reset/migrate local databases to prevent schema drift.
 6. **Readiness Checks:** The deployment script must explicitly verify `/healthz` or basic root endpoints to confirm successful startup before yielding control back to the user or agent.
+
 
 ---
 <!-- SKILL MODULE: workflow-memory-and-context.md -->
@@ -1069,6 +2197,7 @@ Manage context window headroom efficiently, reduce token consumption while maxim
 - **Direct & Actionable Responses:** Avoid generic pleasantries or verbose conversational fluff. Focus outputs on clear technical reasoning, exact diffs, and verification steps.
 - **Structured Code Diffs:** Use precise git merge diffs or block updates rather than rewriting entire un-impacted files.
 
+
 ---
 <!-- SKILL MODULE: workflow-spec-driven-implementation.md -->
 # Skill: End-to-End Feature Execution Engine & Specification-Driven Implementation
@@ -1086,31 +2215,31 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
 ## The 8-Stage Feature Execution Lifecycle
 
 ```
- ┌────────────────────────────────────────────────────────────────────────┐
- │                   8-STAGE FEATURE EXECUTION ENGINE                     │
- └────────────────────────────────────────────────────────────────────────┘
-  [STAGE 1: VISION TRIANGULATION & FEATURE SELECTION] ──► Compare vision vs backlog; expand vision.
-            │
-            ▼
-  [STAGE 2: FEATURE VALIDATION & DESIGN THINKING / SPIKE]──► Run feasibility analysis & Design Thinking.
-            │
-            ▼
-  [STAGE 3: HLD & LLD ARCHITECTURE & GRANULAR DECOMPOSITION]► High/Low-Level Design & sub-tasking.
-            │
-            ▼
-  [STAGE 4: ITERATIVE IMPLEMENTATION & REFACTORED CODE]  ──► Write clean code; refactor/optimize.
-            │
-            ▼
-  [STAGE 5: VERIFICATION & AUTOMATED UNIT/INT TESTS]     ──► Unit, integration & regression tests.
-            │
-            ▼
-  [STAGE 6: SYSTEM INTEGRATION AUDIT]                    ──► Verify integration with existing software.
-            │
-            ▼
-  [STAGE 7: BUG HUNT & SECURITY AUDIT]                   ──► OWASP check, race condition & bug hunting.
-            │
-            ▼
-  [STAGE 8: SSOT SYNC & AUTONOMOUS TRANSITION]            ──► Measure `git diff --shortstat`, update docs,
+ â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ â”‚                   8-STAGE FEATURE EXECUTION ENGINE                     â”‚
+ â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+  [STAGE 1: VISION TRIANGULATION & FEATURE SELECTION] â”€â”€â–º Compare vision vs backlog; expand vision.
+            â”‚
+            â–¼
+  [STAGE 2: FEATURE VALIDATION & DESIGN THINKING / SPIKE]â”€â”€â–º Run feasibility analysis & Design Thinking.
+            â”‚
+            â–¼
+  [STAGE 3: HLD & LLD ARCHITECTURE & GRANULAR DECOMPOSITION]â–º High/Low-Level Design & sub-tasking.
+            â”‚
+            â–¼
+  [STAGE 4: ITERATIVE IMPLEMENTATION & REFACTORED CODE]  â”€â”€â–º Write clean code; refactor/optimize.
+            â”‚
+            â–¼
+  [STAGE 5: VERIFICATION & AUTOMATED UNIT/INT TESTS]     â”€â”€â–º Unit, integration & regression tests.
+            â”‚
+            â–¼
+  [STAGE 6: SYSTEM INTEGRATION AUDIT]                    â”€â”€â–º Verify integration with existing software.
+            â”‚
+            â–¼
+  [STAGE 7: BUG HUNT & SECURITY AUDIT]                   â”€â”€â–º OWASP check, race condition & bug hunting.
+            â”‚
+            â–¼
+  [STAGE 8: SSOT SYNC & AUTONOMOUS TRANSITION]            â”€â”€â–º Measure `git diff --shortstat`, update docs,
                                                               and transition autonomously to next feature.
 ```
 
@@ -1139,7 +2268,7 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
 
 ### STAGE 5: Verification & Automated Unit/Integration Testing
 1. **Automated Test Creation:** Write comprehensive unit, integration, and E2E tests covering happy paths, edge cases, null inputs, and error states.
-2. **Physical Execution:** Run `npm test`, `pytest`, `go test`, or relevant test command in the environment. Verify all tests pass physically—never hallucinate test results.
+2. **Physical Execution:** Run `npm test`, `pytest`, `go test`, or relevant test command in the environment. Verify all tests pass physicallyâ€”never hallucinate test results.
 3. **Circuit Breaker Rule:** If a fix or test fails 3 consecutive times, trigger [Circuit Breaker Protocol] (`skills/circuit-breaker.md`) to revert to baseline, tag `[BLOCKED: Needs Human/Architect Review]` in `backlog.md`, and pivot.
 
 ### STAGE 6: System Integration Audit
@@ -1159,4 +2288,4 @@ Provide an immutable, 8-stage execution engine for delivering features end-to-en
    - Update `vision.md` or `.status` metrics if milestones were achieved.
 3. **Autonomous Transition:** If session capacity permits (< 500 LOC / < 4 tasks) and unblocked backlog items remain, self-prompt and transition immediately back to **STAGE 1** for the next feature without halting.
 
----
+
